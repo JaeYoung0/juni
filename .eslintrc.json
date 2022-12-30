@@ -1,0 +1,40 @@
+// https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#recommended-configs
+// https://github.com/prettier/eslint-plugin-prettier#recommended-configuration
+
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 13,
+    "sourceType": "module"
+  },
+
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
+  "extends": [
+    // extends 는 나중에 정의될수록 우선 순위가 높다.
+    "eslint:recommended",
+    "plugin:react/recommended", // eslint-plugin-react
+    "plugin:react-hooks/recommended", // eslint-plugin-react-hooks
+    "plugin:@typescript-eslint/recommended", // @typescript-eslint/eslint-plugin
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@next/next/recommended",
+    "plugin:prettier/recommended" // as the last extension
+  ],
+
+  "rules": {
+    "prettier/prettier": "warn",
+    "react/react-in-jsx-scope": "off", // next.js doesn't require 'import React'
+    "react-hooks/rules-of-hooks": "error", // plugins - react-hooks
+    "@next/next/no-img-element": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }]
+  },
+  "ignorePatterns": ["dist/", "node_modules/"]
+}
