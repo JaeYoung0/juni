@@ -1,6 +1,2 @@
-# Next.js Starter
-
-- typescript
-- emotion
-- husky, lint-staged
-- eslint, prettier
+# 플래너
+- 계획 vs 실제 비교 통계
