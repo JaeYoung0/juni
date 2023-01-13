@@ -1,7 +1,7 @@
 import { useCalendarAtomState } from '@/domain/Calendar/calendar'
-import { ScheduleItem } from '@/domain/Schedule/schedule'
+import { ScheduleItem, useScheduleAtomState } from '@/domain/Schedule/schedule'
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
 
 import * as S from './style'
@@ -11,8 +11,9 @@ function TodayGrid() {
   const plans = Array.from({ length: 24 }, (v, i) => i + 1)
   const real = Array.from({ length: 24 }, (v, i) => i + 1)
 
-  const [schedules, setSchedules] = useState<ScheduleItem[]>([])
+  // TODO. api 연결하면 react-query로 대체
   const [calendarAtom] = useCalendarAtomState()
+  const [scheduleAtom] = useScheduleAtomState()
 
   //   TODO1. 계획 셀 클릭했을 때
   // '계획'을 클릭 => 모달이 뜬다 => 모달에서는 00시 ~ 00시까지 000을 한다는 입력을 받는다. (제목 + 상세내용) 그리고 색상도 정한다 (POST 요청을 보냄)
@@ -48,13 +49,6 @@ function TodayGrid() {
     localStorage.setItem('@schedule', JSON.stringify(stack))
   }
 
-  useEffect(() => {
-    const results = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
-    setSchedules(results)
-  }, [])
-
-  console.log('@@schedules', schedules)
-
   return (
     <>
       <S.CurrentDateTime>
@@ -83,7 +77,7 @@ function TodayGrid() {
               <span>계획</span>
             </S.Plan>
           ))}
-          {schedules.map((item, idx) => (
+          {scheduleAtom.map((item, idx) => (
             <S.ScheduleItem
               key={idx}
               top={(item.range.start * 100) / (24 * 60)}

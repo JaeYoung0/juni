@@ -8,8 +8,8 @@ export type ScheduleItem = {
 }
 
 const ScheduleAtom = atom<ScheduleItem[]>({
-  key: '@schedule', // unique ID (with respect to other atoms/selectors)
-  default: [], // default value (aka initial value)
+  key: '@schedule',
+  default: [],
 })
 
 export function useScheduleAtomState() {
