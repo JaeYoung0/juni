@@ -1,7 +1,8 @@
 import { useCalendarAtomState } from '@/domain/Calendar/calendar'
+import { ScheduleItem } from '@/domain/Schedule/schedule'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
-import TimeSelector, { ScheduleItem, TimeSelectorRef } from '../TimeSelector'
+import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
 
 import * as S from './style'
 
@@ -10,9 +11,8 @@ function TodayGrid() {
   const plans = Array.from({ length: 24 }, (v, i) => i + 1)
   const real = Array.from({ length: 24 }, (v, i) => i + 1)
 
-  const [calendarAtom] = useCalendarAtomState()
-
   const [schedules, setSchedules] = useState<ScheduleItem[]>([])
+  const [calendarAtom] = useCalendarAtomState()
 
   //   TODO1. 계획 셀 클릭했을 때
   // '계획'을 클릭 => 모달이 뜬다 => 모달에서는 00시 ~ 00시까지 000을 한다는 입력을 받는다. (제목 + 상세내용) 그리고 색상도 정한다 (POST 요청을 보냄)
@@ -39,10 +39,12 @@ function TodayGrid() {
 
   const timeSelectorRef = useRef<TimeSelectorRef | null>(null)
 
-  const onDialogClose = (payload: ScheduleItem) => {
+  const saveSchedule = (payload: Omit<ScheduleItem, 'dateTime'>) => {
     const saved = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
     const stack = [...saved]
-    stack.push(payload)
+
+    // TODO. 업데이트면 기존 데이터 바꿔치기, 새로 생기면 그냥 추가
+    stack.push({ ...payload, dateTime: calendarAtom })
     localStorage.setItem('@schedule', JSON.stringify(stack))
   }
 
@@ -98,7 +100,7 @@ function TodayGrid() {
             </S.RealItem>
           ))}
         </S.Reals>
-        <TimeSelector ref={timeSelectorRef} onDialogClose={onDialogClose} />
+        <TimeSelector ref={timeSelectorRef} onDialogClose={saveSchedule} />
       </S.Container>
     </>
   )

@@ -1,18 +1,13 @@
+import { ScheduleItem } from '@/domain/Schedule/schedule'
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 type Props = {
-  onDialogClose: (payload: ScheduleItem) => void
+  onDialogClose: (payload: Omit<ScheduleItem, 'dateTime'>) => void
 }
 
 export type TimeSelectorRef = {
   showModal: (payload?: ScheduleItem) => void
-}
-
-export type ScheduleItem = {
-  id: string | number
-  range: { start: number; end: number }
-  content: string
 }
 
 function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>) {
@@ -33,8 +28,8 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
       if (payload) {
         setMode('update')
         setRange({
-          start: { hour: payload.range.start / 60, min: payload.range.start % 60 },
-          end: { hour: payload.range.end / 60, min: payload.range.end % 60 },
+          start: { hour: Math.floor(payload.range.start / 60), min: payload.range.start % 60 },
+          end: { hour: Math.floor(payload.range.end / 60), min: payload.range.end % 60 },
         })
         setContent(payload.content)
       } else {
