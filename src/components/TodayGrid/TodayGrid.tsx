@@ -57,7 +57,12 @@ function TodayGrid() {
 
   return (
     <>
-      <h2 style={{ marginBottom: '2rem' }}>{dayjs.unix(calendarAtom).format('YYYY-MM-DD')}</h2>
+      <S.CurrentDateTime>
+        {`< `}선택 날짜: {dayjs.unix(calendarAtom).format('YYYY-MM-DD')}
+        {` >`}
+      </S.CurrentDateTime>
+      <S.VacantArea />
+      <div />
       <S.Container>
         <S.Times>
           {times.map((item) => (

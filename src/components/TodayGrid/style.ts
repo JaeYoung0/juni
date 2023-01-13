@@ -17,6 +17,8 @@ export const Container = styled.div`
   grid-template-columns: 1fr 3fr 3fr;
   padding: 0rem 0rem 5rem;
 
+  color: #fff;
+
   div > div {
     border-right: 1px solid #aaa;
   }
@@ -25,8 +27,23 @@ export const Container = styled.div`
     border-bottom: none;
   }
   div:not(:first-of-type) > div {
+    border-top: 1px solid #aaa;
+  }
+  div:not(:first-of-type) > div {
     border-bottom: 1px solid #aaa;
   }
+`
+
+export const VacantArea = styled.div`
+  height: 3rem;
+  background: #222222;
+`
+
+export const CurrentDateTime = styled.h2`
+  color: #fff;
+  font-size: 1.8rem;
+  text-align: center;
+  padding: 2rem 0rem;
 `
 
 export const Times = styled.div``

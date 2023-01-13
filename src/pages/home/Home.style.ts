@@ -6,7 +6,7 @@ export const Container = styled.div`
   background-color: #000000;
 `
 
-export const CalendarBox = styled.div`
+export const Box = styled.div`
   width: 100%;
   max-width: 60rem;
   margin: 0 auto;
