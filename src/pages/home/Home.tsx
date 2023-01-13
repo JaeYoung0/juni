@@ -1,27 +1,21 @@
 import * as S from './Home.style'
-import { css } from '@emotion/react'
 import Calendar from '@/components/Calendar'
 import TodayGrid from '@/components/TodayGrid'
-import { useCalendarAtomState } from '@/domain/Calendar/calendar'
-import dayjs from 'dayjs'
+import { useEffect } from 'react'
+import { ScheduleItem, useScheduleAtomState } from '@/domain/Schedule/schedule'
 
 function Home() {
-  const [calendarAtom] = useCalendarAtomState()
-  console.log('@@calendarAtom', dayjs.unix(calendarAtom).format('YYYY-MM-DD'))
-
+  const [_, setScheduleAtom] = useScheduleAtomState()
+  useEffect(() => {
+    const results = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
+    setScheduleAtom(results)
+  }, [])
   return (
     <S.Container>
-      Home
-      <h1
-        css={css`
-          color: white;
-        `}
-      >
-        <S.CalendarBox>
-          <Calendar />
-          <TodayGrid />
-        </S.CalendarBox>
-      </h1>
+      <S.Box>
+        <Calendar />
+        <TodayGrid />
+      </S.Box>
     </S.Container>
   )
 }

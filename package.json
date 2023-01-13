@@ -26,13 +26,15 @@
     "next": "^13.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recoil": "^0.7.6"
+    "recoil": "^0.7.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.1.1",
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "eslint": "^8.12.0",

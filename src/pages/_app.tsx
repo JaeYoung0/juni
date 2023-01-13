@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Juni Calendar</title>
+        <title>주니줄러</title>
         <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1" />
       </Head>
       <Global styles={resetStyle} />

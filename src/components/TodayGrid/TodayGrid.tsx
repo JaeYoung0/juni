@@ -1,14 +1,19 @@
 import { useCalendarAtomState } from '@/domain/Calendar/calendar'
+import { ScheduleItem, useScheduleAtomState } from '@/domain/Schedule/schedule'
 import dayjs from 'dayjs'
-import React from 'react'
+import { useRef } from 'react'
+import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
+
 import * as S from './style'
 
 function TodayGrid() {
-  const times = Array.from({ length: 24 }, (v, i) => i + 1)
+  const times = Array.from({ length: 24 }, (v, i) => i)
   const plans = Array.from({ length: 24 }, (v, i) => i + 1)
   const real = Array.from({ length: 24 }, (v, i) => i + 1)
 
+  // TODO. api 연결하면 react-query로 대체
   const [calendarAtom] = useCalendarAtomState()
+  const [scheduleAtom] = useScheduleAtomState()
 
   //   TODO1. 계획 셀 클릭했을 때
   // '계획'을 클릭 => 모달이 뜬다 => 모달에서는 00시 ~ 00시까지 000을 한다는 입력을 받는다. (제목 + 상세내용) 그리고 색상도 정한다 (POST 요청을 보냄)
@@ -32,37 +37,69 @@ function TodayGrid() {
    * 한달동안 별이 몇개인지 볼 수 있음
    * 그 날에 왜 그것을 못했는지 적어보는 성찰노트도 있으면 좋겠음.
    */
+
+  const timeSelectorRef = useRef<TimeSelectorRef | null>(null)
+
+  const saveSchedule = (payload: Omit<ScheduleItem, 'dateTime'>) => {
+    const saved = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
+    const stack = [...saved]
+
+    // TODO. 업데이트면 기존 데이터 바꿔치기, 새로 생기면 그냥 추가
+    stack.push({ ...payload, dateTime: calendarAtom })
+    localStorage.setItem('@schedule', JSON.stringify(stack))
+  }
+
   return (
     <>
-      <h2>{dayjs.unix(calendarAtom).format('YYYY-MM-DD')}</h2>
+      <S.CurrentDateTime>
+        {`< `}선택 날짜: {dayjs.unix(calendarAtom).format('YYYY-MM-DD')}
+        {` >`}
+      </S.CurrentDateTime>
+      <S.VacantArea />
+      <div />
       <S.Container>
-        <div>
+        <S.Times>
           {times.map((item) => (
             <S.Time className="time" key={item}>
               <span>{item}시</span>
             </S.Time>
           ))}
-        </div>
-        <div>
+        </S.Times>
+
+        <S.Plans>
           {plans.map((item) => (
-            <div
+            <S.Plan
               key={item}
               onClick={() => {
-                const answer = prompt('어떤 계획을 세우시겠습니까?')
-                console.log('@@answer', answer)
+                timeSelectorRef.current?.showModal()
               }}
             >
               <span>계획</span>
-            </div>
+            </S.Plan>
           ))}
-        </div>
-        <div>
+          {scheduleAtom.map((item, idx) => (
+            <S.ScheduleItem
+              key={idx}
+              top={(item.range.start * 100) / (24 * 60)}
+              height={((item.range.end - item.range.start) * 100) / (24 * 60)}
+              onClick={() => {
+                console.log('@@item', item)
+                timeSelectorRef.current?.showModal(item)
+              }}
+            >
+              {item.content}
+            </S.ScheduleItem>
+          ))}
+        </S.Plans>
+
+        <S.Reals>
           {real.map((item) => (
-            <div key={item}>
+            <S.RealItem key={item}>
               <span>실제</span>
-            </div>
+            </S.RealItem>
           ))}
-        </div>
+        </S.Reals>
+        <TimeSelector ref={timeSelectorRef} onDialogClose={saveSchedule} />
       </S.Container>
     </>
   )
