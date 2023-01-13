@@ -74,18 +74,9 @@ export const Cell = styled.button`
     background: #7755ff;
   }
 
-  /* &:hover:not(.start, .end) {
-    background: #434343;
-  } */
-
   &.today {
     border: 1px solid #fff;
   }
-`
-
-export const SelectedRangeBox = styled.div`
-  background: #2f2f2f;
-  font-size: 16px;
 `
 
 export const HelperBox = styled.div`

@@ -1,3 +1,5 @@
+import { useCalendarAtomState } from '@/domain/Calendar/calendar'
+import dayjs from 'dayjs'
 import React from 'react'
 import * as S from './style'
 
@@ -5,6 +7,8 @@ function TodayGrid() {
   const times = Array.from({ length: 24 }, (v, i) => i + 1)
   const plans = Array.from({ length: 24 }, (v, i) => i + 1)
   const real = Array.from({ length: 24 }, (v, i) => i + 1)
+
+  const [calendarAtom] = useCalendarAtomState()
 
   //   TODO1. 계획 셀 클릭했을 때
   // '계획'을 클릭 => 모달이 뜬다 => 모달에서는 00시 ~ 00시까지 000을 한다는 입력을 받는다. (제목 + 상세내용) 그리고 색상도 정한다 (POST 요청을 보냄)
@@ -29,35 +33,38 @@ function TodayGrid() {
    * 그 날에 왜 그것을 못했는지 적어보는 성찰노트도 있으면 좋겠음.
    */
   return (
-    <S.Container>
-      <div>
-        {times.map((item) => (
-          <S.Time className="time" key={item}>
-            <span>{item}시</span>
-          </S.Time>
-        ))}
-      </div>
-      <div>
-        {plans.map((item) => (
-          <div
-            key={item}
-            onClick={() => {
-              const answer = prompt('어떤 계획을 세우시겠습니까?')
-              console.log('@@answer', answer)
-            }}
-          >
-            <span>계획</span>
-          </div>
-        ))}
-      </div>
-      <div>
-        {real.map((item) => (
-          <div key={item}>
-            <span>실제</span>
-          </div>
-        ))}
-      </div>
-    </S.Container>
+    <>
+      <h2>{dayjs.unix(calendarAtom).format('YYYY-MM-DD')}</h2>
+      <S.Container>
+        <div>
+          {times.map((item) => (
+            <S.Time className="time" key={item}>
+              <span>{item}시</span>
+            </S.Time>
+          ))}
+        </div>
+        <div>
+          {plans.map((item) => (
+            <div
+              key={item}
+              onClick={() => {
+                const answer = prompt('어떤 계획을 세우시겠습니까?')
+                console.log('@@answer', answer)
+              }}
+            >
+              <span>계획</span>
+            </div>
+          ))}
+        </div>
+        <div>
+          {real.map((item) => (
+            <div key={item}>
+              <span>실제</span>
+            </div>
+          ))}
+        </div>
+      </S.Container>
+    </>
   )
 }
 

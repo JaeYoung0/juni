@@ -19,7 +19,7 @@ export const Time = styled.div`
 export const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr 3fr;
-  padding: 5rem 0;
+  padding: 0rem 0rem 5rem;
 
   div > div {
     width: 100%;
@@ -29,10 +29,10 @@ export const Container = styled.div`
     border-right: 1px solid #aaa;
   }
 
-  div:first-child > div {
+  div:first-of-type > div {
     border-bottom: none;
   }
-  div:not(:first-child) > div {
+  div:not(:first-of-type) > div {
     border-bottom: 1px solid #aaa;
   }
 `
