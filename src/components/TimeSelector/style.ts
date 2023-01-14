@@ -10,6 +10,7 @@ export const Row = styled.div`
 
 export const Dialog = styled.dialog`
   width: 32rem;
+  height: 40.5rem;
   padding: 1rem;
   border-radius: 5px;
 `
