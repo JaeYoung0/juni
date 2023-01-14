@@ -133,7 +133,7 @@ export const resetStyle = css`
   }
 
   html {
-    font-family: NanumBarunGothic;
+    font-family: Pretendard;
     font-size: 10px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
