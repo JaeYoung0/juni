@@ -1,4 +1,4 @@
-import { useCalendarAtomState } from '@/domain/Calendar/calendar'
+import { useCalendarAtomState } from '@/domain/calendar/calendar'
 import CalendarView from './CalendarView'
 
 function Calendar() {

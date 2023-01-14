@@ -1,7 +1,8 @@
-import { ScheduleItem } from '@/domain/Schedule/schedule'
+import { ScheduleItem } from '@/domain/schedule/schedule'
+import dayjs from 'dayjs'
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-
+import * as S from './style'
 type Props = {
   onDialogClose: (payload: Omit<ScheduleItem, 'dateTime'>) => void
 }
@@ -13,6 +14,7 @@ export type TimeSelectorRef = {
 function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>) {
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
+  const [title, setTitle] = useState('')
   const [mode, setMode] = useState<'create' | 'update'>('create')
 
   // range는 분 단위로 저장. ex) 10 ~ 140분은 00:10 ~ 02:20분을 의미함.
@@ -47,16 +49,21 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         start: range.start.hour * 60 + range.start.min,
         end: range.end.hour * 60 + range.end.min,
       },
+      title,
       content,
     })
     setRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
     setContent('')
   }
 
+  const [time, setTime] = useState('')
+  console.log('@@time', time, dayjs(time).unix())
+
   return (
     <dialog ref={dialogRef} style={{ width: '32rem', height: '20rem' }} onClose={handleClose}>
       <form method="dialog">
         <p>{mode === 'create' ? '스케줄 추가' : '스케줄 수정'}</p>
+        <input type="time" onChange={(e) => console.log('@@@@', e.target.value)} />
         <select
           value={range.start.hour}
           required
@@ -123,14 +130,16 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         <label>분</label>
         <span>{` `}까지</span>
 
+        <S.Row>
+          <S.TitleInput type="text" placeholder="제목" onChange={(e) => setTitle(e.target.value)} />
+        </S.Row>
+
         <div>
           <textarea
             style={{ width: '100%', height: '10rem' }}
             value={content}
             required
-            onChange={(e) => {
-              setContent(e.target.value)
-            }}
+            onChange={(e) => setContent(e.target.value)}
             placeholder="무슨일"
           />
         </div>

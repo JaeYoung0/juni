@@ -1,5 +1,5 @@
-import { useCalendarAtomState } from '@/domain/Calendar/calendar'
-import { ScheduleItem, useScheduleAtomState } from '@/domain/Schedule/schedule'
+import { useCalendarAtomState } from '@/domain/calendar/calendar'
+import { ScheduleItem, useScheduleAtomState } from '@/domain/schedule/schedule'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
@@ -81,7 +81,6 @@ function TodayGrid() {
               top={(item.range.start * 100) / (24 * 60)}
               height={((item.range.end - item.range.start) * 100) / (24 * 60)}
               onClick={() => {
-                console.log('@@item', item)
                 timeSelectorRef.current?.showModal(item)
               }}
             >
