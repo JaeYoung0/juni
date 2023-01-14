@@ -1,5 +1,5 @@
-import { useCalendarAtomState } from '@/domain/Calendar/calendar'
-import { ScheduleItem, useScheduleAtomState } from '@/domain/Schedule/schedule'
+import { useCalendarAtomState } from '@/domain/calendar/calendar'
+import { ScheduleItem, useScheduleAtomState } from '@/domain/schedule/schedule'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
@@ -40,12 +40,12 @@ function TodayGrid() {
 
   const timeSelectorRef = useRef<TimeSelectorRef | null>(null)
 
-  const saveSchedule = (payload: Omit<ScheduleItem, 'dateTime'>) => {
+  const saveSchedule = (payload: Omit<ScheduleItem, 'date'>) => {
     const saved = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
     const stack = [...saved]
 
     // TODO. 업데이트면 기존 데이터 바꿔치기, 새로 생기면 그냥 추가
-    stack.push({ ...payload, dateTime: calendarAtom })
+    stack.push({ ...payload, date: calendarAtom })
     localStorage.setItem('@schedule', JSON.stringify(stack))
   }
 
@@ -78,10 +78,9 @@ function TodayGrid() {
           {scheduleAtom.map((item, idx) => (
             <S.ScheduleItem
               key={idx}
-              top={(item.range.start * 100) / (24 * 60)}
-              height={((item.range.end - item.range.start) * 100) / (24 * 60)}
+              top={(item.timeRange.start * 100) / (24 * 60)}
+              height={((item.timeRange.end - item.timeRange.start) * 100) / (24 * 60)}
               onClick={() => {
-                console.log('@@item', item)
                 timeSelectorRef.current?.showModal(item)
               }}
             >
