@@ -6,10 +6,10 @@ import {
   useDeleteScheduleItem,
   useUpdateScheduleItem,
 } from '@/service/schedule'
-
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+
 import * as S from './style'
+
 type Props = Record<string, unknown>
 
 export type TimeSelectorRef = {
@@ -98,80 +98,75 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
   }
 
   return (
-    <dialog
-      ref={dialogRef}
-      style={{ width: '32rem', height: '20rem' }}
-      onClose={handleClose}
-      onSubmit={handleSubmit}
-    >
-      <form method="dialog">
-        <p>{mode === 'create' ? '스케줄 추가' : '스케줄 수정'}</p>
+    <S.Dialog ref={dialogRef} onClose={handleClose} onSubmit={handleSubmit}>
+      <S.DialogTitle>{mode === 'create' ? '[스케줄 추가]' : '[스케줄 수정]'}</S.DialogTitle>
 
-        <select
-          value={timeRange.start.hour}
-          required
-          onChange={(e) => {
-            setTimeRange({
-              ...timeRange,
-              start: { ...timeRange.start, hour: Number(e.target.value) },
-            })
-          }}
-        >
-          {Array.from({ length: 24 }, (_, i) => i).map((item, j) => (
-            <option key={j}>{item}</option>
-          ))}
-        </select>
-        <label>시</label>
+      <S.Form method="dialog">
+        <S.Row>
+          <S.Select
+            value={timeRange.start.hour}
+            required
+            onChange={(e) => {
+              setTimeRange({
+                ...timeRange,
+                start: { ...timeRange.start, hour: Number(e.target.value) },
+              })
+            }}
+          >
+            {Array.from({ length: 24 }, (_, i) => i).map((item, j) => (
+              <option key={j}>{item}</option>
+            ))}
+          </S.Select>
+          <S.Label>{` 시 `}</S.Label>
 
-        <select
-          value={timeRange.start.min}
-          required
-          onChange={(e) => {
-            setTimeRange({
-              ...timeRange,
-              start: { ...timeRange.start, min: Number(e.target.value) },
-            })
-          }}
-        >
-          {Array.from({ length: 60 }, (_, i) => i).map((item, j) => (
-            <option key={j}>{item}</option>
-          ))}
-        </select>
-        <label>분</label>
-        <span>{` `}부터</span>
+          <S.Select
+            value={timeRange.start.min}
+            required
+            onChange={(e) => {
+              setTimeRange({
+                ...timeRange,
+                start: { ...timeRange.start, min: Number(e.target.value) },
+              })
+            }}
+          >
+            {Array.from({ length: 60 }, (_, i) => i).map((item, j) => (
+              <option key={j}>{item}</option>
+            ))}
+          </S.Select>
+          <S.Label>{` 분  ~ `}</S.Label>
 
-        <select
-          value={timeRange.end.hour}
-          required
-          onChange={(e) => {
-            setTimeRange({
-              ...timeRange,
-              end: { ...timeRange.end, hour: Number(e.target.value) },
-            })
-          }}
-        >
-          {Array.from({ length: 24 }, (_, i) => i).map((item, j) => (
-            <option key={j}>{item}</option>
-          ))}
-        </select>
-        <label>시</label>
+          <S.Select
+            value={timeRange.end.hour}
+            required
+            onChange={(e) => {
+              setTimeRange({
+                ...timeRange,
+                end: { ...timeRange.end, hour: Number(e.target.value) },
+              })
+            }}
+          >
+            {Array.from({ length: 24 }, (_, i) => i).map((item, j) => (
+              <option key={j}>{item}</option>
+            ))}
+          </S.Select>
+          <S.Label>{` 시 `}</S.Label>
 
-        <select
-          value={timeRange.end.min}
-          required
-          onChange={(e) => {
-            setTimeRange({
-              ...timeRange,
-              end: { ...timeRange.end, min: Number(e.target.value) },
-            })
-          }}
-        >
-          {Array.from({ length: 60 }, (_, i) => i).map((item, j) => (
-            <option key={j}>{item}</option>
-          ))}
-        </select>
-        <label>분</label>
-        <span>{` `}까지</span>
+          <S.Select
+            value={timeRange.end.min}
+            required
+            onChange={(e) => {
+              setTimeRange({
+                ...timeRange,
+                end: { ...timeRange.end, min: Number(e.target.value) },
+              })
+            }}
+          >
+            {Array.from({ length: 60 }, (_, i) => i).map((item, j) => (
+              <option key={j}>{item}</option>
+            ))}
+          </S.Select>
+          <S.Label>{` 분 `}</S.Label>
+        </S.Row>
 
         <S.Row>
           <S.TitleInput
@@ -183,46 +178,31 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
           />
         </S.Row>
 
-        <div>
-          <textarea
-            style={{ width: '100%', height: '10rem' }}
-            value={content}
-            required
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="무슨일"
-          />
-        </div>
+        <S.ContentTextArea
+          value={content}
+          required
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="메모"
+        />
 
         {mode === 'create' && (
-          <div>
-            <button
+          <S.ButtonsWrapper>
+            <S.Button
               type="reset"
               onClick={() => {
                 dialogRef.current?.close()
               }}
             >
               취소
-            </button>
-            <button type="submit">확인</button>
-          </div>
+            </S.Button>
+            <S.Button type="submit">확인</S.Button>
+          </S.ButtonsWrapper>
         )}
 
         {mode === 'update' && (
-          <div>
-            <button
-              type="reset"
-              onClick={() => {
-                dialogRef.current?.close()
-                // 삭제
-              }}
-            >
-              취소
-            </button>
-
-            <button type="submit">수정</button>
-
-            <button
-              style={{ marginLeft: '3rem', color: 'red' }}
+          <S.ButtonsWrapper>
+            <S.Button
+              style={{ marginRight: 'auto', color: '#000' }}
               onClick={() => {
                 void deleteScheduleItem.mutate({
                   userId: userAtom.userId,
@@ -232,11 +212,21 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
               }}
             >
               삭제
-            </button>
-          </div>
+            </S.Button>
+            <S.Button
+              type="reset"
+              onClick={() => {
+                dialogRef.current?.close()
+                // 삭제
+              }}
+            >
+              취소
+            </S.Button>
+            <S.Button type="submit">수정</S.Button>
+          </S.ButtonsWrapper>
         )}
-      </form>
-    </dialog>
+      </S.Form>
+    </S.Dialog>
   )
 }
 

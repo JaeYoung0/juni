@@ -7,7 +7,7 @@ export type User = {
 }
 
 const UserAtom = atom<User>({
-  key: '@user',
+  key: '@user' + v1(),
   default: {
     userId: '',
     name: '',
