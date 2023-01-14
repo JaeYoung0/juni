@@ -1,8 +1,8 @@
-import { useCalendarAtomState } from '@/domain/calendar/calendar'
+import { useCalendarAtom } from '@/domain/calendar/calendar'
 import CalendarView from './CalendarView'
 
 function Calendar() {
-  const [_, setCalendarAtom] = useCalendarAtomState()
+  const [_, setCalendarAtom] = useCalendarAtom()
 
   const handleChange = (unix: number) => {
     setCalendarAtom(unix)

@@ -1,12 +1,17 @@
 import { atom, useRecoilState } from 'recoil'
 import { v1 } from 'uuid'
 
-const UserAtom = atom({
-  key: '@user' + v1(), // unique ID (with respect to other atoms/selectors)
+export type User = {
+  userId: string
+  name: string
+}
+
+const UserAtom = atom<User>({
+  key: '@user',
   default: {
     userId: '',
     name: '',
-  }, // default value (aka initial value)
+  },
 })
 
 export function useUserAtom() {

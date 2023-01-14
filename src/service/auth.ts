@@ -1,21 +1,14 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
+import { createUser } from './user'
+import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth'
+
 import { FirebaseError } from '@firebase/util'
 import { useUserAtom } from '@/domain/user/user'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { firebaseApp } from '@/lib/firebase'
+import { getUser } from '@/service/user'
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY!,
-  authDomain: 'juniduler.firebaseapp.com',
-  projectId: 'juniduler',
-  storageBucket: 'juniduler.appspot.com',
-  messagingSenderId: '667236950681',
-  appId: process.env.FIREBASE_APP_ID!,
-  measurementId: 'G-R0R387Q4D0',
-}
-const app = initializeApp(firebaseConfig)
-export const firebaseAuth = getAuth(app)
+export const firebaseAuth = getAuth(firebaseApp)
 const provider = new GoogleAuthProvider()
 
 export function useAuth() {
@@ -26,9 +19,13 @@ export function useAuth() {
   const googleLogin = async () => {
     try {
       setIsLoading(true)
+
       // await setPersistence(firebaseAuth, browserSessionPersistence)
       const { user } = await signInWithPopup(firebaseAuth, provider)
+      const res = await findOrCreateUser(user)
+
       const { uid, displayName } = user
+      // 여기서 res를 써먹어야하지 않을까
       setUserAtom({ userId: uid, name: displayName ?? '이름 없음' })
       void router.replace('/')
     } catch (error) {
@@ -37,6 +34,20 @@ export function useAuth() {
       }
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const findOrCreateUser = async (user: User) => {
+    const foundUser = await getUser(user.uid)
+    if (foundUser) {
+      return foundUser
+    } else {
+      const payload = {
+        userId: user.uid,
+        name: user.displayName ?? '이름 없음',
+      }
+      await createUser(payload)
+      return await getUser(user.uid)
     }
   }
 
