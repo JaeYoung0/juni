@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useServiceWorker from '@/hooks/useServiceWorker'
+import useViewportHeight from '@/hooks/useViewportHeight'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useViewportHeight()
   useServiceWorker()
   const [queryClient] = useState(() => new QueryClient())
 

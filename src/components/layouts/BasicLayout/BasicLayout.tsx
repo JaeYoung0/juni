@@ -17,7 +17,7 @@ export default BasicLayout
 
 export const Container = styled.div<Omit<Props, 'children'>>`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(var(--vh) * 100);
   background-color: #000000;
 
   ${({ center }) =>
