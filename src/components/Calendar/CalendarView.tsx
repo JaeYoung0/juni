@@ -9,6 +9,7 @@ import isBetweenPlugin from 'dayjs/plugin/isBetween'
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 
 dayjs.extend(weekdayPlugin)
 dayjs.extend(objectPlugin)
@@ -81,6 +82,11 @@ function CalendarView({ onChange }: CalendarViewProps) {
     setCurrent(date.unixStamp)
   }
 
+  const { onTouchStart, onTouchMove, onTouchEnd } = useHorizontalSwipe({
+    onLeftSwipe: goNextMonth,
+    onRightSwipe: goPrevMonth,
+  })
+
   useEffect(() => {
     getAllDates()
   }, [currentCalendar])
@@ -96,7 +102,7 @@ function CalendarView({ onChange }: CalendarViewProps) {
 
   return (
     <S.Container>
-      <S.CalendarBox>
+      <S.CalendarBox onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         <S.HeaderBox>
           <button onClick={() => goPrevMonth()}>
             <ArrowBackIosNewIcon />
