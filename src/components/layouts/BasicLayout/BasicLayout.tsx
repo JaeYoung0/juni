@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import styled from '@emotion/styled'
-import { css } from '@emotion/react'
+import { css, Interpolation, Theme } from '@emotion/react'
 
 type Props = {
   children: React.ReactNode
   center?: boolean
+  style?: CSSProperties
+  css?: Interpolation<Theme>
 }
 
 function BasicLayout({ children, ...props }: Props) {
