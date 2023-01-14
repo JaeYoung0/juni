@@ -1,8 +1,7 @@
-import { useCalendarAtom } from '@/domain/calendar/calendar'
-import { ScheduleItem } from '@/domain/schedule/schedule'
+import { useCalendarAtom } from '@/domain/calendar'
+import { ScheduleItem } from '@/domain/schedule'
 import { useUserAtom } from '@/domain/user'
 import {
-  deleteScheduleItem,
   useCreateScheduleItem,
   useDeleteScheduleItem,
   useUpdateScheduleItem,

@@ -1,4 +1,4 @@
-import { useCalendarAtom } from '@/domain/calendar/calendar'
+import { useCalendarAtom } from '@/domain/calendar'
 import CalendarView from './CalendarView'
 
 function Calendar() {

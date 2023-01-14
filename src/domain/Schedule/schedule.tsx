@@ -2,7 +2,7 @@ import { unixToYYYYMMDD } from '@/lib/utils'
 import { getScheduleItems } from '@/service/schedule'
 import { useQuery } from '@tanstack/react-query'
 
-import { useCalendarAtom } from '../calendar/calendar'
+import { useCalendarAtom } from '../calendar'
 import { useUserAtom } from '../user'
 
 export type ScheduleItem = {

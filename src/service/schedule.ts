@@ -1,5 +1,5 @@
-import { useCalendarAtom } from '@/domain/calendar/calendar'
-import { ScheduleItem } from '@/domain/schedule/schedule'
+import { useCalendarAtom } from '@/domain/calendar'
+import { ScheduleItem } from '@/domain/schedule'
 import { User } from '@/domain/user'
 import { firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'

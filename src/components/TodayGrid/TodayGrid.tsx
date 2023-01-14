@@ -1,5 +1,5 @@
-import { useCalendarAtom } from '@/domain/calendar/calendar'
-import { useScheduleQuery } from '@/domain/schedule/schedule'
+import { useCalendarAtom } from '@/domain/calendar'
+import { useScheduleQuery } from '@/domain/schedule'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
