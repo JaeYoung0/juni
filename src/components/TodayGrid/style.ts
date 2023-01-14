@@ -5,9 +5,14 @@ import styled from '@emotion/styled'
 /* div > ${Time}{
 } */
 
-const cellStyle = css`
+const baseCellStyle = css`
   width: 100%;
+  background: #222222;
   min-height: 100px;
+`
+
+const planCellStyle = css`
+  width: 100%;
   background: #222222;
 `
 
@@ -59,7 +64,7 @@ export const Time = styled.div`
     font-size: 1.4rem;
   }
 
-  ${cellStyle}
+  ${baseCellStyle}
 `
 
 export const Plans = styled.div`
@@ -67,7 +72,7 @@ export const Plans = styled.div`
 `
 
 export const Plan = styled.div`
-  ${cellStyle}
+  ${baseCellStyle}
 `
 
 export const Schedules = styled.div`
@@ -78,7 +83,7 @@ export const Schedules = styled.div`
   height: 100%;
 `
 
-export const ScheduleItem = styled.div<{ top: number; height: number }>`
+export const PlanItem = styled.div<{ top: number; height: number }>`
   position: absolute;
   top: ${({ top }) => `${top}%`};
   height: ${({ height }) => `${height}%`};
@@ -86,15 +91,21 @@ export const ScheduleItem = styled.div<{ top: number; height: number }>`
   left: 0;
   z-index: 100;
 
-  ${cellStyle}
+  ${planCellStyle}
   background: gray;
   white-space: pre;
   font-size: 1rem;
   line-height: 1.5;
+
+  font-size: 1.4rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `
 
 export const Reals = styled.div``
 
 export const RealItem = styled.div`
-  ${cellStyle}
+  ${baseCellStyle}
 `

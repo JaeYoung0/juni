@@ -65,18 +65,22 @@ function TodayGrid() {
               }}
             />
           ))}
-          {scheduleItems?.map((item, idx) => (
-            <S.ScheduleItem
-              key={idx}
-              top={(item.startTime * 100) / (24 * 60)}
-              height={((item.endTime - item.startTime) * 100) / (24 * 60)}
-              onClick={() => {
-                timeSelectorRef.current?.showModal(item)
-              }}
-            >
-              {item.content}
-            </S.ScheduleItem>
-          ))}
+          {scheduleItems?.map((item, idx) => {
+            const top = (item.startTime * 100) / (24 * 60)
+            const height = ((item.endTime - item.startTime) * 100) / (24 * 60)
+            return (
+              <S.PlanItem
+                key={idx}
+                top={top}
+                height={height}
+                onClick={() => {
+                  timeSelectorRef.current?.showModal(item)
+                }}
+              >
+                {item.content}
+              </S.PlanItem>
+            )
+          })}
         </S.Plans>
 
         <S.Reals>
