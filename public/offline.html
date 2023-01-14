@@ -1,0 +1,80 @@
+<!-- https://web.dev/offline-fallback-page/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>You are offline</title>
+
+    <!-- Inline the page's stylesheet. -->
+    <style>
+      body {
+        font-family: 'SUIT';
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      p {
+        color: #000;
+        font-size: 20px;
+      }
+
+      button {
+        border-radius: 5px;
+        border: 1px solid #2959ff;
+        background-color: #2959ff;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 18px;
+      }
+
+      img {
+        width: 400px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>인터넷 연결을 확인해주세요.</p>
+
+    <button type="button">새로고침</button>
+
+    <script>
+      // Manual reload feature.
+      document.querySelector('button').addEventListener('click', () => {
+        window.location.reload()
+      })
+
+      // Listen to changes in the network state, reload when online.
+      // This handles the case when the device is completely offline.
+      window.addEventListener('online', () => {
+        window.location.reload()
+      })
+
+      // Check if the server is responding and reload the page if it is.
+      // This handles the case when the device is online, but the server
+      // is offline or misbehaving.
+      async function checkNetworkAndReload() {
+        try {
+          const response = await fetch('.')
+          // Verify we get a valid response from the server
+          if (response.status >= 200 && response.status < 500) {
+            window.location.reload()
+            return
+          }
+        } catch {
+          // Unable to connect to the server, ignore.
+        }
+        window.setTimeout(checkNetworkAndReload, 2500)
+      }
+
+      checkNetworkAndReload()
+    </script>
+  </body>
+</html>
