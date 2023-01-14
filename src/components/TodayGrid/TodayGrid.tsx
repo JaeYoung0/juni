@@ -1,5 +1,5 @@
-import { useCalendarAtomState } from '@/domain/calendar/calendar'
-import { ScheduleItem, useScheduleAtomState } from '@/domain/schedule/schedule'
+import { useCalendarAtom } from '@/domain/calendar/calendar'
+import { useScheduleQuery } from '@/domain/schedule/schedule'
 import dayjs from 'dayjs'
 import { useRef } from 'react'
 import TimeSelector, { TimeSelectorRef } from '../TimeSelector'
@@ -11,9 +11,8 @@ function TodayGrid() {
   const plans = Array.from({ length: 24 }, (v, i) => i + 1)
   const real = Array.from({ length: 24 }, (v, i) => i + 1)
 
-  // TODO. api 연결하면 react-query로 대체
-  const [calendarAtom] = useCalendarAtomState()
-  const [scheduleAtom] = useScheduleAtomState()
+  const [currentUnix] = useCalendarAtom()
+  const { data: scheduleItems } = useScheduleQuery()
 
   //   TODO1. 계획 셀 클릭했을 때
   // '계획'을 클릭 => 모달이 뜬다 => 모달에서는 00시 ~ 00시까지 000을 한다는 입력을 받는다. (제목 + 상세내용) 그리고 색상도 정한다 (POST 요청을 보냄)
@@ -40,19 +39,10 @@ function TodayGrid() {
 
   const timeSelectorRef = useRef<TimeSelectorRef | null>(null)
 
-  const saveSchedule = (payload: Omit<ScheduleItem, 'date'>) => {
-    const saved = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
-    const stack = [...saved]
-
-    // TODO. 업데이트면 기존 데이터 바꿔치기, 새로 생기면 그냥 추가
-    stack.push({ ...payload, date: calendarAtom })
-    localStorage.setItem('@schedule', JSON.stringify(stack))
-  }
-
   return (
     <>
       <S.CurrentDateTime>
-        {`< `}선택 날짜: {dayjs.unix(calendarAtom).format('YYYY-MM-DD')}
+        {`< `}선택 날짜: {dayjs.unix(currentUnix).format('YYYY-MM-DD')}
         {` >`}
       </S.CurrentDateTime>
       <S.VacantArea />
@@ -75,11 +65,11 @@ function TodayGrid() {
               }}
             />
           ))}
-          {scheduleAtom.map((item, idx) => (
+          {scheduleItems?.map((item, idx) => (
             <S.ScheduleItem
               key={idx}
-              top={(item.timeRange.start * 100) / (24 * 60)}
-              height={((item.timeRange.end - item.timeRange.start) * 100) / (24 * 60)}
+              top={(item.startTime * 100) / (24 * 60)}
+              height={((item.endTime - item.startTime) * 100) / (24 * 60)}
               onClick={() => {
                 timeSelectorRef.current?.showModal(item)
               }}
@@ -94,7 +84,7 @@ function TodayGrid() {
             <S.RealItem key={item} />
           ))}
         </S.Reals>
-        <TimeSelector ref={timeSelectorRef} onDialogClose={saveSchedule} />
+        <TimeSelector ref={timeSelectorRef} />
       </S.Container>
     </>
   )

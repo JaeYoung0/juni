@@ -2,21 +2,13 @@ import * as S from './Home.style'
 import Calendar from '@/components/Calendar'
 import TodayGrid from '@/components/TodayGrid'
 import { useEffect } from 'react'
-import { ScheduleItem, useScheduleAtomState } from '@/domain/schedule/schedule'
 import { useUserAtom } from '@/domain/user'
-import { firebaseAuth, useAuth } from '@/service/auth/auth'
+import { firebaseAuth, useAuth } from '@/service/auth'
 import { useRouter } from 'next/router'
-
 function Home() {
-  const [_, setScheduleAtom] = useScheduleAtomState()
   const [userAtom, setUserAtom] = useUserAtom()
   const router = useRouter()
   const { logout } = useAuth()
-
-  useEffect(() => {
-    const results = JSON.parse(localStorage.getItem('@schedule') ?? '[]') as ScheduleItem[]
-    setScheduleAtom(results)
-  }, [])
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
@@ -45,7 +37,6 @@ function Home() {
             로그아웃
           </button>
         </S.UserName>
-
         <Calendar />
         <TodayGrid />
       </S.Box>

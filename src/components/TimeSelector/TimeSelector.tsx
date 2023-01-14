@@ -1,17 +1,23 @@
+import { useCalendarAtom } from '@/domain/calendar/calendar'
 import { ScheduleItem } from '@/domain/schedule/schedule'
-import dayjs from 'dayjs'
+import { useUserAtom } from '@/domain/user'
+import {
+  deleteScheduleItem,
+  useCreateScheduleItem,
+  useDeleteScheduleItem,
+  useUpdateScheduleItem,
+} from '@/service/schedule'
+
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import * as S from './style'
-type Props = {
-  onDialogClose: (payload: Omit<ScheduleItem, 'date'>) => void
-}
+type Props = Record<string, unknown>
 
 export type TimeSelectorRef = {
   showModal: (payload?: ScheduleItem) => void
 }
 
-function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>) {
+function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   const [title, setTitle] = useState('')
@@ -23,7 +29,16 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
     end: { hour: 0, min: 0 },
   })
 
+  const [currentUnix] = useCalendarAtom()
+
   const [content, setContent] = useState('')
+  const [scheduleId, setScheduleId] = useState('')
+
+  const [userAtom] = useUserAtom()
+
+  const createScheduleItem = useCreateScheduleItem()
+  const updateScheduleItem = useUpdateScheduleItem()
+  const deleteScheduleItem = useDeleteScheduleItem()
 
   useImperativeHandle(ref, () => ({
     showModal: (payload?: ScheduleItem) => {
@@ -31,13 +46,14 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         setMode('update')
         setTimeRange({
           start: {
-            hour: Math.floor(payload.timeRange.start / 60),
-            min: payload.timeRange.start % 60,
+            hour: Math.floor(payload.startTime / 60),
+            min: payload.startTime % 60,
           },
-          end: { hour: Math.floor(payload.timeRange.end / 60), min: payload.timeRange.end % 60 },
+          end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
         })
         setTitle(payload.title)
         setContent(payload.content)
+        setScheduleId(payload.id)
       } else {
         setMode('create')
       }
@@ -47,24 +63,48 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
   }))
 
   const handleClose = () => {
-    onDialogClose({
-      id: uuidv4(),
-      timeRange: {
-        start: timeRange.start.hour * 60 + timeRange.start.min,
-        end: timeRange.end.hour * 60 + timeRange.end.min,
-      },
-      title,
-      content,
-    })
+    // void createScheduleItem()
     setTimeRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
+    setTitle('')
+    setContent('')
+
+    console.log('@@closed 2')
+  }
+
+  const handleSubmit = () => {
+    if (mode === 'create') {
+      createScheduleItem.mutate({
+        currentUnix,
+        startTime: timeRange.start.hour * 60 + timeRange.start.min,
+        endTime: timeRange.end.hour * 60 + timeRange.end.min,
+        title,
+        content,
+        userId: userAtom.userId,
+      })
+    } else {
+      updateScheduleItem.mutate({
+        currentUnix,
+        startTime: timeRange.start.hour * 60 + timeRange.start.min,
+        endTime: timeRange.end.hour * 60 + timeRange.end.min,
+        title,
+        content,
+        userId: userAtom.userId,
+        id: scheduleId,
+      })
+    }
+
+    setTimeRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
+    setTitle('')
     setContent('')
   }
 
-  const [time, setTime] = useState('')
-  console.log('@@time', time, dayjs(time).unix())
-
   return (
-    <dialog ref={dialogRef} style={{ width: '32rem', height: '20rem' }} onClose={handleClose}>
+    <dialog
+      ref={dialogRef}
+      style={{ width: '32rem', height: '20rem' }}
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+    >
       <form method="dialog">
         <p>{mode === 'create' ? '스케줄 추가' : '스케줄 수정'}</p>
 
@@ -139,6 +179,7 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
             type="text"
             required
             placeholder="제목"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </S.Row>
@@ -178,7 +219,21 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
             >
               취소
             </button>
+
             <button type="submit">수정</button>
+
+            <button
+              style={{ marginLeft: '3rem', color: 'red' }}
+              onClick={() => {
+                void deleteScheduleItem.mutate({
+                  userId: userAtom.userId,
+                  currentUnix,
+                  id: scheduleId,
+                })
+              }}
+            >
+              삭제
+            </button>
           </div>
         )}
       </form>
