@@ -3,8 +3,8 @@ import { v1 } from 'uuid'
 
 export type ScheduleItem = {
   id: string | number
-  dateTime: number // unix timestamp
-  range: { start: number; end: number }
+  date: number // unix timestamp
+  timeRange: { start: number; end: number }
   title: string
   content: string
 }

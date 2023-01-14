@@ -4,7 +4,7 @@ import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import * as S from './style'
 type Props = {
-  onDialogClose: (payload: Omit<ScheduleItem, 'dateTime'>) => void
+  onDialogClose: (payload: Omit<ScheduleItem, 'date'>) => void
 }
 
 export type TimeSelectorRef = {
@@ -18,7 +18,7 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
   const [mode, setMode] = useState<'create' | 'update'>('create')
 
   // range는 분 단위로 저장. ex) 10 ~ 140분은 00:10 ~ 02:20분을 의미함.
-  const [range, setRange] = useState({
+  const [timeRange, setTimeRange] = useState({
     start: { hour: 0, min: 0 },
     end: { hour: 0, min: 0 },
   })
@@ -29,10 +29,14 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
     showModal: (payload?: ScheduleItem) => {
       if (payload) {
         setMode('update')
-        setRange({
-          start: { hour: Math.floor(payload.range.start / 60), min: payload.range.start % 60 },
-          end: { hour: Math.floor(payload.range.end / 60), min: payload.range.end % 60 },
+        setTimeRange({
+          start: {
+            hour: Math.floor(payload.timeRange.start / 60),
+            min: payload.timeRange.start % 60,
+          },
+          end: { hour: Math.floor(payload.timeRange.end / 60), min: payload.timeRange.end % 60 },
         })
+        setTitle(payload.title)
         setContent(payload.content)
       } else {
         setMode('create')
@@ -45,14 +49,14 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
   const handleClose = () => {
     onDialogClose({
       id: uuidv4(),
-      range: {
-        start: range.start.hour * 60 + range.start.min,
-        end: range.end.hour * 60 + range.end.min,
+      timeRange: {
+        start: timeRange.start.hour * 60 + timeRange.start.min,
+        end: timeRange.end.hour * 60 + timeRange.end.min,
       },
       title,
       content,
     })
-    setRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
+    setTimeRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
     setContent('')
   }
 
@@ -63,14 +67,14 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
     <dialog ref={dialogRef} style={{ width: '32rem', height: '20rem' }} onClose={handleClose}>
       <form method="dialog">
         <p>{mode === 'create' ? '스케줄 추가' : '스케줄 수정'}</p>
-        <input type="time" onChange={(e) => console.log('@@@@', e.target.value)} />
+
         <select
-          value={range.start.hour}
+          value={timeRange.start.hour}
           required
           onChange={(e) => {
-            setRange({
-              ...range,
-              start: { ...range.start, hour: Number(e.target.value) },
+            setTimeRange({
+              ...timeRange,
+              start: { ...timeRange.start, hour: Number(e.target.value) },
             })
           }}
         >
@@ -81,12 +85,12 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         <label>시</label>
 
         <select
-          value={range.start.min}
+          value={timeRange.start.min}
           required
           onChange={(e) => {
-            setRange({
-              ...range,
-              start: { ...range.start, min: Number(e.target.value) },
+            setTimeRange({
+              ...timeRange,
+              start: { ...timeRange.start, min: Number(e.target.value) },
             })
           }}
         >
@@ -98,12 +102,12 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         <span>{` `}부터</span>
 
         <select
-          value={range.end.hour}
+          value={timeRange.end.hour}
           required
           onChange={(e) => {
-            setRange({
-              ...range,
-              end: { ...range.end, hour: Number(e.target.value) },
+            setTimeRange({
+              ...timeRange,
+              end: { ...timeRange.end, hour: Number(e.target.value) },
             })
           }}
         >
@@ -114,12 +118,12 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         <label>시</label>
 
         <select
-          value={range.end.min}
+          value={timeRange.end.min}
           required
           onChange={(e) => {
-            setRange({
-              ...range,
-              end: { ...range.end, min: Number(e.target.value) },
+            setTimeRange({
+              ...timeRange,
+              end: { ...timeRange.end, min: Number(e.target.value) },
             })
           }}
         >
@@ -131,7 +135,12 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
         <span>{` `}까지</span>
 
         <S.Row>
-          <S.TitleInput type="text" placeholder="제목" onChange={(e) => setTitle(e.target.value)} />
+          <S.TitleInput
+            type="text"
+            required
+            placeholder="제목"
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </S.Row>
 
         <div>
@@ -163,11 +172,11 @@ function TimeSelector({ onDialogClose }: Props, ref: React.Ref<TimeSelectorRef>)
             <button
               type="reset"
               onClick={() => {
-                // dialogRef.current?.close()
+                dialogRef.current?.close()
                 // 삭제
               }}
             >
-              삭제
+              취소
             </button>
             <button type="submit">수정</button>
           </div>
