@@ -73,9 +73,7 @@ function TodayGrid() {
               onClick={() => {
                 timeSelectorRef.current?.showModal()
               }}
-            >
-              <span>계획</span>
-            </S.Plan>
+            />
           ))}
           {scheduleAtom.map((item, idx) => (
             <S.ScheduleItem
@@ -94,9 +92,7 @@ function TodayGrid() {
 
         <S.Reals>
           {real.map((item) => (
-            <S.RealItem key={item}>
-              <span>실제</span>
-            </S.RealItem>
+            <S.RealItem key={item} />
           ))}
         </S.Reals>
         <TimeSelector ref={timeSelectorRef} onDialogClose={saveSchedule} />

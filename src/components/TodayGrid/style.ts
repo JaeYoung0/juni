@@ -88,6 +88,9 @@ export const ScheduleItem = styled.div<{ top: number; height: number }>`
 
   ${cellStyle}
   background: gray;
+  white-space: pre;
+  font-size: 1rem;
+  line-height: 1.5;
 `
 
 export const Reals = styled.div``
