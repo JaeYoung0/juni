@@ -18,3 +18,25 @@ export const UserName = styled.h2`
   padding: 2rem 0rem;
   text-align: center;
 `
+
+export const ToggleButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* width: 5rem; */
+  /* height: 5rem; */
+  padding: 0;
+  background: #fff;
+  border: 1px solid #2959ff;
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  p {
+    font-size: 1.4rem;
+    color: #000;
+  }
+`
