@@ -11,6 +11,7 @@ export type PlanItem = {
   content: string
   startTime: number
   endTime: number
+  color: string
 }
 
 export const QUERY_KEY_HEAD = '@planList'
@@ -26,5 +27,6 @@ export function usePlanList() {
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
     enabled: !!userAtom.userId,
+    refetchOnWindowFocus: false,
   })
 }

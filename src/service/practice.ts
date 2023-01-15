@@ -113,7 +113,6 @@ export function useCreatePracticeItem() {
     mutationFn: createPracticeItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })

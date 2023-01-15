@@ -44,6 +44,8 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
 
   // state가 너무 많다!
   const [title, setTitle] = useState('')
+  console.log('@@title', title)
+
   const [content, setContent] = useState('')
   const [practiceId, setPracticeId] = useState('')
   const [timeRange, setTimeRange] = useState({
@@ -110,7 +112,9 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
       </S.DialogTitle>
 
       <S.Form method="dialog">
-        <S.CloseButton onClick={handleCancel}>X</S.CloseButton>
+        <S.CloseButton type="reset" onClick={handleCancel}>
+          X
+        </S.CloseButton>
         <S.Row>
           <S.Select
             value={timeRange.start.hour}
@@ -186,8 +190,9 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
             }}
             style={{ width: '100%' }}
           >
-            {planTitles?.map((item) => (
-              <option key={item}>{item}</option>
+            <option></option>
+            {planTitles?.map((item, idx) => (
+              <option key={idx}>{item}</option>
             ))}
             <option>계획에 없던 일</option>
           </S.Select>
