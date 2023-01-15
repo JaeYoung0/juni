@@ -28,7 +28,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Juniduler</title>
-        <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, viewport-fit=cover, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+        />
       </Head>
       <Global styles={resetStyle} />
       <QueryClientProvider client={queryClient}>
