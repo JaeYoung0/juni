@@ -8,6 +8,8 @@ import PlanDialog, { PlanDialogRefType } from '../PlanDialog'
 import * as S from './style'
 import { usePracticeList } from '@/domain/practice'
 
+const LENGTH = 24
+
 function TodayGrid() {
   const [currentUnix] = useCalendarAtom()
 
@@ -29,7 +31,7 @@ function TodayGrid() {
 }
 
 function TimeCol() {
-  const bases = Array.from({ length: 24 }, (v, i) => i)
+  const bases = Array.from({ length: LENGTH }, (v, i) => i)
 
   return (
     <S.Times>
@@ -43,7 +45,7 @@ function TimeCol() {
 }
 
 function PlanCol() {
-  const bases = Array.from({ length: 24 }, (v, i) => i + 1)
+  const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: plans } = usePlanList()
 
   const planDialogRef = useRef<PlanDialogRefType | null>(null)
@@ -74,7 +76,7 @@ function PlanCol() {
 }
 
 function PracticeCol() {
-  const bases = Array.from({ length: 24 }, (v, i) => i + 1)
+  const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const practiceDialogRef = useRef<PracticeDialogRefType | null>(null)
   const handlePracticeBaseClick = () => {
     practiceDialogRef.current?.showModal()

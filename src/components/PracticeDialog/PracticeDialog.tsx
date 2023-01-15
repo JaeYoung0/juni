@@ -189,6 +189,7 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
             {planTitles?.map((item) => (
               <option key={item}>{item}</option>
             ))}
+            <option>계획에 없던 일</option>
           </S.Select>
         </S.Row>
 
