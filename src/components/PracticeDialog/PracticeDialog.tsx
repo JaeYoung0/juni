@@ -8,6 +8,7 @@ import {
   useUpdatePracticeItem,
 } from '@/service/practice'
 import { useUserAtom } from '@/domain/user'
+import { usePlanList } from '@/domain/plan'
 
 export type PracticeDialogRefType = {
   showModal: (payload?: PracticeItem) => void
@@ -99,6 +100,9 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
     dialogRef.current?.close()
   }
 
+  const { data: planList } = usePlanList()
+  const planTitles = planList?.map((item) => item.title)
+
   return (
     <S.Dialog ref={dialogRef} onClose={handleClose} onSubmit={handleSubmit}>
       <S.DialogTitle>
@@ -174,13 +178,18 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
         </S.Row>
 
         <S.Row>
-          <S.TitleInput
-            type="text"
-            required
-            placeholder="제목"
+          <S.Select
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+            required
+            onChange={(e) => {
+              setTitle(e.target.value)
+            }}
+            style={{ width: '100%' }}
+          >
+            {planTitles?.map((item) => (
+              <option key={item}>{item}</option>
+            ))}
+          </S.Select>
         </S.Row>
 
         <S.ContentTextArea

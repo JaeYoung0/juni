@@ -45,6 +45,8 @@ function TimeCol() {
 function PlanCol() {
   const bases = Array.from({ length: 24 }, (v, i) => i + 1)
   const { data: plans } = usePlanList()
+  console.log('@@plans', plans)
+
   const planDialogRef = useRef<PlanDialogRefType | null>(null)
 
   const handlePlanBaseClick = () => planDialogRef.current?.showModal()
