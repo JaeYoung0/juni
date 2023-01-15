@@ -45,7 +45,6 @@ function TimeCol() {
 function PlanCol() {
   const bases = Array.from({ length: 24 }, (v, i) => i + 1)
   const { data: plans } = usePlanList()
-  console.log('@@plans', plans)
 
   const planDialogRef = useRef<PlanDialogRefType | null>(null)
 
@@ -65,7 +64,7 @@ function PlanCol() {
         const height = ((item.endTime - item.startTime) * 100) / (24 * 60)
         return (
           <S.PlanItem key={idx} top={top} height={height} onClick={() => handlePlanItemClick(item)}>
-            {item.content}
+            <span>{item.content}</span>
           </S.PlanItem>
         )
       })}
@@ -95,14 +94,14 @@ function PracticeCol() {
         const top = (item.startTime * 100) / (24 * 60)
         const height = ((item.endTime - item.startTime) * 100) / (24 * 60)
         return (
-          <S.PlanItem
+          <S.PracticeItem
             key={idx}
             top={top}
             height={height}
             onClick={() => handlePracticeItemClick(item)}
           >
-            {item.content}
-          </S.PlanItem>
+            <span>{item.content}</span>
+          </S.PracticeItem>
         )
       })}
       <PracticeDialog ref={practiceDialogRef} />

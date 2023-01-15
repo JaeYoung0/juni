@@ -85,16 +85,19 @@ export const PlanItem = styled.div<{ top: number; height: number }>`
 
   ${planCellStyle}
   background: gray;
-  white-space: pre;
+
   font-size: 1rem;
   line-height: 1.5;
 
   font-size: 1.4rem;
   padding: 1rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
 `
+
+export const PracticeItem = styled(PlanItem)``
 
 export const PracticeList = styled.div`
   position: relative;
