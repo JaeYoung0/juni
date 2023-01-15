@@ -15,12 +15,15 @@ const planCellStyle = css`
   width: 100%;
   background: #222222;
 `
-
-export const Grid = styled.div`
+export const GridWrapper = styled.div`
+  overflow: hidden;
+`
+export const Grid = styled.div<{ firstHour: number }>`
   position: relative;
   display: grid;
   grid-template-columns: 1fr 3fr 3fr;
-  padding: 0rem 0rem 5rem;
+  padding: 5rem 0rem 5rem;
+  background: #222;
 
   color: #fff;
 
@@ -37,11 +40,8 @@ export const Grid = styled.div`
   div:not(:first-of-type) > div {
     border-bottom: 1px solid #aaa;
   }
-`
 
-export const VacantArea = styled.div`
-  height: 3rem;
-  background: #222222;
+  transform: ${({ firstHour }) => `translateY(calc((-${firstHour} / 24) * 100%));`};
 `
 
 export const CurrentUnix = styled.h2`

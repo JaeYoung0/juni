@@ -1,7 +1,7 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { PlanItem, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
-import { useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import PracticeDialog, { PracticeDialogRefType } from '../PracticeDialog'
 import PlanDialog, { PlanDialogRefType } from '../PlanDialog'
 
@@ -12,6 +12,41 @@ const LENGTH = 24
 
 function TodayGrid() {
   const [currentUnix] = useCalendarAtom()
+  const { data: planList } = usePlanList()
+
+  const getFirstStartTime = () => {
+    let result = 0
+    planList?.forEach((planItem) => {
+      let min = Number.MAX_SAFE_INTEGER
+
+      if (planItem.startTime < min) {
+        min = planItem.startTime
+      }
+      result = min
+    })
+    return result
+  }
+
+  // TODO. refactor
+  const calculatedHour = useMemo(() => {
+    let result = 0
+    planList?.forEach((planItem) => {
+      let min = Number.MAX_SAFE_INTEGER
+
+      if (planItem.startTime < min) {
+        min = planItem.startTime
+      }
+      result = min
+    })
+
+    return result / 60
+  }, [planList])
+
+  const [firstStartHour, setFirstStartHour] = useState(0)
+
+  useEffect(() => {
+    setFirstStartHour(calculatedHour)
+  }, [planList])
 
   return (
     <>
@@ -20,12 +55,24 @@ function TodayGrid() {
         {` >`}
       </S.CurrentUnix>
 
-      <S.VacantArea />
-      <S.Grid>
-        <TimeCol />
-        <PlanCol />
-        <PracticeCol />
-      </S.Grid>
+      <button
+        onClick={() => {
+          if (!firstStartHour) {
+            setFirstStartHour(calculatedHour)
+          } else {
+            setFirstStartHour(0)
+          }
+        }}
+      >
+        토글
+      </button>
+      <S.GridWrapper>
+        <S.Grid firstHour={firstStartHour}>
+          <TimeCol />
+          <PlanCol />
+          <PracticeCol />
+        </S.Grid>
+      </S.GridWrapper>
     </>
   )
 }
