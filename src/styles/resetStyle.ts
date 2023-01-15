@@ -81,14 +81,15 @@ export const resetStyle = css`
   summary,
   time,
   mark,
+  textarea,
   audio,
   video {
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: inherit;
     vertical-align: baseline;
+    font-family: inherit;
   }
 
   article,
@@ -133,7 +134,7 @@ export const resetStyle = css`
   }
 
   html {
-    font-family: Pretendard;
+    font-family: 'Pretendard';
     font-size: 10px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
