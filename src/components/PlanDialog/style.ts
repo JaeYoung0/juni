@@ -10,7 +10,8 @@ export const Row = styled.div`
 
 export const Dialog = styled.dialog`
   // dialog position default: fixed
-  width: 34rem;
+  width: 100%;
+  max-width: 40rem;
   height: 45rem;
   padding: 1rem;
   border-radius: 5px;
@@ -47,6 +48,7 @@ const inputStyle = css`
 export const TitleInput = styled.input`
   width: 100%;
   ${inputStyle}
+  font-size:1.6rem;
 `
 
 export const Select = styled.select`
@@ -62,7 +64,8 @@ export const Label = styled.label`
 export const ContentTextArea = styled.textarea`
   width: 100%;
   height: 25rem;
-
+  font-size: 1.6rem;
+  /* font-family: 'Pretendard'; */
   ${inputStyle}
 `
 
