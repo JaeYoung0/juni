@@ -1,5 +1,5 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import { PlanItem } from '@/domain/plan'
+import { PlanItem, QUERY_KEY_HEAD } from '@/domain/plan'
 import { User } from '@/domain/user'
 import { firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'
@@ -111,7 +111,7 @@ export function useCreatePlanItem() {
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
-      void queryClient.invalidateQueries({ queryKey: ['@planList', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }
@@ -123,7 +123,7 @@ export function useUpdatePlanItem() {
     mutationFn: (payload: UpdatePlanItemPayload) => updatePlanItem(payload),
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-      void queryClient.invalidateQueries({ queryKey: ['@planList', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }
@@ -135,7 +135,7 @@ export function useDeletePlanItem() {
     mutationFn: deletePlanItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-      void queryClient.invalidateQueries({ queryKey: ['@planList', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }

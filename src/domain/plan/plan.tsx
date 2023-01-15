@@ -13,6 +13,7 @@ export type PlanItem = {
   endTime: number
 }
 
+export const QUERY_KEY_HEAD = '@planList'
 export function usePlanList() {
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
@@ -20,7 +21,7 @@ export function usePlanList() {
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   return useQuery({
-    queryKey: ['@plan', year, month, date],
+    queryKey: [QUERY_KEY_HEAD, year, month, date],
     queryFn: () => getPlanItems({ currentUnix, userId: userAtom.userId }),
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
