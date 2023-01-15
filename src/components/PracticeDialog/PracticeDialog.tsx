@@ -11,7 +11,7 @@ import { useUserAtom } from '@/domain/user'
 import { usePlanList } from '@/domain/plan'
 
 export type PracticeDialogRefType = {
-  showModal: (payload?: PracticeItem) => void
+  showModal: (payload?: Partial<PracticeItem>) => void
 }
 
 type Props = Record<string, unknown>
@@ -19,21 +19,45 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   useImperativeHandle(ref, () => ({
-    showModal: (payload?: PracticeItem) => {
-      if (payload) {
+    showModal: (payload?: Partial<PracticeItem>) => {
+      const isNew = !payload?.title && !payload?.content
+
+      if (!isNew) {
         setMode('update')
-        setTimeRange({
-          start: {
-            hour: Math.floor(payload.startTime / 60),
-            min: payload.startTime % 60,
-          },
-          end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
-        })
-        setTitle(payload.title)
-        setContent(payload.content)
-        setPracticeId(payload.id)
+
+        // setTimeRange, setTitle, setContent는 PlanDialog와 완전 동일. practiceId도 이름만 다름.
+        //  setColor는 Practice Collection에 직접 넣지는 않을 생각이라 필요없음
+        if (payload.startTime && payload.endTime) {
+          setTimeRange({
+            start: {
+              hour: Math.floor(payload.startTime / 60),
+              min: payload.startTime % 60,
+            },
+            end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
+          })
+        }
+        if (payload.title) {
+          setTitle(payload.title)
+        }
+
+        if (payload.content) {
+          setContent(payload.content)
+        }
+
+        if (payload.id) {
+          setPracticeId(payload.id)
+        }
       } else {
         setMode('create')
+        if (payload?.startTime && payload?.endTime) {
+          setTimeRange({
+            start: {
+              hour: Math.floor(payload.startTime / 60),
+              min: payload.startTime % 60,
+            },
+            end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
+          })
+        }
       }
 
       dialogRef.current?.showModal()

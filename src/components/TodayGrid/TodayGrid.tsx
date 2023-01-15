@@ -8,6 +8,7 @@ import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
 import * as S from './style'
 import { PracticeItem, usePracticeList } from '@/domain/practice'
+import { getItemHeight } from '@/lib/utils'
 
 const LENGTH = 24
 
@@ -86,7 +87,8 @@ function PlanCol() {
 
   const planDialogRef = useRef<PlanDialogRefType | null>(null)
 
-  const handlePlanBaseClick = () => planDialogRef.current?.showModal()
+  const handlePlanBaseClick = (startTime: number) =>
+    planDialogRef.current?.showModal({ startTime: startTime * 60, endTime: (startTime + 1) * 60 })
 
   const handlePlanItemClick = (item: PlanItem) => {
     planDialogRef.current?.showModal(item)
@@ -95,22 +97,13 @@ function PlanCol() {
   return (
     <S.Plans>
       {bases.map((_, idx) => (
-        <S.Plan key={idx} onClick={handlePlanBaseClick} />
+        <S.PlanBaseCell key={idx} onClick={() => handlePlanBaseClick(idx)} />
       ))}
       {planList?.map((item, idx) => {
         const { startTime, endTime, content, color } = item
         const top = (item.startTime * 100) / (24 * 60)
 
-        // TODO. 중복 코드 어디에 모을까
-        const getHeight = () => {
-          // endTime이 자정일 때
-          let _endTime = endTime
-          if (startTime > endTime && endTime === 0) {
-            _endTime = 24 * 60
-          }
-          return (Math.abs(_endTime - startTime) / (24 * 60)) * 100
-        }
-        const height = getHeight()
+        const height = getItemHeight(startTime, endTime)
 
         return (
           <S.PlanItem
@@ -132,8 +125,11 @@ function PlanCol() {
 function PracticeCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const practiceDialogRef = useRef<PracticeDialogRefType | null>(null)
-  const handlePracticeBaseClick = () => {
-    practiceDialogRef.current?.showModal()
+  const handlePracticeBaseClick = (startTime: number) => {
+    practiceDialogRef.current?.showModal({
+      startTime: startTime * 60,
+      endTime: (startTime + 1) * 60,
+    })
   }
   const handlePracticeItemClick = (item: PracticeItem) => {
     practiceDialogRef.current?.showModal(item)
@@ -144,23 +140,14 @@ function PracticeCol() {
 
   return (
     <S.PracticeList>
-      {bases.map((item) => (
-        <S.PracticeBaseCell key={item} onClick={handlePracticeBaseClick} />
+      {bases.map((_, idx) => (
+        <S.PracticeBaseCell key={idx} onClick={() => handlePracticeBaseClick(idx)} />
       ))}
       {practiceList?.map((item, idx) => {
         const { startTime, endTime, color, content } = item
         const top = (startTime * 100) / (24 * 60)
 
-        const getHeight = () => {
-          // endTime이 자정일 때
-          let _endTime = endTime
-          if (startTime > endTime && endTime === 0) {
-            _endTime = 24 * 60
-          }
-          return (Math.abs(_endTime - startTime) / (24 * 60)) * 100
-        }
-
-        const height = getHeight()
+        const height = getItemHeight(startTime, endTime)
 
         return (
           <S.PracticeItem

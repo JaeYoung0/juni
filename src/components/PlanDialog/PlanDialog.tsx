@@ -8,7 +8,7 @@ import { HexColorPicker } from 'react-colorful'
 import * as S from './style'
 
 export type PlanDialogRefType = {
-  showModal: (payload?: PlanItem) => void
+  showModal: (payload?: Partial<PlanItem>) => void
 }
 
 type Props = Record<string, unknown>
@@ -36,22 +36,45 @@ function PlanDialog({ ...props }: Props, ref: React.Ref<PlanDialogRefType>) {
   const deletePlanItem = useDeletePlanItem()
 
   useImperativeHandle(ref, () => ({
-    showModal: (payload?: PlanItem) => {
-      if (payload) {
+    // TODO. refactor
+    showModal: (payload?: Partial<PlanItem>) => {
+      const isNew = !payload?.title && !payload?.content
+      if (!isNew) {
         setMode('update')
-        setTimeRange({
-          start: {
-            hour: Math.floor(payload.startTime / 60),
-            min: payload.startTime % 60,
-          },
-          end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
-        })
-        setTitle(payload.title)
-        setContent(payload.content)
-        setplanId(payload.id)
-        setColor(payload.color)
+        if (payload.startTime && payload.endTime) {
+          setTimeRange({
+            start: {
+              hour: Math.floor(payload.startTime / 60),
+              min: payload.startTime % 60,
+            },
+            end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
+          })
+        }
+        if (payload.title) {
+          setTitle(payload.title)
+        }
+
+        if (payload.content) {
+          setContent(payload.content)
+        }
+        if (payload.id) {
+          setplanId(payload.id)
+        }
+
+        if (payload.color) {
+          setColor(payload.color)
+        }
       } else {
         setMode('create')
+        if (payload?.startTime && payload?.endTime) {
+          setTimeRange({
+            start: {
+              hour: Math.floor(payload.startTime / 60),
+              min: payload.startTime % 60,
+            },
+            end: { hour: Math.floor(payload.endTime / 60), min: payload.endTime % 60 },
+          })
+        }
       }
 
       dialogRef.current?.showModal()

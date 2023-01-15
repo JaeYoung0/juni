@@ -77,7 +77,7 @@ export const Plans = styled.div`
   position: relative;
 `
 
-export const Plan = styled.div`
+export const PlanBaseCell = styled.div`
   ${baseCellStyle}
 `
 
