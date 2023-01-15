@@ -16,7 +16,7 @@ const planCellStyle = css`
   background: #222222;
 `
 
-export const Container = styled.div`
+export const Grid = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 1fr 3fr 3fr;
@@ -44,7 +44,7 @@ export const VacantArea = styled.div`
   background: #222222;
 `
 
-export const CurrentDateTime = styled.h2`
+export const CurrentUnix = styled.h2`
   color: #fff;
   font-size: 1.8rem;
   text-align: center;
@@ -75,14 +75,6 @@ export const Plan = styled.div`
   ${baseCellStyle}
 `
 
-export const Schedules = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`
-
 export const PlanItem = styled.div<{ top: number; height: number }>`
   position: absolute;
   top: ${({ top }) => `${top}%`};
@@ -104,8 +96,10 @@ export const PlanItem = styled.div<{ top: number; height: number }>`
   align-items: center;
 `
 
-export const Reals = styled.div``
+export const PracticeList = styled.div`
+  position: relative;
+`
 
-export const RealItem = styled.div`
+export const PracticeBaseCell = styled.div`
   ${baseCellStyle}
 `

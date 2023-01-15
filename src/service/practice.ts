@@ -1,9 +1,8 @@
+import { PracticeItem, QUERY_KEY_HEAD } from './../domain/practice/practice'
 import { useCalendarAtom } from '@/domain/calendar'
-import { ScheduleItem } from '@/domain/schedule'
 import { User } from '@/domain/user'
 import { firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'
-import { async } from '@firebase/util'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import {
@@ -12,74 +11,72 @@ import {
   Timestamp,
   query,
   getDocs,
-  where,
-  getDoc,
   doc,
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore/lite'
 
-export type GetScheduleItemsPayload = { currentUnix: number } & Pick<User, 'userId'>
-export const getScheduleItems = async (payload: GetScheduleItemsPayload) => {
+const COLLECTION_NAME = 'practices'
+
+export type GetPracticeItemsPayload = { currentUnix: number } & Pick<User, 'userId'>
+export const getPracticeItems = async (payload: GetPracticeItemsPayload) => {
   const { currentUnix, userId } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
-  console.log('@@userId', userId)
 
-  const todayScheduleRef = collection(
+  const ref = collection(
     firestore,
-    'schedules',
+    COLLECTION_NAME,
     userId,
     String(year),
     String(month + 1),
     String(date)
   )
 
-  const q = query(todayScheduleRef)
+  const q = query(ref)
   const querySnapShot = await getDocs(q)
 
-  const scheduleItems: ScheduleItem[] = []
+  const results: PracticeItem[] = []
   querySnapShot.forEach((item) => {
-    console.log('@@item', item)
-    const scheduleItem = {
+    const practiceItem = {
       id: item.id,
       ...item.data(),
     }
 
-    scheduleItems.push(scheduleItem as ScheduleItem)
+    results.push(practiceItem as PracticeItem)
   })
 
-  return scheduleItems
+  return results
 }
 
-export type CreateScheduleItemPayload = Pick<User, 'userId'> &
-  Omit<ScheduleItem, 'id' | 'date'> & {
+export type CreatePracticeItemPayload = Pick<User, 'userId'> &
+  Omit<PracticeItem, 'id' | 'date'> & {
     currentUnix: number
   }
-export const createScheduleItem = async (payload: CreateScheduleItemPayload) => {
+export const createPracticeItem = async (payload: CreatePracticeItemPayload) => {
   const { userId, currentUnix, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
-  const scheduleItem = {
+  const practiceItem = {
     ...rest,
     updatedAt: Timestamp.now(),
   }
 
   await addDoc(
-    collection(firestore, 'schedules', userId, String(year), String(month + 1), String(date)),
-    scheduleItem
+    collection(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date)),
+    practiceItem
   )
 }
 
-export type UpdateScheduleItemPayload = Partial<Omit<ScheduleItem, 'id'>> &
-  Pick<ScheduleItem, 'id'> & {
+export type UpdatePracticeItemPayload = Partial<Omit<PracticeItem, 'id'>> &
+  Pick<PracticeItem, 'id'> & {
     currentUnix: number
   } & Pick<User, 'userId'>
-export const updateScheduleItem = async (payload: UpdateScheduleItemPayload) => {
+export const updatePracticeItem = async (payload: UpdatePracticeItemPayload) => {
   const { currentUnix, userId, id, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   const docRef = doc(
     firestore,
-    'schedules',
+    COLLECTION_NAME,
     userId,
     String(year),
     String(month + 1),
@@ -95,53 +92,53 @@ export const updateScheduleItem = async (payload: UpdateScheduleItemPayload) => 
   await updateDoc(docRef, { ...updatedItem })
 }
 
-type DeleteScheduleItemPayload = Pick<User, 'userId'> & { currentUnix: number } & Pick<
-    ScheduleItem,
+type DeletePracticeItemPayload = Pick<User, 'userId'> & { currentUnix: number } & Pick<
+    PracticeItem,
     'id'
   >
-export const deleteScheduleItem = async (payload: DeleteScheduleItemPayload) => {
+export const deletePracticeItem = async (payload: DeletePracticeItemPayload) => {
   const { userId, currentUnix, id } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   await deleteDoc(
-    doc(firestore, 'schedules', userId, String(year), String(month + 1), String(date), id)
+    doc(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date), id)
   )
 }
 
-export function useCreateScheduleItem() {
+export function useCreatePracticeItem() {
   const queryClient = useQueryClient()
   const [currentUnix] = useCalendarAtom()
 
   return useMutation({
-    mutationFn: (payload: CreateScheduleItemPayload) => createScheduleItem(payload),
+    mutationFn: createPracticeItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
-      void queryClient.invalidateQueries({ queryKey: ['@schedule', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }
 
-export function useUpdateScheduleItem() {
+export function useUpdatePracticeItem() {
   const queryClient = useQueryClient()
   const [currentUnix] = useCalendarAtom()
   return useMutation({
-    mutationFn: (payload: UpdateScheduleItemPayload) => updateScheduleItem(payload),
+    mutationFn: updatePracticeItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-      void queryClient.invalidateQueries({ queryKey: ['@schedule', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }
 
-export function useDeleteScheduleItem() {
+export function useDeletePracticeItem() {
   const queryClient = useQueryClient()
   const [currentUnix] = useCalendarAtom()
   return useMutation({
-    mutationFn: (payload: DeleteScheduleItemPayload) => deleteScheduleItem(payload),
+    mutationFn: deletePracticeItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-      void queryClient.invalidateQueries({ queryKey: ['@schedule', year, month, date] })
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
 }

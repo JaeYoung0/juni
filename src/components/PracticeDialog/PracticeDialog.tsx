@@ -1,46 +1,24 @@
-import { useCalendarAtom } from '@/domain/calendar'
-import { ScheduleItem } from '@/domain/schedule'
-import { useUserAtom } from '@/domain/user'
-import {
-  useCreateScheduleItem,
-  useDeleteScheduleItem,
-  useUpdateScheduleItem,
-} from '@/service/schedule'
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
+import * as S from '@/components/PlanDialog/style'
+import { useCalendarAtom } from '@/domain/calendar'
+import { PracticeItem } from '@/domain/practice'
+import {
+  useCreatePracticeItem,
+  useDeletePracticeItem,
+  useUpdatePracticeItem,
+} from '@/service/practice'
+import { useUserAtom } from '@/domain/user'
 
-import * as S from './style'
-
-type Props = Record<string, unknown>
-
-export type TimeSelectorRef = {
-  showModal: (payload?: ScheduleItem) => void
+export type PracticeDialogRefType = {
+  showModal: (payload?: PracticeItem) => void
 }
 
-function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
+type Props = Record<string, unknown>
+function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefType>) {
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
-  const [title, setTitle] = useState('')
-  const [mode, setMode] = useState<'create' | 'update'>('create')
-
-  // range는 분 단위로 저장. ex) 10 ~ 140분은 00:10 ~ 02:20분을 의미함.
-  const [timeRange, setTimeRange] = useState({
-    start: { hour: 0, min: 0 },
-    end: { hour: 0, min: 0 },
-  })
-
-  const [currentUnix] = useCalendarAtom()
-
-  const [content, setContent] = useState('')
-  const [scheduleId, setScheduleId] = useState('')
-
-  const [userAtom] = useUserAtom()
-
-  const createScheduleItem = useCreateScheduleItem()
-  const updateScheduleItem = useUpdateScheduleItem()
-  const deleteScheduleItem = useDeleteScheduleItem()
-
   useImperativeHandle(ref, () => ({
-    showModal: (payload?: ScheduleItem) => {
+    showModal: (payload?: PracticeItem) => {
       if (payload) {
         setMode('update')
         setTimeRange({
@@ -52,7 +30,7 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
         })
         setTitle(payload.title)
         setContent(payload.content)
-        setScheduleId(payload.id)
+        setPracticeId(payload.id)
       } else {
         setMode('create')
       }
@@ -61,18 +39,34 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
     },
   }))
 
+  const [currentUnix] = useCalendarAtom()
+
+  // state가 너무 많다!
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [practiceId, setPracticeId] = useState('')
+  const [timeRange, setTimeRange] = useState({
+    start: { hour: 0, min: 0 },
+    end: { hour: 0, min: 0 },
+  })
+
+  const [mode, setMode] = useState<'create' | 'update'>('create')
+
   const handleClose = () => {
-    // void createScheduleItem()
+    // 초기화
     setTimeRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
     setTitle('')
     setContent('')
-
-    console.log('@@closed 2')
   }
+
+  const [userAtom] = useUserAtom()
+  const createPracticeItem = useCreatePracticeItem()
+  const updatePracticeItem = useUpdatePracticeItem()
+  const deletePracticeItem = useDeletePracticeItem()
 
   const handleSubmit = () => {
     if (mode === 'create') {
-      createScheduleItem.mutate({
+      createPracticeItem.mutate({
         currentUnix,
         startTime: timeRange.start.hour * 60 + timeRange.start.min,
         endTime: timeRange.end.hour * 60 + timeRange.end.min,
@@ -81,27 +75,38 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
         userId: userAtom.userId,
       })
     } else {
-      updateScheduleItem.mutate({
+      updatePracticeItem.mutate({
         currentUnix,
         startTime: timeRange.start.hour * 60 + timeRange.start.min,
         endTime: timeRange.end.hour * 60 + timeRange.end.min,
         title,
         content,
         userId: userAtom.userId,
-        id: scheduleId,
+        id: practiceId,
       })
     }
+  }
 
-    setTimeRange({ start: { hour: 0, min: 0 }, end: { hour: 0, min: 0 } })
-    setTitle('')
-    setContent('')
+  const handleDelete = () => {
+    void deletePracticeItem.mutate({
+      userId: userAtom.userId,
+      currentUnix,
+      id: practiceId,
+    })
+  }
+
+  const handleCancel = () => {
+    dialogRef.current?.close()
   }
 
   return (
     <S.Dialog ref={dialogRef} onClose={handleClose} onSubmit={handleSubmit}>
-      <S.DialogTitle>{mode === 'create' ? '[스케줄 추가]' : '[스케줄 수정]'}</S.DialogTitle>
+      <S.DialogTitle>
+        {mode === 'create' ? '[실행 아이템 추가]' : '[실행 아이템 수정]'}
+      </S.DialogTitle>
 
       <S.Form method="dialog">
+        <S.CloseButton onClick={handleCancel}>X</S.CloseButton>
         <S.Row>
           <S.Select
             value={timeRange.start.hour}
@@ -187,40 +192,14 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
 
         {mode === 'create' && (
           <S.ButtonsWrapper>
-            <S.Button
-              type="reset"
-              onClick={() => {
-                dialogRef.current?.close()
-              }}
-            >
-              취소
-            </S.Button>
-            <S.Button type="submit">확인</S.Button>
+            <S.Button type="submit">추가</S.Button>
           </S.ButtonsWrapper>
         )}
 
         {mode === 'update' && (
           <S.ButtonsWrapper>
-            <S.Button
-              style={{ marginRight: 'auto', color: '#000' }}
-              onClick={() => {
-                void deleteScheduleItem.mutate({
-                  userId: userAtom.userId,
-                  currentUnix,
-                  id: scheduleId,
-                })
-              }}
-            >
+            <S.Button style={{ color: '#000' }} onClick={handleDelete}>
               삭제
-            </S.Button>
-            <S.Button
-              type="reset"
-              onClick={() => {
-                dialogRef.current?.close()
-                // 삭제
-              }}
-            >
-              취소
             </S.Button>
             <S.Button type="submit">수정</S.Button>
           </S.ButtonsWrapper>
@@ -230,4 +209,4 @@ function TimeSelector({ ...props }: Props, ref: React.Ref<TimeSelectorRef>) {
   )
 }
 
-export default forwardRef<any, Props>(TimeSelector)
+export default forwardRef<any, Props>(PracticeDialog)

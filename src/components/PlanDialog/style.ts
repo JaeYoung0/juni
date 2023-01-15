@@ -9,10 +9,24 @@ export const Row = styled.div`
 `
 
 export const Dialog = styled.dialog`
-  width: 32rem;
-  height: 40.5rem;
+  // dialog position default: fixed
+  width: 34rem;
+  height: 45rem;
   padding: 1rem;
   border-radius: 5px;
+  overflow: visible;
+`
+
+export const CloseButton = styled.button`
+  position: absolute;
+  right: -1rem;
+  top: -4rem;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  font-size: 2rem;
+  color: #fff;
+  background: transparent;
 `
 
 export const Form = styled.form`
