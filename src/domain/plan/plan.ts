@@ -30,3 +30,17 @@ export function usePlanList() {
     refetchOnWindowFocus: false,
   })
 }
+
+export const getStartTimeOfPlanList = (planList: PlanItem[]) => {
+  let min = Number.MAX_SAFE_INTEGER
+  let result = 0
+
+  planList?.forEach((planItem) => {
+    if (planItem.startTime < min) {
+      min = planItem.startTime
+    }
+    result = min
+  })
+
+  return result / 60
+}

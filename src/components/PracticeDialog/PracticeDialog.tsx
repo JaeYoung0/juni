@@ -19,7 +19,9 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   useImperativeHandle(ref, () => ({
+    // showCreateModal, showUpdateModal 분리 ? 그런데 ref가 맞나?...
     showModal: (payload?: Partial<PracticeItem>) => {
+      // 이 조건이 맞나 ...
       const isNew = !payload?.title && !payload?.content
 
       if (!isNew) {
@@ -68,7 +70,6 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
 
   // state가 너무 많다!
   const [title, setTitle] = useState('')
-  console.log('@@title', title)
 
   const [content, setContent] = useState('')
   const [practiceId, setPracticeId] = useState('')

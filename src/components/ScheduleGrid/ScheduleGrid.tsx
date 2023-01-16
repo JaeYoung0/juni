@@ -1,5 +1,5 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import { PlanItem, usePlanList } from '@/domain/plan'
+import { getStartTimeOfPlanList, PlanItem, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import PracticeDialog, { PracticeDialogRefType } from '../PracticeDialog'
@@ -9,33 +9,38 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
 import * as S from './style'
 import { PracticeItem, usePracticeList } from '@/domain/practice'
 import { getItemHeight } from '@/lib/utils'
+import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 
 const LENGTH = 24
-
-function TodayGrid() {
+// schedule = plan + practice
+export default function ScheduleGrid() {
   const [currentUnix] = useCalendarAtom()
   const { data: planList } = usePlanList()
-
-  // TODO. refactor
-  const calculatedHour = useMemo(() => {
-    let min = Number.MAX_SAFE_INTEGER
-    let result = 0
-
-    planList?.forEach((planItem) => {
-      if (planItem.startTime < min) {
-        min = planItem.startTime
-      }
-      result = min
-    })
-
-    return result / 60
-  }, [planList])
-
+  const startTimeOfFirstPlanItem = useMemo(() => getStartTimeOfPlanList(planList ?? []), [planList])
   const [firstStartHour, setFirstStartHour] = useState(0)
 
   useEffect(() => {
-    setFirstStartHour(calculatedHour)
+    setFirstStartHour(startTimeOfFirstPlanItem)
   }, [planList])
+
+  const handleClickGridToggle = () =>
+    setFirstStartHour(firstStartHour === 0 ? startTimeOfFirstPlanItem : 0)
+
+  const practiceDialogRef = useRef<PracticeDialogRefType | null>(null)
+
+  useEffect(() => {
+    const handleCustomEvent = (e: CustomEventInit<PlanItem>) => {
+      console.log('@@e', e)
+
+      if (e.detail) {
+        const { content, ...rest } = e.detail
+
+        practiceDialogRef.current?.showModal(rest)
+      }
+    }
+    document.addEventListener('detectPlanItemMove', handleCustomEvent)
+    return () => document.removeEventListener('detectPlanItemMove', handleCustomEvent)
+  }, [])
 
   return (
     <>
@@ -44,15 +49,7 @@ function TodayGrid() {
         {` >`}
       </S.CurrentUnix>
 
-      <S.GridToggleBtn
-        onClick={() => {
-          if (!firstStartHour) {
-            setFirstStartHour(calculatedHour)
-          } else {
-            setFirstStartHour(0)
-          }
-        }}
-      >
+      <S.GridToggleBtn onClick={handleClickGridToggle}>
         {firstStartHour ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
       </S.GridToggleBtn>
       <S.GridWrapper firstHour={firstStartHour}>
@@ -62,6 +59,7 @@ function TodayGrid() {
           <PracticeCol />
         </S.Grid>
       </S.GridWrapper>
+      <PracticeDialog ref={practiceDialogRef} />
     </>
   )
 }
@@ -90,7 +88,7 @@ function PlanCol() {
   const handlePlanBaseClick = (startTime: number) =>
     planDialogRef.current?.showModal({ startTime: startTime * 60, endTime: (startTime + 1) * 60 })
 
-  const handlePlanItemClick = (item: PlanItem) => {
+  const handleClickPlanItem = (item: PlanItem) => {
     planDialogRef.current?.showModal(item)
   }
 
@@ -100,25 +98,58 @@ function PlanCol() {
         <S.PlanBaseCell key={idx} onClick={() => handlePlanBaseClick(idx)} />
       ))}
       {planList?.map((item, idx) => {
-        const { startTime, endTime, content, color } = item
+        const { startTime, endTime } = item
         const top = (item.startTime * 100) / (24 * 60)
 
         const height = getItemHeight(startTime, endTime)
 
         return (
-          <S.PlanItem
-            style={{ background: color }}
-            key={idx}
+          <PlanItem
+            key={item.id}
+            item={item}
             top={top}
             height={height}
-            onClick={() => handlePlanItemClick(item)}
-          >
-            <span>{content}</span>
-          </S.PlanItem>
+            onClickPlanItem={handleClickPlanItem}
+          />
         )
       })}
       <PlanDialog ref={planDialogRef} />
     </S.Plans>
+  )
+}
+
+type PlanItemProps = {
+  top: number
+  height: number
+  item: PlanItem
+  onClickPlanItem: (item: PlanItem) => void
+}
+function PlanItem({ ...props }: PlanItemProps) {
+  const { top, height, item } = props
+
+  const handleRightSwipe = (item: PlanItem) => {
+    const planItemMoveEvent = new CustomEvent('detectPlanItemMove', {
+      detail: item,
+    })
+    document.dispatchEvent(planItemMoveEvent)
+  }
+
+  const { onTouchStart, onTouchMove, onTouchEnd } = useHorizontalSwipe({
+    onRightSwipe: () => handleRightSwipe(item),
+  })
+
+  return (
+    <S.PlanItem
+      style={{ background: item.color }}
+      top={top}
+      height={height}
+      onClick={() => props.onClickPlanItem(item)}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      <span>{item.content}</span>
+    </S.PlanItem>
   )
 }
 
@@ -165,5 +196,3 @@ function PracticeCol() {
     </S.PracticeList>
   )
 }
-
-export default TodayGrid
