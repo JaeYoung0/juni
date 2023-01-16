@@ -1,6 +1,7 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { PlanItem } from '@/domain/plan'
 import { useUserAtom } from '@/domain/user'
+import useDialogList from '@/hooks/useDialogList'
 import { useCreatePlanItem, useDeletePlanItem, useUpdatePlanItem } from '@/service/plan'
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
@@ -106,8 +107,10 @@ function PlanDialog({ ...props }: Props, ref: React.Ref<PlanDialogRefType>) {
         title,
         content,
         userId: userAtom.userId,
-        id: planId,
         color,
+
+        // create와의 차이점
+        id: planId,
       })
     }
 
@@ -128,6 +131,8 @@ function PlanDialog({ ...props }: Props, ref: React.Ref<PlanDialogRefType>) {
     dialogRef.current?.close()
   }
 
+  const { openDialog } = useDialogList()
+
   return (
     <>
       <S.Dialog ref={dialogRef} onClose={handleClose} onSubmit={handleSubmit}>
@@ -140,6 +145,17 @@ function PlanDialog({ ...props }: Props, ref: React.Ref<PlanDialogRefType>) {
             }}
           >
             컬러픽
+          </button>
+
+          <button
+            onClick={() => {
+              openDialog({
+                variant: 'TimePickerDialog',
+                props: {},
+              })
+            }}
+          >
+            시간픽
           </button>
         </S.DialogTitle>
 

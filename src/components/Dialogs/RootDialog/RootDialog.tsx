@@ -1,13 +1,13 @@
 import useDialogList from '@/hooks/useDialogList'
-import * as dialogs from '@/components/Dialogs'
+import * as Dialogs from '@/components/Dialogs'
 
 function RootDialog() {
   const { dialogList, setDialogList } = useDialogList()
 
   return (
     <>
-      {dialogList.map((dialog, idx) => {
-        const Dialog = dialogs[dialog.variant]
+      {dialogList.map((dialogProps, idx) => {
+        const Dialog = Dialogs[dialogProps.variant]
 
         const close = () => {
           // TODO. refactor
@@ -15,7 +15,18 @@ function RootDialog() {
           setDialogList([..._dialogList].slice(0, _dialogList.length - 1))
         }
 
-        return <Dialog close={close} key={idx} {...dialog} />
+        // TODO. fix this
+        return (
+          <Dialog
+            title={''}
+            content={''}
+            cancelText={''}
+            actionText={''}
+            close={close}
+            key={idx}
+            {...dialogProps.props}
+          />
+        )
       })}
     </>
   )

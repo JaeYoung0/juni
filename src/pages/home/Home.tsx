@@ -50,11 +50,19 @@ function Home() {
         <button
           onClick={() => {
             openDialog({
-              variant: 'ActionDialg',
-              title: 'wow',
-              content: 'ㅁㄴㅇㅁㄴㅇ',
-              cancelText: '취소',
-              actionText: '확인',
+              variant: 'ActionDialog',
+              props: {
+                title: 'asd',
+                content: 'asdsd',
+                cancelText: 'cancel',
+                actionText: 'action',
+              },
+              // props: {
+              //   title: 'wowwwww',
+              //   content: 'ㅁㄴㅇㅁㄴㅇ',
+              //   cancelText: '취소',
+              //   actionText: 'wow',
+              // },
             })
           }}
         >

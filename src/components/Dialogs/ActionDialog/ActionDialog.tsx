@@ -1,7 +1,14 @@
 import { BasicProps } from '@/hooks/useDialogList'
 import { useEffect, useRef } from 'react'
 
-function ActionDialog(props: BasicProps) {
+export type ActionDialogProps = BasicProps & {
+  title: string
+  content: string
+  cancelText: string
+  actionText: string
+}
+
+function ActionDialog(props: ActionDialogProps) {
   const { title, content, cancelText, actionText, close } = props
   const ref = useRef<HTMLDialogElement | null>(null)
   const open = () => ref.current?.showModal()
