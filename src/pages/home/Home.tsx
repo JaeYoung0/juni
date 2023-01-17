@@ -29,7 +29,7 @@ function Home() {
           userId: uid,
           name: displayName ?? '이름 없음',
         })
-        // Home에서는 auth check만 하자.
+        // Home에서는 ui비워놓고 auth check만 할까?
         // void router.replace('/schedule')
       }
     })
@@ -47,27 +47,6 @@ function Home() {
     <BasicLayout>
       <S.UserName>
         {userAtom.name}님 안녕하세요! <button onClick={handleClickButton}>로그아웃</button>
-        <button
-          onClick={() => {
-            openDialog({
-              variant: 'ActionDialog',
-              props: {
-                title: 'asd',
-                content: 'asdsd',
-                cancelText: 'cancel',
-                actionText: 'action',
-              },
-              // props: {
-              //   title: 'wowwwww',
-              //   content: 'ㅁㄴㅇㅁㄴㅇ',
-              //   cancelText: '취소',
-              //   actionText: 'wow',
-              // },
-            })
-          }}
-        >
-          test
-        </button>
       </S.UserName>
       <S.Box>
         <ToggledCalendar />

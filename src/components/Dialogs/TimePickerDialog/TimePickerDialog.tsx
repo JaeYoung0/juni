@@ -3,11 +3,13 @@ import dayjs, { Dayjs } from 'dayjs'
 import TextField from '@mui/material/TextField'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker'
+import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 
-export default function TimePickerDialog() {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-07'))
-
+type TimePickerDialogProps = {
+  time: Dayjs | null
+  handleChange: (newValue: dayjs.Dayjs | null) => void
+}
+export default function TimePickerDialog({ time, handleChange }: TimePickerDialogProps) {
   const ref = React.useRef<HTMLDialogElement | null>(null)
   const open = () => ref.current?.showModal()
 
@@ -15,17 +17,13 @@ export default function TimePickerDialog() {
     !ref.current?.open ? open() : close()
   }, [])
 
-  console.log('@@value', dayjs(value).unix())
-
   return (
     <dialog ref={ref} style={{ height: '500px' }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <StaticTimePicker
-          displayStaticWrapperAs="mobile"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue)
-          }}
+        <TimePicker
+          label="Basic example"
+          value={time}
+          onChange={handleChange}
           renderInput={(params) => <TextField {...params} />}
         />
       </LocalizationProvider>

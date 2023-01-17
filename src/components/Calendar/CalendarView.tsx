@@ -2,19 +2,10 @@ import { useEffect, useState } from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import * as S from './style'
 import locale from 'dayjs/locale/ko'
-import weekdayPlugin from 'dayjs/plugin/weekday'
-import objectPlugin from 'dayjs/plugin/toObject'
-import isTodayPlugin from 'dayjs/plugin/isToday'
-import isBetweenPlugin from 'dayjs/plugin/isBetween'
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
-
-dayjs.extend(weekdayPlugin)
-dayjs.extend(objectPlugin)
-dayjs.extend(isTodayPlugin)
-dayjs.extend(isBetweenPlugin)
 
 // day <- 요일
 // date <- 날짜 (1일, 2일 ..)

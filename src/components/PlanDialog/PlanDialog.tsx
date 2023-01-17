@@ -150,12 +150,12 @@ function PlanDialog({ ...props }: Props, ref: React.Ref<PlanDialogRefType>) {
           <button
             onClick={() => {
               openDialog({
-                variant: 'TimePickerDialog',
+                variant: 'CreatePlanDialog',
                 props: {},
               })
             }}
           >
-            시간픽
+            TEST
           </button>
         </S.DialogTitle>
 

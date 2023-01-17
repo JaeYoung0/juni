@@ -1,15 +1,14 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import { getStartTimeOfPlanList, PlanItem, usePlanList } from '@/domain/plan'
+import { getStartTimeOfPlanList, PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import PracticeDialog, { PracticeDialogRefType } from '../PracticeDialog'
-import PlanDialog, { PlanDialogRefType } from '../PlanDialog'
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
 import * as S from './style'
-import { PracticeItem, usePracticeList } from '@/domain/practice'
-import { getItemHeight } from '@/lib/utils'
+import { getItemHeight, isNumeric, totalMinParser, unixToUTC } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
+import useDialogList from '@/hooks/useDialogList'
+import { usePracticeList } from '@/domain/practice'
 
 const LENGTH = 24
 // schedule = plan + practice
@@ -26,22 +25,6 @@ export default function ScheduleGrid() {
   const handleClickGridToggle = () =>
     setFirstStartHour(firstStartHour === 0 ? startTimeOfFirstPlanItem : 0)
 
-  const practiceDialogRef = useRef<PracticeDialogRefType | null>(null)
-
-  useEffect(() => {
-    const handleCustomEvent = (e: CustomEventInit<PlanItem>) => {
-      console.log('@@e', e)
-
-      if (e.detail) {
-        const { content, ...rest } = e.detail
-
-        practiceDialogRef.current?.showModal(rest)
-      }
-    }
-    document.addEventListener('detectPlanItemMove', handleCustomEvent)
-    return () => document.removeEventListener('detectPlanItemMove', handleCustomEvent)
-  }, [])
-
   return (
     <>
       <S.CurrentUnix>
@@ -56,10 +39,9 @@ export default function ScheduleGrid() {
         <S.Grid firstHour={firstStartHour}>
           <TimeCol />
           <PlanCol />
-          <PracticeCol />
+          {/* <PracticeCol /> */}
         </S.Grid>
       </S.GridWrapper>
-      <PracticeDialog ref={practiceDialogRef} />
     </>
   )
 }
@@ -83,25 +65,49 @@ function PlanCol() {
   const { data: planList } = usePlanList()
   console.log('@@planList', planList)
 
-  const planDialogRef = useRef<PlanDialogRefType | null>(null)
+  const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
+  console.log('@@planItemAtom', planItemAtom)
 
-  const handlePlanBaseClick = (startTime: number) =>
-    planDialogRef.current?.showModal({ startTime: startTime * 60, endTime: (startTime + 1) * 60 })
+  const { openDialog } = useDialogList()
+  const [currentUnix] = useCalendarAtom()
+
+  const handleClickPlanBase = (hour: number) => {
+    setPlanItemAtom({
+      ...planItemAtom,
+      startTime: unixToUTC(currentUnix).add(hour, 'h').format(),
+      endTime: unixToUTC(currentUnix)
+        .add(hour + 1, 'h')
+        .format(),
+    })
+    openDialog({
+      variant: 'CreatePlanDialog',
+      props: {},
+    })
+  }
 
   const handleClickPlanItem = (item: PlanItem) => {
-    planDialogRef.current?.showModal(item)
+    setPlanItemAtom(item)
+    openDialog({
+      variant: 'UpdatePlanDialog',
+      props: {},
+    })
   }
 
   return (
     <S.Plans>
       {bases.map((_, idx) => (
-        <S.PlanBaseCell key={idx} onClick={() => handlePlanBaseClick(idx)} />
+        <S.PlanBaseCell key={idx} onClick={() => handleClickPlanBase(idx)} />
       ))}
       {planList?.map((item, idx) => {
         const { startTime, endTime } = item
-        const top = (item.startTime * 100) / (24 * 60)
+        console.log('@@item', item)
 
-        const height = getItemHeight(startTime, endTime)
+        const _startTime = totalMinParser(startTime)
+        const _endTime = totalMinParser(endTime)
+
+        const top = (_startTime * 100) / (24 * 60)
+
+        const height = getItemHeight(_startTime, _endTime)
 
         return (
           <PlanItem
@@ -113,7 +119,6 @@ function PlanCol() {
           />
         )
       })}
-      <PlanDialog ref={planDialogRef} />
     </S.Plans>
   )
 }
@@ -153,46 +158,42 @@ function PlanItem({ ...props }: PlanItemProps) {
   )
 }
 
-function PracticeCol() {
-  const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
-  const practiceDialogRef = useRef<PracticeDialogRefType | null>(null)
-  const handlePracticeBaseClick = (startTime: number) => {
-    practiceDialogRef.current?.showModal({
-      startTime: startTime * 60,
-      endTime: (startTime + 1) * 60,
-    })
-  }
-  const handlePracticeItemClick = (item: PracticeItem) => {
-    practiceDialogRef.current?.showModal(item)
-  }
+// function PracticeCol() {
+//   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
+//   const handlePracticeBaseClick = (startTime: number) => {
 
-  const { data: practiceList } = usePracticeList()
-  console.log('@@practiceList', practiceList)
+//   }
+//   const handleClickPracticeItem = (item: PracticeItem) => {
+//     // practiceDialogRef.current?.showModal(item)
+//   }
 
-  return (
-    <S.PracticeList>
-      {bases.map((_, idx) => (
-        <S.PracticeBaseCell key={idx} onClick={() => handlePracticeBaseClick(idx)} />
-      ))}
-      {practiceList?.map((item, idx) => {
-        const { startTime, endTime, color, content } = item
-        const top = (startTime * 100) / (24 * 60)
+//   const { data: practiceList } = usePracticeList()
 
-        const height = getItemHeight(startTime, endTime)
+//   // console.log('@@practiceList', practiceList)
 
-        return (
-          <S.PracticeItem
-            style={{ background: color }}
-            key={idx}
-            top={top}
-            height={height}
-            onClick={() => handlePracticeItemClick(item)}
-          >
-            <span>{content}</span>
-          </S.PracticeItem>
-        )
-      })}
-      <PracticeDialog ref={practiceDialogRef} />
-    </S.PracticeList>
-  )
-}
+//   return (
+//     <S.PracticeList>
+//       {bases.map((_, idx) => (
+//         <S.PracticeBaseCell key={idx} onClick={() => handleClickPracticeItem(idx)} />
+//       ))}
+//       {practiceList?.map((item, idx) => {
+//         const { startTime, endTime, color, content } = item
+//         const top = (startTime * 100) / (24 * 60)
+
+//         const height = getItemHeight(startTime, endTime)
+
+//         return (
+//           <S.PracticeItem
+//             style={{ background: color }}
+//             key={idx}
+//             top={top}
+//             height={height}
+//             onClick={() => handlePracticeItemClick(item)}
+//           >
+//             <span>{content}</span>
+//           </S.PracticeItem>
+//         )
+//       })}
+//     </S.PracticeList>
+//   )
+// }

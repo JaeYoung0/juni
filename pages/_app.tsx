@@ -10,6 +10,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useServiceWorker from '@/hooks/useServiceWorker'
 import useViewportHeight from '@/hooks/useViewportHeight'
 import RootDialog from '@/components/Dialogs/RootDialog'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import weekdayPlugin from 'dayjs/plugin/weekday'
+import objectPlugin from 'dayjs/plugin/toObject'
+import isTodayPlugin from 'dayjs/plugin/isToday'
+import isBetweenPlugin from 'dayjs/plugin/isBetween'
+
+dayjs.extend(utc)
+dayjs.extend(weekdayPlugin)
+dayjs.extend(objectPlugin)
+dayjs.extend(isTodayPlugin)
+dayjs.extend(isBetweenPlugin)
 
 function MyApp({ Component, pageProps }: AppProps) {
   useViewportHeight()

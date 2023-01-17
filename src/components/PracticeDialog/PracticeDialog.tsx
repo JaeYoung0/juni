@@ -70,13 +70,14 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
 
   // state가 너무 많다!
   const [title, setTitle] = useState('')
-
   const [content, setContent] = useState('')
   const [practiceId, setPracticeId] = useState('')
   const [timeRange, setTimeRange] = useState({
     start: { hour: 0, min: 0 },
     end: { hour: 0, min: 0 },
   })
+
+  const [payload, setPayload] = useState({})
 
   const [mode, setMode] = useState<'create' | 'update'>('create')
 
@@ -117,8 +118,8 @@ function PracticeDialog({ ...props }: Props, ref: React.Ref<PracticeDialogRefTyp
 
   const handleDelete = () => {
     void deletePracticeItem.mutate({
-      userId: userAtom.userId,
       currentUnix,
+      userId: userAtom.userId,
       id: practiceId,
     })
   }

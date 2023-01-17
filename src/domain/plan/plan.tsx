@@ -1,17 +1,39 @@
-import { unixToYYYYMMDD } from '@/lib/utils'
+import { totalMinParser, unixToYYYYMMDD } from '@/lib/utils'
 import { getPlanItems } from '@/service/plan'
 import { useQuery } from '@tanstack/react-query'
-
+import { atom, useRecoilState } from 'recoil'
 import { useCalendarAtom } from '../calendar'
 import { useUserAtom } from '../user'
+import { v1 } from 'uuid'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 export type PlanItem = {
   id: string
   title: string
   content: string
-  startTime: number
-  endTime: number
+  startTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
+  endTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
   color: string
+}
+
+export const DEFAULT_PLAN_ATOM = {
+  id: '',
+  title: '',
+  content: '',
+  startTime: dayjs().utc().format(),
+  endTime: dayjs().utc().format(),
+  color: '#aaa',
+}
+
+const PlanItemAtom = atom<PlanItem>({
+  key: '@PlanItem' + v1(),
+  default: DEFAULT_PLAN_ATOM,
+})
+
+export function usePlanItemAtom() {
+  return useRecoilState(PlanItemAtom)
 }
 
 export const QUERY_KEY_HEAD = '@planList'
@@ -36,8 +58,9 @@ export const getStartTimeOfPlanList = (planList: PlanItem[]) => {
   let result = 0
 
   planList?.forEach((planItem) => {
-    if (planItem.startTime < min) {
-      min = planItem.startTime
+    const _startTime = totalMinParser(planItem.startTime)
+    if (_startTime < min) {
+      min = _startTime
     }
     result = min
   })

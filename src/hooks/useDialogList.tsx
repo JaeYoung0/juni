@@ -5,6 +5,9 @@ import * as Dialogs from '@/components/Dialogs'
 
 // TODO. dialog 상태는 도메인은 아닌데 ... 어디에 위치하는게 좋을까
 
+/**
+ * ref.current.close가 아니라 prop으로 전달받은 close로 닫을것
+ */
 export type BasicProps = {
   close: () => void
 }

@@ -38,10 +38,9 @@ export const getPlanItems = async (payload: GetPlanItemsPayload) => {
   const results: PlanItem[] = []
   querySnapShot.forEach((item) => {
     const planItem = {
-      id: item.id,
       ...item.data(),
+      id: item.id, // create할 때 빈 스트링으로 넣었던 id를 db 생성시 만들어진 id로 대체한다
     }
-
     results.push(planItem as PlanItem)
   })
 
