@@ -21,7 +21,6 @@ function RootDialog() {
           <div
             key={idx}
             css={css`
-              /* display: ${dialogList.length > 0 ? 'block' : 'none'}; */
               position: fixed;
               top: 0;
               left: 0;
@@ -32,18 +31,7 @@ function RootDialog() {
               align-items: center;
             `}
           >
-            <Dialog
-              // time={null}
-              // handleChange={function (newValue: Dayjs | null): void {
-              //   throw new Error('Function not implemented.')
-              // }}
-              title={''}
-              content={''}
-              cancelText={''}
-              actionText={''}
-              close={close}
-              {...dialogProps.props}
-            />
+            <Dialog close={close} {...(dialogProps.props as any)} />
           </div>
         )
       })}
