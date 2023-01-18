@@ -29,7 +29,6 @@ function RootDialog() {
               display: flex;
               justify-content: center;
               align-items: center;
-              backdrop-filter: blur(3px); ;
             `}
           >
             <Dialog close={close} {...(dialogProps.props as any)} />

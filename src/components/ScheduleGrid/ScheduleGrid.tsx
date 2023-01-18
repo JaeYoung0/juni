@@ -125,16 +125,16 @@ type PlanItemProps = {
 }
 function PlanItem({ ...props }: PlanItemProps) {
   const { top, height, item } = props
+  const { openDialog } = useDialogList()
+  const [_, setPracticeItemAtom] = usePracticeItemAtom()
 
-  const handleRightSwipe = (item: PlanItem) => {
-    const planItemMoveEvent = new CustomEvent('detectPlanItemMove', {
-      detail: item,
-    })
-    document.dispatchEvent(planItemMoveEvent)
+  const handleRightSwipePlan = (item: PlanItem) => {
+    setPracticeItemAtom({ ...item })
+    openDialog({ variant: 'CreatePracticeDialog', props: {} })
   }
 
   const { onTouchStart, onTouchMove, onTouchEnd } = useHorizontalSwipe({
-    onRightSwipe: () => handleRightSwipe(item),
+    onRightSwipe: () => handleRightSwipePlan(item),
   })
 
   return (

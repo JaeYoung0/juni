@@ -1,3 +1,4 @@
+import { Colors } from '@/styles/colors'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -37,6 +38,7 @@ export const Wrapper = styled.div`
 export const HeaderName = styled.p`
   font-size: 1.4rem;
   margin-bottom: 1rem;
+  color: ${Colors.Gray};
 `
 
 const inputStyle = css`

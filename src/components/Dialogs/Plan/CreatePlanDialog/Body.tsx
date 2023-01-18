@@ -8,6 +8,7 @@ import { css } from '@emotion/react'
 import { PlanItem } from '@/domain/plan'
 import { PracticeItem } from '@/domain/practice'
 import { SetterOrUpdater } from 'recoil'
+import { Colors } from '@/styles/colors'
 
 type Props<T extends PlanItem | PracticeItem> = {
   item: T
