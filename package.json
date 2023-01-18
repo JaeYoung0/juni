@@ -1,21 +1,12 @@
 {
+  "root": true,
   "private": true,
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "eslint": "eslint . --cache --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint . --fix"
-    ]
+    "lint": "yarn run type-check && next lint"
   },
   "dependencies": {
     "@emotion/react": "11.10.4",
@@ -34,7 +25,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.1.1",
     "@types/node": "18.0.6",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
@@ -42,14 +32,11 @@
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "dotenv-webpack": "^8.0.1",
-    "eslint": "^8.12.0",
+    "eslint": "^8.32.0",
+    "eslint-config-next": "13.1.2",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.3.7",
+    "lint-staged": "^13.1.0",
     "prettier": "^2.6.1",
-    "typescript": "latest"
+    "typescript": "4.9.4"
   }
 }

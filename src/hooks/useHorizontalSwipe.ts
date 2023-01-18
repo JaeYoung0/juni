@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 type Params = {
-  onLeftSwipe: () => void
-  onRightSwipe: () => void
+  onLeftSwipe?: () => void
+  onRightSwipe?: () => void
 }
 function useHorizontalSwipe({ onLeftSwipe, onRightSwipe }: Params) {
   const [touchStart, setTouchStart] = useState<number>(0)
@@ -24,9 +24,9 @@ function useHorizontalSwipe({ onLeftSwipe, onRightSwipe }: Params) {
     const isLeftSwipe = distance > minSwipeDistance
     const isRightSwipe = distance < -minSwipeDistance
     if (isLeftSwipe) {
-      onLeftSwipe()
+      onLeftSwipe?.()
     } else if (isRightSwipe) {
-      onRightSwipe()
+      onRightSwipe?.()
     }
   }
   return { onTouchStart, onTouchMove, onTouchEnd }

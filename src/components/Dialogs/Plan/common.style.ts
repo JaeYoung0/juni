@@ -12,7 +12,7 @@ export const Dialog = styled.dialog`
   // dialog position default: fixed
   width: 100%;
   max-width: 40rem;
-  height: 45rem;
+  height: 50rem;
   padding: 1rem;
   border-radius: 5px;
   overflow: visible;
@@ -30,7 +30,7 @@ export const CloseButton = styled.button`
   background: transparent;
 `
 
-export const Form = styled.form`
+export const Wrapper = styled.div`
   height: 90%;
 `
 
