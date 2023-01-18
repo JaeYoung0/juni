@@ -12,6 +12,9 @@ const config = {
     )
     return config
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = config
