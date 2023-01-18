@@ -12,6 +12,7 @@ import { useCalendarAtom } from '@/domain/calendar'
 import dayjs from 'dayjs'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import useDialogList from '@/hooks/useDialogList'
+import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
 
 function Home() {
   const [userAtom, setUserAtom] = useUserAtom()
@@ -36,9 +37,10 @@ function Home() {
   }, [])
 
   // TODO. refactor: calendarAtom 위치
-  const [_, setCurrentUnix] = useCalendarAtom()
+  const [currentUnix, setCurrentUnix] = useCalendarAtom()
+
   useEffect(() => {
-    setCurrentUnix(dayjs().unix())
+    setCurrentUnix(TODAY_UNIX)
   }, [])
 
   return (

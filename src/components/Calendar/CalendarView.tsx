@@ -26,14 +26,16 @@ export type CalendarViewProps = {
   onChange: (unix: number) => void
 }
 
-function CalendarView({ onChange }: CalendarViewProps) {
-  const now = dayjs().locale({
-    ...locale,
-  })
+const now = dayjs().locale({
+  ...locale,
+})
 
+export const TODAY_UNIX = now.startOf('date').unix()
+
+function CalendarView({ onChange }: CalendarViewProps) {
   const [currentCalendar, setCurrentCalendar] = useState<Dayjs>(now)
   const [allDates, setAllDates] = useState<{ dates: WeekDates }[]>([{ dates: [] }])
-  const [current, setCurrent] = useState<number>(now.startOf('date').unix())
+  const [current, setCurrent] = useState<number>(TODAY_UNIX)
 
   const goNextMonth = () => {
     const result = currentCalendar.add(1, 'month')
