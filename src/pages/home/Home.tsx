@@ -61,8 +61,9 @@ function ToggledCalendar() {
   return (
     <>
       <S.ToggleButton onClick={() => setShowCalendar(!showCalendar)}>
-        <CalendarMonthIcon />
-        {showCalendar ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        {/* <CalendarMonthIcon /> */}
+        <span>Calendar</span>
+        {showCalendar ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon />}
       </S.ToggleButton>
       {showCalendar && <Calendar />}
     </>

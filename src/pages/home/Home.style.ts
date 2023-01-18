@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { Colors } from '@/styles/colors'
 
 export const Box = styled.div`
   width: 100%;
@@ -19,19 +20,16 @@ export const ToggleButton = styled.button`
   justify-content: center;
   align-items: center;
 
-  /* width: 5rem; */
-  /* height: 5rem; */
-  padding: 0;
-  background: #fff;
-  border: 1px solid #2959ff;
+  padding: 1rem 2rem;
+  background: #000;
+  color: ${Colors.Gray};
 
   svg {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
   }
 
-  p {
-    font-size: 1.4rem;
-    color: #000;
+  span {
+    font-size: 2rem;
   }
 `

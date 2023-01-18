@@ -27,18 +27,16 @@ export default function ScheduleGrid() {
 
   return (
     <>
-      <S.CurrentUnix>
-        {`< `}선택 날짜: {dayjs.unix(currentUnix).format('YYYY-MM-DD')}
-        {` >`}
-      </S.CurrentUnix>
+      <S.CurrentUnix>선택한 날짜: {dayjs.unix(currentUnix).format('YYYY-MM-DD')}</S.CurrentUnix>
 
       <S.GridToggleBtn onClick={handleClickGridToggle}>
+        {/* <span>Toggle</span> */}
         {firstStartHour ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
       </S.GridToggleBtn>
       <S.GridWrapper firstHour={firstStartHour}>
         <S.Grid firstHour={firstStartHour}>
-          <TimeCol />
           <PlanCol />
+          <TimeCol />
           <PracticeCol />
         </S.Grid>
       </S.GridWrapper>
@@ -53,7 +51,7 @@ function TimeCol() {
     <S.Times>
       {bases.map((item) => (
         <S.Time className="time" key={item}>
-          <span>{item}시</span>
+          <span>{item}</span>
         </S.Time>
       ))}
     </S.Times>

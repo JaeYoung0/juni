@@ -1,3 +1,4 @@
+import { Colors } from '@/styles/colors'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -9,41 +10,45 @@ const CELL_HEIGHT = '10rem'
 
 const baseCellStyle = css`
   width: 100%;
-  background: #222222;
+  background: #000;
   min-height: 100px;
 `
 
 const planCellStyle = css`
   width: 100%;
-  background: #222222;
+  background: #000;
 `
 export const GridWrapper = styled.div<{ firstHour: number }>`
   overflow: hidden;
-  background: #222;
+  background: #000;
   height: ${({ firstHour }) =>
     `calc((24 - ${firstHour}) * ${CELL_HEIGHT})`}; // 9시부터 시작인 시간표라면, 24-9 - 13에다가 각 셀의 높이인 10rem을 곱한다
 `
 export const Grid = styled.div<{ firstHour: number }>`
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 3fr 3fr;
+  grid-template-columns: 7fr 1fr 7fr;
   padding: 0rem 0rem 5rem;
   background: #222;
 
   color: #fff;
 
+  div:not(:nth-of-type(2)) > div {
+    border-top: 1px solid ${Colors.Gray};
+  }
+
   div > div {
-    border-right: 1px solid #aaa;
+    /* border-right: 1px solid #aaa; */
   }
 
   div:first-of-type > div {
-    border-bottom: none;
+    /* border-bottom: none; */
   }
   div:not(:first-of-type) > div {
-    border-top: 1px solid #aaa;
+    /* border-top: 1px solid #aaa; */
   }
   div:not(:first-of-type) > div {
-    border-bottom: 1px solid #aaa;
+    /* border-bottom: 1px solid #aaa; */
   }
 
   transform: ${({ firstHour }) =>
@@ -52,7 +57,7 @@ export const Grid = styled.div<{ firstHour: number }>`
 
 export const CurrentUnix = styled.h2`
   color: #fff;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   text-align: center;
   padding: 2rem 0rem;
 `
@@ -68,6 +73,7 @@ export const Time = styled.div`
   span {
     transform: translateY(-50%);
     font-size: 1.4rem;
+    color: ${Colors.Gray};
   }
 
   ${baseCellStyle}
@@ -75,6 +81,17 @@ export const Time = styled.div`
 
 export const Plans = styled.div`
   position: relative;
+
+  &::before {
+    position: absolute;
+    /* width: 100%; */
+    top: 0;
+    left: 0;
+    transform: translate3d(100%, -160%, 0);
+    color: ${Colors.Gray};
+    font-size: 1.6rem;
+    content: 'Plan';
+  }
 `
 
 export const PlanBaseCell = styled.div`
@@ -107,6 +124,16 @@ export const PracticeItem = styled(PlanItem)``
 
 export const PracticeList = styled.div`
   position: relative;
+  &::before {
+    position: absolute;
+    /* width: 100%; */
+    top: 0;
+    right: 0;
+    transform: translate3d(-50%, -160%, 0);
+    color: ${Colors.Gray};
+    font-size: 1.6rem;
+    content: 'Practice';
+  }
 `
 
 export const PracticeBaseCell = styled.div`
@@ -116,11 +143,17 @@ export const PracticeBaseCell = styled.div`
 export const GridToggleBtn = styled.button`
   display: flex;
   align-items: center;
-  font-size: 1.6rem;
+
   background: #fff;
+  margin-bottom: 3rem;
+
+  span {
+    font-size: 1.4rem;
+  }
 
   svg {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
+    color: #000;
   }
 `
