@@ -38,8 +38,8 @@ export const getPracticeItems = async (payload: GetPracticeItemsPayload) => {
   const results: PracticeItem[] = []
   querySnapShot.forEach((item) => {
     const practiceItem = {
-      id: item.id,
       ...item.data(),
+      id: item.id, // db 생성시 만들어진 id로 대체
     }
 
     results.push(practiceItem as PracticeItem)

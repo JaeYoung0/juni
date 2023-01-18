@@ -14,7 +14,7 @@ export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>
   const { openDialog } = useDialogList()
 
   return (
-    <CS.DialogTitle>
+    <CS.HeaderName>
       [스케줄 추가]
       <button
         type="button"
@@ -32,6 +32,6 @@ export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>
       >
         컬러픽
       </button>
-    </CS.DialogTitle>
+    </CS.HeaderName>
   )
 }

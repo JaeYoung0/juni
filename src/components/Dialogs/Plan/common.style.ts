@@ -13,7 +13,7 @@ export const Dialog = styled.dialog`
   width: 100%;
   max-width: 40rem;
   height: 50rem;
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 5px;
   overflow: visible;
 `
@@ -34,7 +34,7 @@ export const Wrapper = styled.div`
   height: 90%;
 `
 
-export const DialogTitle = styled.p`
+export const HeaderName = styled.p`
   font-size: 1.4rem;
   margin-bottom: 1rem;
 `

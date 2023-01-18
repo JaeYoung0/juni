@@ -1,6 +1,6 @@
 import * as CS from '@/components/Dialogs/Plan/common.style'
-import Header from '@/components/Dialogs/Plan/CreatePlanDialog/Header'
-import Body from '@/components/Dialogs/Plan/CreatePlanDialog/Body'
+import Header from '../CreatePracticeDialog/Header'
+import Body from '../CreatePracticeDialog/Body'
 import { BasicProps } from '@/hooks/useDialogList'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
