@@ -24,15 +24,32 @@ export const isNumeric = (data: string | number) => {
 }
 
 /**
- * db에 utc로 저장한 경우와(string), 분단위로 저장한 경우를 모두 대응하여 (2시 => 120)
- * 분단위로 저장한 값을 리턴한다.
+ * time이 utc인 경우와(2023-01-18T14:02:33Z), 분단위로 저장한 경우(120) 모두에 대응하여
+ * 분단위 값을(120) 리턴한다.
  */
-export const totalMinParser = (time: string | number) => {
-  let _time = 0
+export const minParser = (time: string | number) => {
+  let _time
+
   if (isNumeric(time)) {
     _time = Number(time)
   } else {
     _time = dayjs.utc(time).local().hour() * 60 + dayjs.utc(time).local().minute()
+  }
+
+  return _time
+}
+
+/**
+ * time이 utc인 경우와(2023-01-18T14:02:33Z), 분단위로 저장한 경우(120) 모두에 대응하여
+ * utc 값을(120) 리턴한다.
+ */
+export const utcParser = (time: string | number, currentUnix: number) => {
+  let _time
+
+  if (isNumeric(time)) {
+    _time = dayjs.unix(currentUnix).add(Number(time), 'm').utc().format()
+  } else {
+    _time = time
   }
 
   return _time

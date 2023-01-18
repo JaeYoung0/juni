@@ -5,11 +5,15 @@ import * as CS from '../common.style'
 import { TimePicker } from '@mui/x-date-pickers/TimePicker'
 import TextField from '@mui/material/TextField'
 import { css } from '@emotion/react'
-import { usePlanItemAtom } from '@/domain/plan'
+import { PlanItem } from '@/domain/plan'
+import { PracticeItem } from '@/domain/practice'
+import { SetterOrUpdater } from 'recoil'
 
-export default function Body() {
-  const [plan, setPlan] = usePlanItemAtom()
-
+type Props<T extends PlanItem | PracticeItem> = {
+  item: T
+  setItem: SetterOrUpdater<T>
+}
+export default function Body({ item, setItem }: Props<PlanItem | PracticeItem>) {
   return (
     <>
       <CS.Row>
@@ -23,10 +27,10 @@ export default function Body() {
           >
             <TimePicker
               label="시작 시간"
-              value={dayjs(plan.startTime)}
+              value={dayjs(item.startTime)}
               onChange={(newValue) =>
-                setPlan({
-                  ...plan,
+                setItem({
+                  ...item,
                   startTime: dayjs(newValue).utc().format(),
                 })
               }
@@ -35,8 +39,8 @@ export default function Body() {
 
             <TimePicker
               label="종료 시간"
-              value={dayjs(plan.endTime)}
-              onChange={(newValue) => setPlan({ ...plan, endTime: dayjs(newValue).utc().format() })}
+              value={dayjs(item.endTime)}
+              onChange={(newValue) => setItem({ ...item, endTime: dayjs(newValue).utc().format() })}
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
@@ -48,16 +52,16 @@ export default function Body() {
           type="text"
           required
           placeholder="제목"
-          value={plan.title}
-          onChange={(e) => setPlan({ ...plan, title: e.target.value })}
+          value={item.title}
+          onChange={(e) => setItem({ ...item, title: e.target.value })}
         />
       </CS.Row>
 
       <CS.Row>
         <CS.ContentTextArea
-          value={plan.content}
+          value={item.content}
           required
-          onChange={(e) => setPlan({ ...plan, content: e.target.value })}
+          onChange={(e) => setItem({ ...item, content: e.target.value })}
           placeholder="메모"
         />
       </CS.Row>

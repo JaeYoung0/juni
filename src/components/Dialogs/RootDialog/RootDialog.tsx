@@ -1,11 +1,9 @@
 import useDialogList from '@/hooks/useDialogList'
 import * as Dialogs from '@/components/Dialogs'
 import { css } from '@emotion/react'
-import { Dayjs } from 'dayjs'
 
 function RootDialog() {
   const { dialogList, setDialogList } = useDialogList()
-  console.log('@@dialogList', dialogList)
 
   return (
     <>

@@ -1,17 +1,17 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { getStartTimeOfPlanList, PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
 import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
 import * as S from './style'
-import { getItemHeight, isNumeric, totalMinParser, unixToUTC } from '@/lib/utils'
+import { getItemHeight, minParser, unixToUTC, utcParser } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDialogList from '@/hooks/useDialogList'
-import { usePracticeList } from '@/domain/practice'
+import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 
 const LENGTH = 24
-// schedule = plan + practice
+// ScheduleGrid = Time + Plan + Practice
 export default function ScheduleGrid() {
   const [currentUnix] = useCalendarAtom()
   const { data: planList } = usePlanList()
@@ -39,7 +39,7 @@ export default function ScheduleGrid() {
         <S.Grid firstHour={firstStartHour}>
           <TimeCol />
           <PlanCol />
-          {/* <PracticeCol /> */}
+          <PracticeCol />
         </S.Grid>
       </S.GridWrapper>
     </>
@@ -63,13 +63,9 @@ function TimeCol() {
 function PlanCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: planList } = usePlanList()
-  console.log('@@planList', planList)
-
   const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
-  console.log('@@planItemAtom', planItemAtom)
-
-  const { openDialog } = useDialogList()
   const [currentUnix] = useCalendarAtom()
+  const { openDialog } = useDialogList()
 
   const handleClickPlanBase = (hour: number) => {
     setPlanItemAtom({
@@ -86,7 +82,11 @@ function PlanCol() {
   }
 
   const handleClickPlanItem = (item: PlanItem) => {
-    setPlanItemAtom(item)
+    setPlanItemAtom({
+      ...item,
+      startTime: utcParser(item.startTime, currentUnix),
+      endTime: utcParser(item.endTime, currentUnix),
+    })
     openDialog({
       variant: 'UpdatePlanDialog',
       props: {},
@@ -98,15 +98,11 @@ function PlanCol() {
       {bases.map((_, idx) => (
         <S.PlanBaseCell key={idx} onClick={() => handleClickPlanBase(idx)} />
       ))}
-      {planList?.map((item, idx) => {
+      {planList?.map((item) => {
         const { startTime, endTime } = item
-        console.log('@@item', item)
-
-        const _startTime = totalMinParser(startTime)
-        const _endTime = totalMinParser(endTime)
-
+        const _startTime = minParser(startTime)
+        const _endTime = minParser(endTime)
         const top = (_startTime * 100) / (24 * 60)
-
         const height = getItemHeight(_startTime, _endTime)
 
         return (
@@ -158,42 +154,65 @@ function PlanItem({ ...props }: PlanItemProps) {
   )
 }
 
-// function PracticeCol() {
-//   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
-//   const handlePracticeBaseClick = (startTime: number) => {
+function PracticeCol() {
+  const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
+  const { data: practiceList } = usePracticeList()
+  const [praticeItemAtom, setPracticeItemAtom] = usePracticeItemAtom()
 
-//   }
-//   const handleClickPracticeItem = (item: PracticeItem) => {
-//     // practiceDialogRef.current?.showModal(item)
-//   }
+  const [currentUnix] = useCalendarAtom()
+  const { openDialog } = useDialogList()
 
-//   const { data: practiceList } = usePracticeList()
+  const handleClickPracticeBase = (hour: number) => {
+    setPracticeItemAtom({
+      ...praticeItemAtom,
+      startTime: unixToUTC(currentUnix).add(hour, 'h').format(),
+      endTime: unixToUTC(currentUnix)
+        .add(hour + 1, 'h')
+        .format(),
+    })
+    openDialog({
+      variant: 'CreatePracticeDialog',
+      props: {},
+    })
+  }
 
-//   // console.log('@@practiceList', practiceList)
+  const handleClickPracticeItem = (item: PracticeItem) => {
+    setPracticeItemAtom({
+      ...item,
+      startTime: utcParser(item.startTime, currentUnix),
+      endTime: utcParser(item.endTime, currentUnix),
+    })
+    openDialog({
+      variant: 'UpdatePracticeDialog',
+      props: {},
+    })
+  }
 
-//   return (
-//     <S.PracticeList>
-//       {bases.map((_, idx) => (
-//         <S.PracticeBaseCell key={idx} onClick={() => handleClickPracticeItem(idx)} />
-//       ))}
-//       {practiceList?.map((item, idx) => {
-//         const { startTime, endTime, color, content } = item
-//         const top = (startTime * 100) / (24 * 60)
+  return (
+    <S.PracticeList>
+      {bases.map((_, idx) => (
+        <S.PracticeBaseCell key={idx} onClick={() => handleClickPracticeBase(idx)} />
+      ))}
+      {practiceList?.map((item, idx) => {
+        const { startTime, endTime, color, content } = item
+        const _startTime = minParser(startTime)
+        const _endTime = minParser(endTime)
+        const top = (_startTime * 100) / (24 * 60)
 
-//         const height = getItemHeight(startTime, endTime)
+        const height = getItemHeight(_startTime, _endTime)
 
-//         return (
-//           <S.PracticeItem
-//             style={{ background: color }}
-//             key={idx}
-//             top={top}
-//             height={height}
-//             onClick={() => handlePracticeItemClick(item)}
-//           >
-//             <span>{content}</span>
-//           </S.PracticeItem>
-//         )
-//       })}
-//     </S.PracticeList>
-//   )
-// }
+        return (
+          <S.PracticeItem
+            style={{ background: color }}
+            key={idx}
+            top={top}
+            height={height}
+            onClick={() => handleClickPracticeItem(item)}
+          >
+            <span>{content}</span>
+          </S.PracticeItem>
+        )
+      })}
+    </S.PracticeList>
+  )
+}

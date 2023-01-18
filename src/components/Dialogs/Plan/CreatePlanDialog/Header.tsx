@@ -1,10 +1,16 @@
-import { usePlanItemAtom } from '@/domain/plan'
+import { PlanItem } from '@/domain/plan'
+import { PracticeItem } from '@/domain/practice'
 import useDialogList from '@/hooks/useDialogList'
 import { css } from '@emotion/react'
+import { SetterOrUpdater } from 'recoil'
 import * as CS from '../common.style'
 
-export default function Header() {
-  const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
+// BodyProps와 동일
+type Props<T extends PlanItem | PracticeItem> = {
+  item: T
+  setItem: SetterOrUpdater<T>
+}
+export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>) {
   const { openDialog } = useDialogList()
 
   return (
@@ -13,14 +19,14 @@ export default function Header() {
       <button
         type="button"
         css={css`
-          background-color: ${planItemAtom.color};
+          background-color: ${item.color};
           padding: 1rem;
         `}
         onClick={() => {
           // TODO. 이것도 prop으로 받아야할까?
           openDialog({
             variant: 'ColorPickerDialog',
-            props: { onChangeColor: (color) => setPlanItemAtom({ ...planItemAtom, color }) }, // throttle?
+            props: { onChangeColor: (color) => setItem({ ...item, color }) }, // throttle?
           })
         }}
       >

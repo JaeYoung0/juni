@@ -40,12 +40,14 @@ function UpdatePlanDialog({ close }: UpdatePlanDialogProps) {
     close()
   }
 
+  const ItemProps = { item: planItem, setItem: setPlanItem }
+
   return (
     <CS.Dialog open>
       <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
       <CS.Wrapper>
-        <Header />
-        <Body />
+        <Header {...ItemProps} />
+        <Body {...ItemProps} />
         <CS.ButtonsWrapper>
           <CS.Button onClick={handleDelete}>삭제</CS.Button>
           <CS.Button onClick={handleSubmit}>수정</CS.Button>

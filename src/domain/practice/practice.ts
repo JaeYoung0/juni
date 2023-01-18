@@ -51,7 +51,7 @@ export function usePracticeList() {
       return getPracticeItems({ currentUnix, userId: userAtom.userId }).then((items) => {
         const enrichedItems = items.map((item) => ({
           ...item,
-          color: plans?.find((plan) => plan.title === item.title)?.color,
+          color: plans?.find((plan) => plan.title === item.title)?.color ?? '#aaa',
         }))
 
         return enrichedItems

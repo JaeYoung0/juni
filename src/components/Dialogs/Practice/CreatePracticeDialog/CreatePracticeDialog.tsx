@@ -1,17 +1,17 @@
-import { useCalendarAtom } from '@/domain/calendar'
-import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
-import { useUserAtom } from '@/domain/user'
-import { BasicProps } from '@/hooks/useDialogList'
-import { useCreatePracticeItem } from '@/service/practice'
 import * as CS from '@/components/Dialogs/Plan/common.style'
 import Header from '@/components/Dialogs/Plan/CreatePlanDialog/Header'
 import Body from '@/components/Dialogs/Plan/CreatePlanDialog/Body'
+import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
+import { useCreatePracticeItem } from '@/service/practice'
+import { useUserAtom } from '@/domain/user'
+import { BasicProps } from '@/hooks/useDialogList'
+import { useCalendarAtom } from '@/domain/calendar'
 
 type CreatePracticeDialogProps = BasicProps
 
 // TODO. CreatePlanDialog와 거의 동일
 export default function CreatePracticeDialog({ close }: CreatePracticeDialogProps) {
-  const [planItem, setPlanItem] = usePracticeItemAtom()
+  const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
 
@@ -20,24 +20,26 @@ export default function CreatePracticeDialog({ close }: CreatePracticeDialogProp
   const handleSubmit = () => {
     createPracticeItem.mutate({
       currentUnix,
-      ...planItem,
+      ...practiceItem,
       userId: userAtom.userId,
     })
     close()
   }
 
   const handleClose = () => {
-    setPlanItem(DEFAULT_PRACTICE_ATOM)
+    setPracticeItem(DEFAULT_PRACTICE_ATOM)
     close()
   }
+
+  const ItemProps = { item: practiceItem, setItem: setPracticeItem }
 
   return (
     <>
       <CS.Dialog open>
         <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
         <CS.Wrapper>
-          <Header />
-          <Body />
+          <Header {...ItemProps} />
+          <Body {...ItemProps} />
           <CS.ButtonsWrapper>
             <CS.Button onClick={handleSubmit}>추가</CS.Button>
           </CS.ButtonsWrapper>

@@ -41,8 +41,6 @@ function Home() {
     setCurrentUnix(dayjs().unix())
   }, [])
 
-  const { openDialog } = useDialogList()
-
   return (
     <BasicLayout>
       <S.UserName>

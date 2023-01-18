@@ -29,13 +29,15 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
     close()
   }
 
+  const ItemProps = { item: planItem, setItem: setPlanItem }
+
   return (
     <>
       <CS.Dialog open>
         <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
         <CS.Wrapper>
-          <Header />
-          <Body />
+          <Header {...ItemProps} />
+          <Body {...ItemProps} />
           <CS.ButtonsWrapper>
             <CS.Button onClick={handleSubmit}>추가</CS.Button>
           </CS.ButtonsWrapper>

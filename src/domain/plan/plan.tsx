@@ -1,4 +1,4 @@
-import { totalMinParser, unixToYYYYMMDD } from '@/lib/utils'
+import { minParser, unixToYYYYMMDD } from '@/lib/utils'
 import { getPlanItems } from '@/service/plan'
 import { useQuery } from '@tanstack/react-query'
 import { atom, useRecoilState } from 'recoil'
@@ -58,7 +58,7 @@ export const getStartTimeOfPlanList = (planList: PlanItem[]) => {
   let result = 0
 
   planList?.forEach((planItem) => {
-    const _startTime = totalMinParser(planItem.startTime)
+    const _startTime = minParser(planItem.startTime)
     if (_startTime < min) {
       min = _startTime
     }
