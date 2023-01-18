@@ -13,8 +13,9 @@ import Autocomplete from '@mui/material/Autocomplete'
 type Props<T extends PlanItem | PracticeItem> = {
   item: T
   setItem: SetterOrUpdater<T>
+  type: 'create' | 'update'
 }
-export default function Body({ item, setItem }: Props<PlanItem | PracticeItem>) {
+export default function Body({ item, setItem, type }: Props<PlanItem | PracticeItem>) {
   const { data: planList } = usePlanList()
   const planTitles = planList?.map((item) => item.title)
 
@@ -55,7 +56,7 @@ export default function Body({ item, setItem }: Props<PlanItem | PracticeItem>) 
         {/* form 상태를 사용했다면 required를 쉽게 사용했을텐데 ... */}
         <Autocomplete
           value={item.title}
-          disabled={!!item.title}
+          disabled={type === 'update'}
           onChange={(event: any, newValue: string | null) => {
             setItem({ ...item, title: newValue ?? '' })
           }}

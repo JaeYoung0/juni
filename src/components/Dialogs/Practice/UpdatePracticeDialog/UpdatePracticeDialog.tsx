@@ -47,7 +47,7 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
       <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
       <CS.Wrapper>
         <Header {...ItemProps} />
-        <Body {...ItemProps} />
+        <Body type="update" {...ItemProps} />
         <CS.ButtonsWrapper>
           <CS.Button onClick={handleDelete}>삭제</CS.Button>
           <CS.Button onClick={handleSubmit}>수정</CS.Button>

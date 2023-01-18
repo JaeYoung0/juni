@@ -39,7 +39,7 @@ export default function CreatePracticeDialog({ close }: CreatePracticeDialogProp
         <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
         <CS.Wrapper>
           <Header {...ItemProps} />
-          <Body {...ItemProps} />
+          <Body type="create" {...ItemProps} />
           <CS.ButtonsWrapper>
             <CS.Button onClick={handleSubmit}>추가</CS.Button>
           </CS.ButtonsWrapper>
