@@ -84,13 +84,14 @@ export const Plans = styled.div`
 
   &::before {
     position: absolute;
-    /* width: 100%; */
+    width: 100%;
     top: 0;
     left: 0;
-    transform: translate3d(100%, -160%, 0);
+    transform: translate3d(0, -160%, 0);
     color: ${Colors.Gray};
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     content: 'Plan';
+    text-align: center;
   }
 `
 
@@ -126,13 +127,14 @@ export const PracticeList = styled.div`
   position: relative;
   &::before {
     position: absolute;
-    /* width: 100%; */
+    width: 100%;
     top: 0;
     right: 0;
-    transform: translate3d(-50%, -160%, 0);
+    transform: translate3d(0%, -160%, 0);
     color: ${Colors.Gray};
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     content: 'Practice';
+    text-align: center;
   }
 `
 

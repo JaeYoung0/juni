@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import useDialogList from '@/hooks/useDialogList'
 import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
+import BottomNavigation from '@/components/BottomNavigation'
 
 function Home() {
   const [userAtom, setUserAtom] = useUserAtom()
@@ -52,6 +53,7 @@ function Home() {
         <ToggledCalendar />
         <ScheduleGrid />
       </S.Box>
+      <BottomNavigation />
     </BasicLayout>
   )
 }
