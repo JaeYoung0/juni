@@ -11,22 +11,22 @@ export const Row = styled.div`
 export const Dialog = styled.dialog`
   // dialog position default: fixed
   width: 100%;
-  max-width: 40rem;
-  height: 50rem;
+  height: 100%;
   padding: 2rem;
   border-radius: 5px;
   overflow: visible;
+  border: none;
 `
 
 export const CloseButton = styled.button`
   position: absolute;
-  right: -1rem;
-  top: -4rem;
+  right: 0rem;
+  top: 0rem;
   width: 4rem;
   height: 4rem;
   padding: 0;
   font-size: 2rem;
-  color: #fff;
+  color: #aaa;
   background: transparent;
 `
 
