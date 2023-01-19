@@ -15,12 +15,11 @@ type Props<T extends PlanItem | PracticeItem> = {
   setItem: SetterOrUpdater<T>
   type: 'create' | 'update'
 }
-export default function Body({ item, setItem, type }: Props<PlanItem | PracticeItem>) {
+export default function PracticeBody({ item, setItem, type }: Props<PlanItem | PracticeItem>) {
   const { data: planList } = usePlanList()
 
   const planTitles = planList?.map((item) => item.title)
   planTitles?.push('계획에 없던 일')
-  // TODO. 계획에 없던 일은 카테고리를 어떻게 하지?
 
   return (
     <>

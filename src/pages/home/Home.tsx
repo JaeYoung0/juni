@@ -14,7 +14,20 @@ export default function HomePage() {
           ); // TODO. main height fit size는 global에 변수로 저장하기
         `}
       />
-      <span>index</span>
+
+      <p
+        css={css`
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate3d(-50%, -50%, 0);
+
+          font-size: 1.6rem;
+          color: #fff;
+        `}
+      >
+        구성 중입니다 : )
+      </p>
     </BasicLayout>
   )
 }

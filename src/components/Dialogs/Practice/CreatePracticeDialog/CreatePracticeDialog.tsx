@@ -1,6 +1,6 @@
 import * as CS from '@/components/Dialogs/Plan/common.style'
-import Header from './Header'
-import Body from './Body'
+import PracticeHeader from './PracticeHeader'
+import PracticeBody from './PracticeBody'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useCreatePracticeItem } from '@/service/practice'
 import { useUserAtom } from '@/domain/user'
@@ -38,8 +38,8 @@ export default function CreatePracticeDialog({ close }: CreatePracticeDialogProp
       <CS.Dialog open>
         <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
         <CS.Wrapper>
-          <Header {...ItemProps} />
-          <Body type="create" {...ItemProps} />
+          <PracticeHeader type="create" {...ItemProps} />
+          <PracticeBody type="create" {...ItemProps} />
           <CS.ButtonsWrapper>
             <CS.Button onClick={handleSubmit}>추가</CS.Button>
           </CS.ButtonsWrapper>

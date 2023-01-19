@@ -9,6 +9,7 @@ import { getItemHeight, minParser, unixToUTC, utcParser } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDialogList from '@/hooks/useDialogList'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
+import { useCategoryList } from '@/domain/category'
 
 const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
@@ -60,6 +61,8 @@ function TimeCol() {
 function PlanCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: planList } = usePlanList()
+  console.log('@@planList', planList)
+
   const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
   const [currentUnix] = useCalendarAtom()
   const { openDialog } = useDialogList()
@@ -128,7 +131,8 @@ function PlanItem({ ...props }: PlanItemProps) {
   const [_, setPracticeItemAtom] = usePracticeItemAtom()
 
   const handleRightSwipePlan = (item: PlanItem) => {
-    setPracticeItemAtom({ ...item })
+    // plan to practice
+    setPracticeItemAtom(item)
     openDialog({ variant: 'CreatePracticeDialog', props: {} })
   }
 
@@ -136,9 +140,12 @@ function PlanItem({ ...props }: PlanItemProps) {
     onRightSwipe: () => handleRightSwipePlan(item),
   })
 
+  const { data: categoryList } = useCategoryList()
+  const category = categoryList?.find((c) => c.id === item.categoryId)
+
   return (
     <S.PlanItem
-      style={{ background: item.color }}
+      style={{ background: category?.color ?? '#aaa' }}
       top={top}
       height={height}
       onClick={() => props.onClickPlanItem(item)}
@@ -154,6 +161,8 @@ function PlanItem({ ...props }: PlanItemProps) {
 function PracticeCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: practiceList } = usePracticeList()
+  console.log('@@practiceList', practiceList)
+
   const [praticeItemAtom, setPracticeItemAtom] = usePracticeItemAtom()
 
   const [currentUnix] = useCalendarAtom()
@@ -191,7 +200,7 @@ function PracticeCol() {
         <S.PracticeBaseCell key={idx} onClick={() => handleClickPracticeBase(idx)} />
       ))}
       {practiceList?.map((item, idx) => {
-        const { startTime, endTime, color, content } = item
+        const { startTime, endTime, content } = item
         const _startTime = minParser(startTime)
         const _endTime = minParser(endTime)
         const top = (_startTime * 100) / (24 * 60)
@@ -199,17 +208,39 @@ function PracticeCol() {
         const height = getItemHeight(_startTime, _endTime)
 
         return (
-          <S.PracticeItem
-            style={{ background: color }}
-            key={idx}
+          <PracticeItem
+            key={item.id}
             top={top}
             height={height}
-            onClick={() => handleClickPracticeItem(item)}
-          >
-            <span>{content}</span>
-          </S.PracticeItem>
+            item={item}
+            onClickPracticeItem={handleClickPracticeItem}
+          />
         )
       })}
     </S.PracticeList>
+  )
+}
+
+type PracticeItemProps = {
+  top: number
+  height: number
+  item: PracticeItem
+  onClickPracticeItem: (item: PracticeItem) => void
+}
+function PracticeItem({ ...props }: PracticeItemProps) {
+  const { top, height, item } = props
+
+  const { data: categoryList } = useCategoryList()
+  const category = categoryList?.find((c) => c.id === item.categoryId)
+
+  return (
+    <S.PracticeItem
+      style={{ background: category?.color ?? '#aaa' }}
+      top={top}
+      height={height}
+      onClick={() => props.onClickPracticeItem(item)}
+    >
+      <span>{item.content}</span>
+    </S.PracticeItem>
   )
 }

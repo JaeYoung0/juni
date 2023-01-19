@@ -17,27 +17,28 @@ const baseCellStyle = css`
 const planCellStyle = css`
   width: 100%;
   background: #000;
+  color: #fff;
+  padding: 0;
+  display: flex;
+  align-items: center;
 `
 
-const lastBaseCellStyle = css`
-  &:last-of-type {
-    border-bottom: 1px solid ${Colors.Gray};
-  }
-`
+const bottomPadding = '20rem'
+
 export const GridWrapper = styled.div<{ firstHour: number }>`
-  /* overflow: hidden; */
+  overflow: hidden;
   background: #000;
+  padding: 0;
   height: ${({ firstHour }) =>
-    `calc((24 - ${firstHour}) * ${CELL_HEIGHT})`}; // 9시부터 시작인 시간표라면, 24-9 - 13에다가 각 셀의 높이인 10rem을 곱한다
+    `calc((24 - ${firstHour}) * ${CELL_HEIGHT} + ${bottomPadding})`}; // 9시부터 시작인 시간표라면, 24-9 - 13에다가 각 셀의 높이인 10rem을 곱한다
 `
 export const Grid = styled.div<{ firstHour: number }>`
   position: relative;
   display: grid;
   grid-template-columns: 7fr 1fr 7fr;
-  padding: 0rem 0rem 15rem;
+  padding: 0;
+  margin-bottom: 20rem;
   background: #000;
-
-  color: #fff;
 
   div:not(:nth-of-type(2)) > div {
     border-top: 1px solid ${Colors.Gray};
@@ -67,13 +68,13 @@ export const Time = styled.div`
   justify-content: flex-start;
   text-align: center;
 
+  ${baseCellStyle}
+
   span {
     font-size: 1.4rem;
     color: ${Colors.Gray};
     transform: translateY(-50%);
   }
-
-  ${baseCellStyle}
 `
 
 export const PlanList = styled.div`
@@ -94,10 +95,14 @@ export const PlanList = styled.div`
 
 export const PlanBaseCell = styled.div`
   ${baseCellStyle}
-  ${lastBaseCellStyle}
+
+  /* last-of-type이 PlanBaseCell이랑 PlanItem을 구분하지 못함... PlanItem을 button으로 바꿔서 대응함 */
+  &:last-of-type {
+    border-bottom: 1px solid ${Colors.Gray};
+  }
 `
 
-export const PlanItem = styled.div<{ top: number; height: number }>`
+export const PlanItem = styled.button<{ top: number; height: number }>`
   position: absolute;
   top: ${({ top }) => `${top}%`};
   height: ${({ height }) => `${height}%`};
@@ -117,10 +122,6 @@ export const PlanItem = styled.div<{ top: number; height: number }>`
   overflow: hidden;
   white-space: pre;
   text-overflow: ellipsis;
-
-  &:last-of-type {
-    border-bottom: 1px solid ${Colors.Gray};
-  }
 `
 
 export const PracticeList = styled.div`

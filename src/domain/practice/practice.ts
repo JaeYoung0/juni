@@ -8,13 +8,18 @@ import { useCalendarAtom } from '../calendar'
 import { usePlanList } from '../plan'
 import { useUserAtom } from '../user'
 
+/**
+ * @startTime - db에 utc로 저장 | 하루를 분으로 계산 (number)
+ * @endTime - db에 utc로 저장 | 하루를 분으로 계산 (number)
+ * @categoryId - categoryId가 비어있는("") practiceItem은 "계획에 없던 일" 아이템이다.
+ */
 export type PracticeItem = {
   id: string
   title: string
   content: string
-  startTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
-  endTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
-  color: string // plan에 있는 color를 가져옴. practice db에는 저장하지 않음
+  startTime: string | number
+  endTime: string | number
+  categoryId: string // plan에 있는 정보를 가져옴. practice db에는 저장하지 않음 << 이 방식이 옳은가
 }
 
 export const DEFAULT_PRACTICE_ATOM = {
@@ -23,7 +28,7 @@ export const DEFAULT_PRACTICE_ATOM = {
   content: '',
   startTime: dayjs().utc().format(),
   endTime: dayjs().utc().format(),
-  color: '#aaa',
+  categoryId: '',
 }
 
 const PracticeItemAtom = atom<PracticeItem>({
@@ -51,7 +56,9 @@ export function usePracticeList() {
       return getPracticeItems({ currentUnix, userId: userAtom.userId }).then((items) => {
         const enrichedItems = items.map((item) => ({
           ...item,
-          color: plans?.find((plan) => plan.title === item.title)?.color ?? '#aaa',
+
+          // plan과 practice의 title이 유니크하다고 가정하는게 옳은가
+          categoryId: plans?.find((plan) => plan.title === item.title)?.categoryId ?? '',
         }))
 
         return enrichedItems

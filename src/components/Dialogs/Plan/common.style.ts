@@ -38,12 +38,13 @@ export const Wrapper = styled.div`
 export const Header = styled.div`
   margin-bottom: 1rem;
 
-  span {
+  p {
     font-size: 1.4rem;
     color: ${Colors.Gray};
+    margin-bottom: 2rem;
   }
 
-  span + button {
+  p + button {
     margin-left: 1rem;
   }
 `
