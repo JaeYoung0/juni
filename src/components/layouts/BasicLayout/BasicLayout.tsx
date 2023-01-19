@@ -2,6 +2,7 @@ import React, { CSSProperties } from 'react'
 import styled from '@emotion/styled'
 import { css, Interpolation, Theme } from '@emotion/react'
 import BottomNavigation from '@/components/BottomNavigation'
+import { NAV_HEIGHT } from '@/components/BottomNavigation/BottomNavigation'
 
 type Props = {
   children: React.ReactNode
@@ -13,7 +14,7 @@ type Props = {
 function BasicLayout({ children, ...props }: Props) {
   return (
     <Container {...props}>
-      {children}
+      <Main>{children}</Main>
       <BottomNavigation />
     </Container>
   )
@@ -36,4 +37,8 @@ export const Container = styled.div<Omit<Props, 'children'>>`
       flex-direction: column;
       align-items: center;
     `}
+`
+
+const Main = styled.main`
+  max-height: calc(var(--vh) * 100 - ${NAV_HEIGHT});
 `

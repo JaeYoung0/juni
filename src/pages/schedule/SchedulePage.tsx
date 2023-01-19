@@ -32,7 +32,6 @@ function ToggledCalendar() {
   return (
     <>
       <S.ToggleButton onClick={() => setShowCalendar(!showCalendar)}>
-        {/* <CalendarMonthIcon /> */}
         <span>Calendar</span>
         {showCalendar ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon />}
       </S.ToggleButton>

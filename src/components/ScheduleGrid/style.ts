@@ -18,8 +18,14 @@ const planCellStyle = css`
   width: 100%;
   background: #000;
 `
+
+const lastBaseCellStyle = css`
+  &:last-of-type {
+    border-bottom: 1px solid ${Colors.Gray};
+  }
+`
 export const GridWrapper = styled.div<{ firstHour: number }>`
-  overflow: hidden;
+  /* overflow: hidden; */
   background: #000;
   height: ${({ firstHour }) =>
     `calc((24 - ${firstHour}) * ${CELL_HEIGHT})`}; // 9시부터 시작인 시간표라면, 24-9 - 13에다가 각 셀의 높이인 10rem을 곱한다
@@ -28,8 +34,8 @@ export const Grid = styled.div<{ firstHour: number }>`
   position: relative;
   display: grid;
   grid-template-columns: 7fr 1fr 7fr;
-  padding: 0rem 0rem 5rem;
-  background: #222;
+  padding: 0rem 0rem 15rem;
+  background: #000;
 
   color: #fff;
 
@@ -37,32 +43,23 @@ export const Grid = styled.div<{ firstHour: number }>`
     border-top: 1px solid ${Colors.Gray};
   }
 
-  div > div {
-    /* border-right: 1px solid #aaa; */
-  }
-
-  div:first-of-type > div {
-    /* border-bottom: none; */
-  }
-  div:not(:first-of-type) > div {
-    /* border-top: 1px solid #aaa; */
-  }
-  div:not(:first-of-type) > div {
-    /* border-bottom: 1px solid #aaa; */
-  }
-
   transform: ${({ firstHour }) =>
     firstHour ? `translateY(calc((-${firstHour} / 24) * 100% + 5rem));` : `translateY(3rem)`};
 `
 
-export const CurrentUnix = styled.h2`
-  color: #fff;
-  font-size: 1.6rem;
-  text-align: center;
-  padding: 2rem 0rem;
-`
+export const Times = styled.div`
+  position: relative;
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate3d(-50%, 50%, 0);
 
-export const Times = styled.div``
+    font-size: 1.4rem;
+    color: ${Colors.Gray};
+    content: '24';
+  }
+`
 
 export const Time = styled.div`
   display: flex;
@@ -71,15 +68,15 @@ export const Time = styled.div`
   text-align: center;
 
   span {
-    transform: translateY(-50%);
     font-size: 1.4rem;
     color: ${Colors.Gray};
+    transform: translateY(-50%);
   }
 
   ${baseCellStyle}
 `
 
-export const Plans = styled.div`
+export const PlanList = styled.div`
   position: relative;
 
   &::before {
@@ -97,6 +94,7 @@ export const Plans = styled.div`
 
 export const PlanBaseCell = styled.div`
   ${baseCellStyle}
+  ${lastBaseCellStyle}
 `
 
 export const PlanItem = styled.div<{ top: number; height: number }>`
@@ -119,9 +117,11 @@ export const PlanItem = styled.div<{ top: number; height: number }>`
   overflow: hidden;
   white-space: pre;
   text-overflow: ellipsis;
-`
 
-export const PracticeItem = styled(PlanItem)``
+  &:last-of-type {
+    border-bottom: 1px solid ${Colors.Gray};
+  }
+`
 
 export const PracticeList = styled.div`
   position: relative;
@@ -138,9 +138,9 @@ export const PracticeList = styled.div`
   }
 `
 
-export const PracticeBaseCell = styled.div`
-  ${baseCellStyle}
-`
+export const PracticeBaseCell = styled(PlanBaseCell)``
+
+export const PracticeItem = styled(PlanItem)``
 
 export const GridToggleBtn = styled.button`
   display: flex;
@@ -158,4 +158,11 @@ export const GridToggleBtn = styled.button`
     height: 2rem;
     color: #000;
   }
+`
+
+export const CurrentUnix = styled.h2`
+  color: #fff;
+  font-size: 1.6rem;
+  text-align: center;
+  padding: 2rem 0rem;
 `

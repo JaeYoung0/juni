@@ -31,6 +31,8 @@ const NAVI_LIST = [
   },
 ]
 
+export const NAV_HEIGHT = '6rem'
+
 function BottomNavigation() {
   const router = useRouter()
   return (
@@ -47,26 +49,6 @@ function BottomNavigation() {
           {item.name}
         </S.NavItem>
       ))}
-      {/* <S.NavItem href="/">
-        <HomeIcon />홈
-      </S.NavItem>
-      <S.NavItem href="/">
-        <CalendarMonthIcon />
-        계획
-      </S.NavItem>
-      <S.NavItem href="/">
-        <BarChartIcon />
-        통계
-      </S.NavItem>
-      <S.NavItem
-        css={css`
-          color: #fff;
-        `}
-        href="/my"
-      >
-        <AssignmentIndIcon />
-        내정보
-      </S.NavItem> */}
     </S.Navigation>
   )
 }

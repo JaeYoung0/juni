@@ -30,7 +30,6 @@ export default function ScheduleGrid() {
       <S.CurrentUnix>선택한 날짜: {dayjs.unix(currentUnix).format('YYYY-MM-DD')}</S.CurrentUnix>
 
       <S.GridToggleBtn onClick={handleClickGridToggle}>
-        {/* <span>Toggle</span> */}
         {firstStartHour ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
       </S.GridToggleBtn>
       <S.GridWrapper firstHour={firstStartHour}>
@@ -92,7 +91,7 @@ function PlanCol() {
   }
 
   return (
-    <S.Plans>
+    <S.PlanList>
       {bases.map((_, idx) => (
         <S.PlanBaseCell key={idx} onClick={() => handleClickPlanBase(idx)} />
       ))}
@@ -113,7 +112,7 @@ function PlanCol() {
           />
         )
       })}
-    </S.Plans>
+    </S.PlanList>
   )
 }
 
