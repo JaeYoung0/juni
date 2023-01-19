@@ -1,6 +1,6 @@
 import * as CS from '../common.style'
-import Body from '../CreatePlanDialog/Body'
-import Header from '../CreatePlanDialog/Header'
+import PlanBody from '../CreatePlanDialog/PlanBody'
+import PlanHeader from '../CreatePlanDialog/PlanHeader'
 import { BasicProps } from '@/hooks/useDialogList'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
 import { useDeletePlanItem, useUpdatePlanItem } from '@/service/plan'
@@ -46,8 +46,8 @@ function UpdatePlanDialog({ close }: UpdatePlanDialogProps) {
     <CS.Dialog open>
       <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
       <CS.Wrapper>
-        <Header {...ItemProps} />
-        <Body {...ItemProps} />
+        <PlanHeader {...ItemProps} />
+        <PlanBody {...ItemProps} />
         <CS.ButtonsWrapper>
           <CS.Button onClick={handleDelete}>삭제</CS.Button>
           <CS.Button onClick={handleSubmit}>수정</CS.Button>
