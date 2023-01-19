@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react'
 import styled from '@emotion/styled'
 import { css, Interpolation, Theme } from '@emotion/react'
+import BottomNavigation from '@/components/BottomNavigation'
 
 type Props = {
   children: React.ReactNode
@@ -10,7 +11,12 @@ type Props = {
 }
 
 function BasicLayout({ children, ...props }: Props) {
-  return <Container {...props}>{children}</Container>
+  return (
+    <Container {...props}>
+      {children}
+      <BottomNavigation />
+    </Container>
+  )
 }
 
 export default BasicLayout

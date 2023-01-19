@@ -35,10 +35,17 @@ export const Wrapper = styled.div`
   height: 90%;
 `
 
-export const HeaderName = styled.p`
-  font-size: 1.4rem;
+export const Header = styled.div`
   margin-bottom: 1rem;
-  color: ${Colors.Gray};
+
+  span {
+    font-size: 1.4rem;
+    color: ${Colors.Gray};
+  }
+
+  span + button {
+    margin-left: 1rem;
+  }
 `
 
 const inputStyle = css`

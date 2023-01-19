@@ -14,13 +14,14 @@ export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>
   const { openDialog } = useDialogList()
 
   return (
-    <CS.HeaderName>
-      [스케줄 추가]
+    <CS.Header>
+      <span>[스케줄 추가]</span>
       <button
         type="button"
         css={css`
+          color: #fff;
           background-color: ${item.color};
-          padding: 1rem;
+          padding: 0.5rem 1rem;
         `}
         onClick={() => {
           // TODO. 이것도 prop으로 받아야할까?
@@ -30,8 +31,8 @@ export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>
           })
         }}
       >
-        컬러픽
+        컬러
       </button>
-    </CS.HeaderName>
+    </CS.Header>
   )
 }
