@@ -6,13 +6,8 @@ export const Box = styled.div`
   height: 100%;
   max-width: 60rem;
   margin: 0 auto;
-`
-
-export const UserName = styled.h2`
-  font-size: 1.6rem;
-  color: #fff;
-  padding: 2rem 0rem;
-  text-align: center;
+  /* padding-bottom: 15rem; */
+  margin-bottom: 15rem;
 `
 
 export const ToggleButton = styled.button`

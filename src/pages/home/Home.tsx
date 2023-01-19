@@ -1,75 +1,33 @@
-import * as S from './Home.style'
-import Calendar from '@/components/Calendar'
-import ScheduleGrid from '@/components/ScheduleGrid'
-import { useEffect, useState } from 'react'
-import { useUserAtom } from '@/domain/user'
-import { firebaseAuth, useAuth } from '@/service/auth'
-import { useRouter } from 'next/router'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { useCalendarAtom } from '@/domain/calendar'
-import dayjs from 'dayjs'
+import { NAV_HEIGHT } from '@/components/BottomNavigation/BottomNavigation'
 import BasicLayout from '@/components/layouts/BasicLayout'
-import useDialogList from '@/hooks/useDialogList'
-import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
-import BottomNavigation from '@/components/BottomNavigation'
+import { css } from '@emotion/react'
 
-function Home() {
-  const [userAtom, setUserAtom] = useUserAtom()
-  const router = useRouter()
-  const { logout } = useAuth()
-  const handleClickButton = () => void logout()
-
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged((user) => {
-      if (!user) {
-        void router.replace('/login')
-      } else {
-        const { uid, displayName } = user
-        setUserAtom({
-          userId: uid,
-          name: displayName ?? '이름 없음',
-        })
-        // Home에서는 ui비워놓고 auth check만 할까?
-        // void router.replace('/schedule')
-      }
-    })
-  }, [])
-
-  // TODO. refactor: calendarAtom 위치
-  const [currentUnix, setCurrentUnix] = useCalendarAtom()
-
-  useEffect(() => {
-    setCurrentUnix(TODAY_UNIX)
-  }, [])
-
+export default function HomePage() {
   return (
     <BasicLayout>
-      <S.UserName>
-        {userAtom.name}님 안녕하세요! <button onClick={handleClickButton}>로그아웃</button>
-      </S.UserName>
-      <S.Box>
-        <ToggledCalendar />
-        <ScheduleGrid />
-      </S.Box>
-      <BottomNavigation />
+      <img
+        src="https://images.unsplash.com/photo-1639678349533-5758a710ca0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+        css={css`
+          opacity: 0.4;
+          height: calc(
+            var(--vh) * 100 - ${NAV_HEIGHT}
+          ); // TODO. main height fit size는 global에 변수로 저장하기
+        `}
+      />
+
+      <p
+        css={css`
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate3d(-50%, -50%, 0);
+
+          font-size: 1.6rem;
+          color: #fff;
+        `}
+      >
+        구성 중입니다 : )
+      </p>
     </BasicLayout>
   )
 }
-
-function ToggledCalendar() {
-  const [showCalendar, setShowCalendar] = useState(false)
-  return (
-    <>
-      <S.ToggleButton onClick={() => setShowCalendar(!showCalendar)}>
-        {/* <CalendarMonthIcon /> */}
-        <span>Calendar</span>
-        {showCalendar ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon />}
-      </S.ToggleButton>
-      {showCalendar && <Calendar />}
-    </>
-  )
-}
-
-export default Home

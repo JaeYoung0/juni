@@ -4,7 +4,6 @@ import { User } from '@/domain/user'
 import { firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
 import {
   addDoc,
   collection,
@@ -106,7 +105,7 @@ export function useCreatePlanItem() {
   const [currentUnix] = useCalendarAtom()
 
   return useMutation({
-    mutationFn: (payload: CreatePlanItemPayload) => createPlanItem(payload),
+    mutationFn: createPlanItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
@@ -119,7 +118,7 @@ export function useUpdatePlanItem() {
   const queryClient = useQueryClient()
   const [currentUnix] = useCalendarAtom()
   return useMutation({
-    mutationFn: (payload: UpdatePlanItemPayload) => updatePlanItem(payload),
+    mutationFn: updatePlanItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })

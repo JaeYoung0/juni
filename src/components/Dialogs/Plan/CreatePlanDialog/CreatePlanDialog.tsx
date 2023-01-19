@@ -4,8 +4,8 @@ import { useUserAtom } from '@/domain/user'
 import { BasicProps } from '@/hooks/useDialogList'
 import { useCreatePlanItem } from '@/service/plan'
 import * as CS from '../common.style'
-import Header from './Header'
-import Body from './Body'
+import Header from './PlanHeader'
+import Body from './PlanBody'
 
 type CreatePlanDialogProps = BasicProps
 

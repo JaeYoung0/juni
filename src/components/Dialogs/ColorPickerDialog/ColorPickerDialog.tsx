@@ -1,7 +1,9 @@
 import { BasicProps } from '@/hooks/useDialogList'
 import { css } from '@emotion/react'
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { HexColorPicker } from 'react-colorful'
+import { COLOR_PICKERS } from './constant'
+import * as S from './style'
 
 type Props = BasicProps & {
   onChangeColor?: (color: string) => void
@@ -16,7 +18,12 @@ function ColorPickerDialog({ onChangeColor, close }: Props) {
 
   return (
     <dialog open>
-      <HexColorPicker color={color} onChange={setColor} />
+      <HexColorPicker
+        style={{ width: '100%', marginBottom: '2rem' }}
+        color={color}
+        onChange={setColor}
+      />
+      <Palette onClick={setColor} />
       <button
         css={css`
           width: 100%;
@@ -32,3 +39,22 @@ function ColorPickerDialog({ onChangeColor, close }: Props) {
 }
 
 export default ColorPickerDialog
+
+type PaletteProps = {
+  onClick: (color: string) => void
+}
+function Palette({ onClick }: PaletteProps) {
+  return (
+    <S.Palette>
+      {COLOR_PICKERS.map((color) => (
+        <S.PaletteItem
+          key={color}
+          onClick={() => onClick(color)}
+          css={css`
+            background: ${color};
+          `}
+        />
+      ))}
+    </S.Palette>
+  )
+}

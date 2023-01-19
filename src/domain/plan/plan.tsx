@@ -15,7 +15,7 @@ export type PlanItem = {
   content: string
   startTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
   endTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
-  color: string
+  categoryId: string
 }
 
 export const DEFAULT_PLAN_ATOM = {
@@ -24,7 +24,7 @@ export const DEFAULT_PLAN_ATOM = {
   content: '',
   startTime: dayjs().utc().format(),
   endTime: dayjs().utc().format(),
-  color: '#aaa',
+  categoryId: '',
 }
 
 const PlanItemAtom = atom<PlanItem>({
