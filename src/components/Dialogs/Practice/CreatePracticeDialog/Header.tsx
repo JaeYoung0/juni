@@ -9,5 +9,5 @@ type Props<T extends PlanItem | PracticeItem> = {
   setItem: SetterOrUpdater<T>
 }
 export default function Header({ item, setItem }: Props<PlanItem | PracticeItem>) {
-  return <CS.HeaderName>{item.title ? `[스케줄 수정]` : `[스케줄 추가]`} </CS.HeaderName>
+  return <CS.Header>{item.title ? `[스케줄 수정]` : `[스케줄 추가]`} </CS.Header>
 }

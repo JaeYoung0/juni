@@ -20,7 +20,7 @@ export type GetCategoryItemsPayload = Pick<User, 'userId'>
 export const getCategoryItems = async (payload: GetCategoryItemsPayload) => {
   const { userId } = payload
 
-  const ref = collection(firestore, COLLENCTION_NAME, userId)
+  const ref = collection(firestore, COLLENCTION_NAME, userId, 'myCategory')
 
   const q = query(ref)
   const querySnapShot = await getDocs(q)
@@ -41,14 +41,30 @@ export type CreateCategoryItemPayload = Pick<User, 'userId'> & Omit<CategoryItem
 export const createCategoryItem = async (payload: CreateCategoryItemPayload) => {
   const { userId, ...rest } = payload
 
-  await addDoc(collection(firestore, COLLENCTION_NAME, userId), rest)
-  collection
+  await addDoc(collection(firestore, COLLENCTION_NAME, userId, 'myCategory'), rest)
 }
 
-export function useCreatePlanItem() {
+export function useCreateCategoryItem() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: createCategoryItem,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD] })
+    },
+  })
+}
+
+type DeleteCategoryItemPayload = Pick<User, 'userId'> & Pick<CategoryItem, 'id'>
+export const deleteCategoryItem = async (payload: DeleteCategoryItemPayload) => {
+  const { userId, id } = payload
+  await deleteDoc(doc(firestore, COLLENCTION_NAME, userId, 'myCategory', id))
+}
+
+export function useDeleteCategoryItem() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteCategoryItem,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD] })
     },
