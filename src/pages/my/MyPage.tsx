@@ -1,3 +1,4 @@
+import withAuth from '@/application/withAuth'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import MyCategories from '@/components/MyCategories'
 import { useUserAtom } from '@/domain/user'
@@ -19,4 +20,4 @@ function MyPage() {
   )
 }
 
-export default MyPage
+export default withAuth(MyPage)

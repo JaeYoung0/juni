@@ -1,5 +1,7 @@
 {
   // extends 는 나중에 정의될수록 우선 순위가 높다.
   "extends": ["next/core-web-vitals", "prettier"],
-  "rules": {}
+  "rules": {
+    "react/display-name": "off"
+  }
 }
