@@ -16,7 +16,9 @@ import weekdayPlugin from 'dayjs/plugin/weekday'
 import objectPlugin from 'dayjs/plugin/toObject'
 import isTodayPlugin from 'dayjs/plugin/isToday'
 import isBetweenPlugin from 'dayjs/plugin/isBetween'
+import locale from 'dayjs/locale/ko'
 
+dayjs.locale({ ...locale })
 dayjs.extend(utc)
 dayjs.extend(weekdayPlugin)
 dayjs.extend(objectPlugin)
