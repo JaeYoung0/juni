@@ -112,8 +112,6 @@ function CalendarView({ onChange }: CalendarViewProps) {
       })
     }
 
-    // console.log('@@tail', tail?.date.get('D'), tail?.date.endOf('M').get('D'))
-
     return allDates
   }, [currentCalendar, showFull])
 
