@@ -12,32 +12,31 @@ import useViewportHeight from '@/hooks/useViewportHeight'
 import RootDialog from '@/components/Dialogs/RootDialog'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import weekdayPlugin from 'dayjs/plugin/weekday'
-import objectPlugin from 'dayjs/plugin/toObject'
-import isTodayPlugin from 'dayjs/plugin/isToday'
-import isBetweenPlugin from 'dayjs/plugin/isBetween'
+import weekday from 'dayjs/plugin/weekday'
+import object from 'dayjs/plugin/toObject'
+import isToday from 'dayjs/plugin/isToday'
+import isBetween from 'dayjs/plugin/isBetween'
+import isoWeek from 'dayjs/plugin/isoWeek'
 import locale from 'dayjs/locale/ko'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
 
-dayjs.locale({ ...locale })
+dayjs.locale({
+  ...locale,
+  weekStart: 1, // 월요일을 한주의 시작으로 본다.
+})
 dayjs.extend(utc)
-dayjs.extend(weekdayPlugin)
-dayjs.extend(objectPlugin)
-dayjs.extend(isTodayPlugin)
-dayjs.extend(isBetweenPlugin)
+dayjs.extend(weekday)
+dayjs.extend(object)
+dayjs.extend(isToday)
+dayjs.extend(isBetween)
+dayjs.extend(weekOfYear)
+dayjs.extend(isToday)
+dayjs.extend(isoWeek)
 
 function MyApp({ Component, pageProps }: AppProps) {
   useViewportHeight()
   useServiceWorker()
   const [queryClient] = useState(() => new QueryClient())
-
-  const router = useRouter()
-  useEffect(() => {
-    firebaseAuth.onAuthStateChanged((user) => {
-      if (!user) {
-        void router.replace('/login')
-      }
-    })
-  }, [])
 
   return (
     <>

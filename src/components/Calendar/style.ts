@@ -1,8 +1,10 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { Colors } from '@/styles/colors'
+const CALENDAR_COLOR = Colors.Black
 
 export const Container = styled.div`
-  /* display: grid; */
-  /* grid-template-columns: 1fr 5fr; */
+  touch-action: none; // 패닝, 줌 동작을 막는다
 `
 
 export const CalendarBox = styled.div`
@@ -10,9 +12,9 @@ export const CalendarBox = styled.div`
   height: 100%;
   font-size: 1.6rem;
   color: #fff;
-  background: #2f2f2f;
+  background: ${CALENDAR_COLOR};
 
-  padding: 1em 1em 2em;
+  padding: 1rem 1rem 2rem;
 `
 
 export const HeaderBox = styled.div`
@@ -21,7 +23,7 @@ export const HeaderBox = styled.div`
   justify-content: space-around;
   align-items: center;
 
-  padding: 1.5em 0;
+  padding: 1.5rem 0;
 
   button {
     background: transparent;
@@ -37,10 +39,10 @@ export const DaysBox = styled.div`
   display: flex;
   justify-content: space-between;
 
-  font-size: 0.8em;
+  font-size: 0.8rem;
   color: gray;
 
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 `
 
 export const Day = styled.div`
@@ -55,35 +57,44 @@ export const Row = styled.div`
   display: flex;
   justify-content: space-between;
 
-  margin: 0.3em 0;
+  margin: 0.3rem 0;
 `
 
-export const Cell = styled.button`
+export const Cell = styled.button<{ isToday: boolean; isSelected: boolean; notThisMonth: boolean }>`
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
 
   color: #fff;
-  background: #121212;
+  background: ${CALENDAR_COLOR};
 
-  border-radius: 50%;
-  margin: 0 0.3em;
-
+  margin: 0 0.3rem;
   transition: 0.2s ease-out;
 
-  &.current {
-    background: #7755ff;
-  }
+  ${({ isSelected }) =>
+    isSelected &&
+    css`
+      background: #969696;
+    `}
 
-  &.today {
-    border: 1px solid #fff;
-  }
+  ${({ isToday }) =>
+    isToday &&
+    css`
+      background: #7755ff;
+    `}
+
+    ${({ notThisMonth }) =>
+    notThisMonth &&
+    css`
+      color: #aaa;
+    `}
 `
 
 export const HelperBox = styled.div`
   width: 100%;
   height: 100%;
 
-  max-width: 10em;
+  max-width: 10rem;
   background: #2f2f2f;
   display: flex;
   flex-direction: column;
@@ -92,8 +103,8 @@ export const HelperBox = styled.div`
   button {
     background: #2f2f2f;
     color: #fff;
-    /* border: 1px solid #000; */
-    padding: 0.5em;
+
+    padding: 0.5rem;
 
     &:hover {
       background: #000;
