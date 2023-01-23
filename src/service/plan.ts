@@ -1,9 +1,10 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { PlanItem, QUERY_KEY_HEAD } from '@/domain/plan'
 import { User } from '@/domain/user'
-import { firestore } from '@/lib/firebase'
+import { firebaseApp, firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import {
   addDoc,
   collection,
@@ -14,9 +15,10 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  setDoc,
 } from 'firebase/firestore/lite'
 
-const COLLENCTION_NAME = 'plans'
+const COLLECTION_NAME = 'plans'
 
 export type GetPlanItemsPayload = { currentUnix: number } & Pick<User, 'userId'>
 export const getPlanItems = async (payload: GetPlanItemsPayload) => {
@@ -25,7 +27,7 @@ export const getPlanItems = async (payload: GetPlanItemsPayload) => {
 
   const ref = collection(
     firestore,
-    COLLENCTION_NAME,
+    COLLECTION_NAME,
     userId,
     String(year),
     String(month + 1),
@@ -47,22 +49,43 @@ export const getPlanItems = async (payload: GetPlanItemsPayload) => {
   return results
 }
 
+export const PLAN_CHART_SUBCOLLECTION_NAME = 'planChart'
 export type CreatePlanItemPayload = Pick<User, 'userId'> &
-  Omit<PlanItem, 'id' | 'date'> & {
+  Omit<PlanItem, 'id'> & {
     currentUnix: number
   }
 export const createPlanItem = async (payload: CreatePlanItemPayload) => {
   const { userId, currentUnix, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
-  const planItem = {
+  const planItem: Omit<PlanItem, 'id'> = {
     ...rest,
-    updatedAt: Timestamp.now(),
   }
 
-  await addDoc(
-    collection(firestore, COLLENCTION_NAME, userId, String(year), String(month + 1), String(date)),
+  const addedDoc = await addDoc(
+    collection(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date)),
     planItem
   )
+
+  // TODO. 분리하기.
+  const categoryDocRef = doc(
+    firestore,
+    COLLECTION_NAME,
+    userId,
+    String(year),
+    String(month + 1),
+    String(date),
+    addedDoc.id,
+    PLAN_CHART_SUBCOLLECTION_NAME,
+    addedDoc.id
+  )
+
+  const categoryData = {
+    categoryId: rest.categoryId,
+    startTime: rest.startTime,
+    minutes: dayjs(rest.endTime).diff(rest.startTime, 'minutes'),
+  }
+
+  await setDoc(categoryDocRef, categoryData)
 }
 
 export type UpdatePlanItemPayload = Partial<Omit<PlanItem, 'id'>> &
@@ -70,12 +93,12 @@ export type UpdatePlanItemPayload = Partial<Omit<PlanItem, 'id'>> &
     currentUnix: number
   } & Pick<User, 'userId'>
 export const updatePlanItem = async (payload: UpdatePlanItemPayload) => {
-  const { currentUnix, userId, id, ...rest } = payload
+  const { currentUnix, userId, id, categoryId, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   const docRef = doc(
     firestore,
-    COLLENCTION_NAME,
+    COLLECTION_NAME,
     userId,
     String(year),
     String(month + 1),
@@ -89,6 +112,25 @@ export const updatePlanItem = async (payload: UpdatePlanItemPayload) => {
   }
 
   await updateDoc(docRef, { ...updatedItem })
+
+  const categoryDocRef = doc(
+    firestore,
+    COLLECTION_NAME,
+    userId,
+    String(year),
+    String(month + 1),
+    String(date),
+    id,
+    PLAN_CHART_SUBCOLLECTION_NAME,
+    id
+  )
+  const categoryData = {
+    categoryId,
+    startTime: rest.startTime,
+    minutes: dayjs(rest.endTime).diff(rest.startTime, 'minutes'),
+  }
+
+  await updateDoc(categoryDocRef, categoryData)
 }
 
 type DeletePlanItemPayload = Pick<User, 'userId'> & { currentUnix: number } & Pick<PlanItem, 'id'>
@@ -97,7 +139,21 @@ export const deletePlanItem = async (payload: DeletePlanItemPayload) => {
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   await deleteDoc(
-    doc(firestore, COLLENCTION_NAME, userId, String(year), String(month + 1), String(date), id)
+    doc(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date), id)
+  )
+
+  await deleteDoc(
+    doc(
+      firestore,
+      COLLECTION_NAME,
+      userId,
+      String(year),
+      String(month + 1),
+      String(date),
+      id,
+      PLAN_CHART_SUBCOLLECTION_NAME,
+      id
+    )
   )
 }
 
@@ -109,7 +165,6 @@ export function useCreatePlanItem() {
     mutationFn: createPlanItem,
     onSuccess: () => {
       const { year, month, date } = unixToYYYYMMDD(currentUnix)
-
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
@@ -149,7 +204,7 @@ type GetPlanHistoryPayload = Pick<User, 'userId'> & {
  */
 export const getMonthlyPlanHistory = async ({ currentCalendar, userId }: GetPlanHistoryPayload) => {
   const { year, month, date } = unixToYYYYMMDD(currentCalendar)
-  const docRef = doc(firestore, COLLENCTION_NAME, userId, String(year), String(month + 1))
+  const docRef = doc(firestore, COLLECTION_NAME, userId, String(year), String(month + 1))
 
   const docSnap = await getDoc(docRef)
   console.log('@@docSnap', docSnap)

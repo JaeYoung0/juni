@@ -46,10 +46,10 @@ export function usePlanList() {
 
   return useQuery({
     queryKey: [QUERY_KEY_HEAD, year, month, date],
-    queryFn: () => getPlanItems({ currentUnix, userId: userId }),
+    queryFn: () => getPlanItems({ currentUnix, userId: userId }) ?? [],
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
-    enabled: !!userId,
+    enabled: !!userId && !!currentUnix,
     refetchOnWindowFocus: false,
   })
 }

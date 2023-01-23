@@ -20,7 +20,7 @@ type Props<T extends PlanItem | PracticeItem> = {
 export default function PlanHeader({ item, setItem }: Props<PlanItem | PracticeItem>) {
   const [categoryId, setCategoryId] = useState(item.categoryId)
   const { data: categoryList } = useCategoryList()
-  const categoryOptions = categoryList?.map((item) => ({ id: item.id, color: item.color }))
+  const categoryOptions = categoryList?.map((item) => ({ id: item.categoryId, color: item.color }))
 
   const current = categoryOptions?.find((item) => item.id === categoryId)
   const handleChange = (e: SelectChangeEvent) => {
@@ -51,7 +51,11 @@ export default function PlanHeader({ item, setItem }: Props<PlanItem | PracticeI
             label="Age"
           >
             {categoryList?.map((item) => (
-              <MenuItem key={item.id} value={item.id} style={{ background: item.color }}>
+              <MenuItem
+                key={item.categoryId}
+                value={item.categoryId}
+                style={{ background: item.color }}
+              >
                 {item.name}
               </MenuItem>
             ))}

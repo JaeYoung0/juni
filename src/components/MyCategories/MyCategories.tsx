@@ -1,4 +1,6 @@
 import { useCategoryList } from '@/domain/category'
+import { usePlanList } from '@/domain/plan'
+import { usePracticeList } from '@/domain/practice'
 import { useUserAtom } from '@/domain/user'
 import useDialogList from '@/hooks/useDialogList'
 import { useCreateCategoryItem, useDeleteCategoryItem } from '@/service/category'
@@ -18,6 +20,16 @@ function MyCategories({}: Props) {
   const [userAtom] = useUserAtom()
 
   const [name, setName] = useState('')
+
+  const { data: planList } = usePlanList()
+  const { data: practiceList } = usePracticeList()
+
+  const cannotDelete = (id: string) => {
+    return !!(
+      planList?.find((item) => item.categoryId === id) ||
+      practiceList?.find((item) => item.categoryId === id)
+    )
+  }
 
   return (
     <div
@@ -91,10 +103,14 @@ function MyCategories({}: Props) {
           >
             <span>{item.name}</span>
             <button
+              disabled={cannotDelete(item.categoryId)}
               onClick={() => {
-                const res = confirm('삭제?')
+                const res = confirm('삭제하시겠어요?')
                 if (res) {
-                  deleteCategoryItem.mutate({ id: item.id, userId: userAtom.userId })
+                  deleteCategoryItem.mutate({
+                    categoryId: item.categoryId,
+                    userId: userAtom.userId,
+                  })
                 }
               }}
             >

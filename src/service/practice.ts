@@ -4,6 +4,7 @@ import { User } from '@/domain/user'
 import { firestore } from '@/lib/firebase'
 import { unixToYYYYMMDD } from '@/lib/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { runTransaction } from 'firebase/firestore'
 
 import {
   addDoc,
@@ -14,7 +15,9 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  setDoc,
 } from 'firebase/firestore/lite'
+import dayjs from 'dayjs'
 
 const COLLECTION_NAME = 'practices'
 
@@ -48,22 +51,44 @@ export const getPracticeItems = async (payload: GetPracticeItemsPayload) => {
   return results
 }
 
+export const PRACTICE_CHART_SUBCOLLECTION_NAME = 'praticeChart'
+
+// TODO. 트랜잭션으로 데이터 업데이트하기 https://cloud.google.com/firestore/docs/manage-data/transactions#transactions
 export type CreatePracticeItemPayload = Pick<User, 'userId'> &
-  Omit<PracticeItem, 'id' | 'date'> & {
+  Omit<PracticeItem, 'id'> & {
     currentUnix: number
   }
 export const createPracticeItem = async (payload: CreatePracticeItemPayload) => {
   const { userId, currentUnix, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
-  const practiceItem = {
+
+  const practiceItem: Omit<PracticeItem, 'id'> = {
     ...rest,
-    updatedAt: Timestamp.now(),
   }
 
-  await addDoc(
+  const addedDoc = await addDoc(
     collection(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date)),
     practiceItem
   )
+
+  const categoryDocRef = doc(
+    firestore,
+    COLLECTION_NAME,
+    userId,
+    String(year),
+    String(month + 1),
+    String(date),
+    addedDoc.id,
+    PRACTICE_CHART_SUBCOLLECTION_NAME,
+    addedDoc.id
+  )
+  const categoryData = {
+    categoryId: rest.categoryId,
+    startTime: rest.startTime,
+    minutes: dayjs(rest.endTime).diff(rest.startTime, 'minutes'),
+  }
+
+  await setDoc(categoryDocRef, categoryData)
 }
 
 export type UpdatePracticeItemPayload = Partial<Omit<PracticeItem, 'id'>> &
@@ -71,7 +96,7 @@ export type UpdatePracticeItemPayload = Partial<Omit<PracticeItem, 'id'>> &
     currentUnix: number
   } & Pick<User, 'userId'>
 export const updatePracticeItem = async (payload: UpdatePracticeItemPayload) => {
-  const { currentUnix, userId, id, ...rest } = payload
+  const { currentUnix, userId, id, categoryId, ...rest } = payload
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   const docRef = doc(
@@ -88,8 +113,26 @@ export const updatePracticeItem = async (payload: UpdatePracticeItemPayload) => 
     ...rest,
     updatedAt: Timestamp.now(),
   }
-
   await updateDoc(docRef, { ...updatedItem })
+
+  const categoryDocRef = doc(
+    firestore,
+    COLLECTION_NAME,
+    userId,
+    String(year),
+    String(month + 1),
+    String(date),
+    id,
+    PRACTICE_CHART_SUBCOLLECTION_NAME,
+    id
+  )
+  const categoryData = {
+    categoryId,
+    startTime: rest.startTime,
+    minutes: dayjs(rest.endTime).diff(rest.startTime, 'minutes'),
+  }
+
+  await updateDoc(categoryDocRef, categoryData)
 }
 
 type DeletePracticeItemPayload = Pick<User, 'userId'> & { currentUnix: number } & Pick<
@@ -102,6 +145,20 @@ export const deletePracticeItem = async (payload: DeletePracticeItemPayload) => 
 
   await deleteDoc(
     doc(firestore, COLLECTION_NAME, userId, String(year), String(month + 1), String(date), id)
+  )
+
+  await deleteDoc(
+    doc(
+      firestore,
+      COLLECTION_NAME,
+      userId,
+      String(year),
+      String(month + 1),
+      String(date),
+      id,
+      PRACTICE_CHART_SUBCOLLECTION_NAME,
+      id
+    )
   )
 }
 
