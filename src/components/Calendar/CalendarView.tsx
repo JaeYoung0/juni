@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 
 import useDateCell, { DateCell } from './useDateCell'
+import { usePlanHistory } from '@/domain/plan'
 
 export type CalendarViewProps = {
   onChange: (unix: number) => void

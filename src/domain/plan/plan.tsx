@@ -1,5 +1,5 @@
 import { minParser, unixToYYYYMMDD } from '@/lib/utils'
-import { getPlanItems } from '@/service/plan'
+import { getMonthlyPlanHistory, getPlanItems } from '@/service/plan'
 import { useQuery } from '@tanstack/react-query'
 import { atom, useRecoilState } from 'recoil'
 import { useCalendarAtom } from '../calendar'
@@ -40,15 +40,16 @@ export const QUERY_KEY_HEAD = '@planList'
 export function usePlanList() {
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
+  const { userId } = userAtom
 
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   return useQuery({
     queryKey: [QUERY_KEY_HEAD, year, month, date],
-    queryFn: () => getPlanItems({ currentUnix, userId: userAtom.userId }),
+    queryFn: () => getPlanItems({ currentUnix, userId: userId }),
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
-    enabled: !!userAtom.userId,
+    enabled: !!userId,
     refetchOnWindowFocus: false,
   })
 }
@@ -66,4 +67,23 @@ export const getStartTimeOfPlanList = (planList: PlanItem[]) => {
   })
 
   return result / 60
+}
+
+// 특정 달에 계획을 세운 날짜를 리턴하는 훅
+// ex. 1월 3, 5, 19일에 계획을 세운 히스토리가 있다면 3, 5, 19를 리턴
+export function usePlanHistory() {
+  const [currentUnix] = useCalendarAtom()
+  const [userAtom] = useUserAtom()
+  const { userId } = userAtom
+
+  const { year, month } = unixToYYYYMMDD(currentUnix)
+
+  return useQuery({
+    queryKey: [QUERY_KEY_HEAD, year, month],
+    queryFn: () => getMonthlyPlanHistory({ currentCalendar: currentUnix, userId }),
+    refetchOnMount: false,
+    staleTime: 60 * 1000, // 1분, default 0
+    enabled: !!userId,
+    refetchOnWindowFocus: false,
+  })
 }
