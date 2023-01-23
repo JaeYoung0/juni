@@ -19,7 +19,7 @@ export type PracticeItem = {
   content: string
   startTime: string | number
   endTime: string | number
-  categoryId: string // plan에 있는 정보를 가져옴. practice db에는 저장하지 않음 << 이 방식이 옳은가
+  categoryId: string
 }
 
 export const DEFAULT_PRACTICE_ATOM = {
@@ -52,18 +52,7 @@ export function usePracticeList() {
   return useQuery({
     queryKey: [QUERY_KEY_HEAD, year, month, date],
 
-    queryFn: async () => {
-      return getPracticeItems({ currentUnix, userId: userAtom.userId }).then((items) => {
-        const enrichedItems = items.map((item) => ({
-          ...item,
-
-          // plan과 practice의 title이 유니크하다고 가정하는게 옳은가
-          categoryId: plans?.find((plan) => plan.title === item.title)?.categoryId ?? '',
-        }))
-
-        return enrichedItems
-      })
-    },
+    queryFn: async () => getPracticeItems({ currentUnix, userId: userAtom.userId }),
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
     enabled: !!userAtom.userId && !isLoading,

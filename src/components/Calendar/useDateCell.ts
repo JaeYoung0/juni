@@ -36,8 +36,6 @@ function useDateCell({ selectedDate, currentCalendar }: Props) {
     let weekDates = []
     let dayCounter = 1
     while (dateOfCalendar.get('M') !== nextMonth) {
-      console.log('@@dateOfCalendar', dateOfCalendar.format())
-
       const item = makeDateItem(dateOfCalendar)
       weekDates.push(item)
       if (dayCounter === 7) {

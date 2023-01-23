@@ -5,7 +5,7 @@ import { v1 } from 'uuid'
 import { useUserAtom } from '../user'
 
 export type CategoryItem = {
-  id: string
+  categoryId: string
   color: string
   name: string
 }
@@ -13,7 +13,7 @@ export type CategoryItem = {
 const CategoryAtom = atom<CategoryItem>({
   key: '@category' + v1(),
   default: {
-    id: '',
+    categoryId: '',
     color: '',
     name: '',
   },

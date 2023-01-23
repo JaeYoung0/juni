@@ -16,8 +16,6 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
 
   const updatePracticeItem = useUpdatePracticeItem()
 
-  console.log('@@practiceItem', practiceItem)
-
   /**
    * 카테고리 필드가 db에 비어있는 상태인데, 카테고리를 채워서 보내면 카테고리가 생기지 않는다. updateDoc이기 때문.
    */

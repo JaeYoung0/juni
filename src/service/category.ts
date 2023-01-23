@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-// import {  } from '@/domain/category'
 import { firestore } from '@/lib/firebase'
 import { User } from '@/domain/user'
 import {
@@ -14,7 +13,7 @@ import {
 } from 'firebase/firestore/lite'
 import { CategoryItem, QUERY_KEY_HEAD } from '@/domain/category'
 
-const COLLENCTION_NAME = 'categories' // db에서도 Categorys로 rename
+const COLLENCTION_NAME = 'categories'
 
 export type GetCategoryItemsPayload = Pick<User, 'userId'>
 export const getCategoryItems = async (payload: GetCategoryItemsPayload) => {
@@ -29,7 +28,7 @@ export const getCategoryItems = async (payload: GetCategoryItemsPayload) => {
   querySnapShot.forEach((item) => {
     const categoryItem = {
       ...item.data(),
-      id: item.id, // create할 때 빈 스트링으로 넣었던 id를 db 생성시 만들어진 id로 대체한다
+      categoryId: item.id, // create할 때 빈 스트링으로 넣었던 id를 db 생성시 만들어진 id로 대체한다
     }
     results.push(categoryItem as CategoryItem)
   })
@@ -37,7 +36,7 @@ export const getCategoryItems = async (payload: GetCategoryItemsPayload) => {
   return results
 }
 
-export type CreateCategoryItemPayload = Pick<User, 'userId'> & Omit<CategoryItem, 'id'>
+export type CreateCategoryItemPayload = Pick<User, 'userId'> & Omit<CategoryItem, 'categoryId'>
 export const createCategoryItem = async (payload: CreateCategoryItemPayload) => {
   const { userId, ...rest } = payload
 
@@ -54,10 +53,10 @@ export function useCreateCategoryItem() {
   })
 }
 
-type DeleteCategoryItemPayload = Pick<User, 'userId'> & Pick<CategoryItem, 'id'>
+type DeleteCategoryItemPayload = Pick<User, 'userId'> & Pick<CategoryItem, 'categoryId'>
 export const deleteCategoryItem = async (payload: DeleteCategoryItemPayload) => {
-  const { userId, id } = payload
-  await deleteDoc(doc(firestore, COLLENCTION_NAME, userId, 'myCategory', id))
+  const { userId, categoryId } = payload
+  await deleteDoc(doc(firestore, COLLENCTION_NAME, userId, 'myCategory', categoryId))
 }
 
 export function useDeleteCategoryItem() {

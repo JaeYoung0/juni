@@ -40,7 +40,6 @@ function WeeklyCalendar({}: Props) {
   const [target, setTarget] = useState(dayjs())
   // 지난주, 이번주, 다음주 weekDates를 만들어놓는다.
   const [weekDates, setWeekDates] = useState(getAllDates(target))
-  console.log('@@weekDates', weekDates)
 
   useEffect(() => {
     setWeekDates(getAllDates(target))

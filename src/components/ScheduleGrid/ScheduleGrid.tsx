@@ -1,5 +1,11 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import { getStartTimeOfPlanList, PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
+import {
+  getStartTimeOfPlanList,
+  PlanItem,
+  usePlanHistory,
+  usePlanItemAtom,
+  usePlanList,
+} from '@/domain/plan'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
@@ -61,7 +67,6 @@ function TimeCol() {
 function PlanCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: planList } = usePlanList()
-  console.log('@@planList', planList)
 
   const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
   const [currentUnix] = useCalendarAtom()
@@ -141,7 +146,7 @@ function PlanItem({ ...props }: PlanItemProps) {
   })
 
   const { data: categoryList } = useCategoryList()
-  const category = categoryList?.find((c) => c.id === item.categoryId)
+  const category = categoryList?.find((c) => c.categoryId === item.categoryId)
 
   return (
     <S.PlanItem
@@ -161,7 +166,6 @@ function PlanItem({ ...props }: PlanItemProps) {
 function PracticeCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i + 1)
   const { data: practiceList } = usePracticeList()
-  console.log('@@practiceList', practiceList)
 
   const [praticeItemAtom, setPracticeItemAtom] = usePracticeItemAtom()
 
@@ -231,7 +235,7 @@ function PracticeItem({ ...props }: PracticeItemProps) {
   const { top, height, item } = props
 
   const { data: categoryList } = useCategoryList()
-  const category = categoryList?.find((c) => c.id === item.categoryId)
+  const category = categoryList?.find((c) => c.categoryId === item.categoryId)
 
   return (
     <S.PracticeItem
