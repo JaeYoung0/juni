@@ -1,15 +1,14 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import dayjs from 'dayjs'
 import CalendarView from './CalendarView'
 
 function Calendar() {
-  const [calendarAtom, setCalendarAtom] = useCalendarAtom()
-  console.log('@@calendarAtom', calendarAtom, dayjs().utc().format())
+  const [_, setCalendarAtom] = useCalendarAtom()
 
   const handleChange = (unix: number) => {
     setCalendarAtom(unix)
   }
 
+  // 이게 무슨 View컴포넌트냐 ...
   return <CalendarView onChange={handleChange} />
 }
 
