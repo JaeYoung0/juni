@@ -8,6 +8,7 @@ function Calendar() {
     setCalendarAtom(unix)
   }
 
+  // 이게 무슨 View컴포넌트냐 ...
   return <CalendarView onChange={handleChange} />
 }
 

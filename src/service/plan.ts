@@ -10,12 +10,13 @@ import {
   Timestamp,
   query,
   getDocs,
+  getDoc,
   doc,
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore/lite'
 
-const COLLENCTION_NAME = 'schedules' // db에서도 plans로 rename
+const COLLENCTION_NAME = 'plans'
 
 export type GetPlanItemsPayload = { currentUnix: number } & Pick<User, 'userId'>
 export const getPlanItems = async (payload: GetPlanItemsPayload) => {
@@ -136,4 +137,20 @@ export function useDeletePlanItem() {
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD, year, month, date] })
     },
   })
+}
+
+type GetPlanHistoryPayload = Pick<User, 'userId'> & {
+  currentCalendar: number
+}
+/**
+ *
+ * 문서의 하위 컬렉션 나열은 웹에선 불가능. node.js에서 받아와야함
+ * https://cloud.google.com/firestore/docs/query-data/get-data#list_subcollections_of_a_document
+ */
+export const getMonthlyPlanHistory = async ({ currentCalendar, userId }: GetPlanHistoryPayload) => {
+  const { year, month, date } = unixToYYYYMMDD(currentCalendar)
+  const docRef = doc(firestore, COLLENCTION_NAME, userId, String(year), String(month + 1))
+
+  const docSnap = await getDoc(docRef)
+  console.log('@@docSnap', docSnap)
 }

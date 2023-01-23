@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 type Params = {
-  onLeftSwipe?: () => void
-  onRightSwipe?: () => void
+  onUpSwipe?: () => void
+  onDownSwipe?: () => void
 }
 // 스와이프 방향 상하좌우 우선권을 구분하기 위해서 useHorizontalSwipe와 useVerticalSwipe를 구분한다.
-function useHorizontalSwipe({ onLeftSwipe, onRightSwipe }: Params) {
+function useVerticalSwipe({ onUpSwipe, onDownSwipe }: Params) {
   const [touchStart, setTouchStart] = useState<number>(0)
   const [touchEnd, setTouchEnd] = useState<number>(0)
 
@@ -14,23 +14,23 @@ function useHorizontalSwipe({ onLeftSwipe, onRightSwipe }: Params) {
 
   const onTouchStart = (e: React.TouchEvent<HTMLElement>) => {
     setTouchEnd(0) // otherwise the swipe is fired even with usual touch events
-    setTouchStart(e.targetTouches[0].clientX)
+    setTouchStart(e.targetTouches[0].clientY)
   }
 
-  const onTouchMove = (e: React.TouchEvent<HTMLElement>) => setTouchEnd(e.targetTouches[0].clientX)
+  const onTouchMove = (e: React.TouchEvent<HTMLElement>) => setTouchEnd(e.targetTouches[0].clientY)
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > minSwipeDistance
-    const isRightSwipe = distance < -minSwipeDistance
+    const isDownSwipe = distance < -minSwipeDistance
     if (isLeftSwipe) {
-      onLeftSwipe?.()
-    } else if (isRightSwipe) {
-      onRightSwipe?.()
+      onUpSwipe?.()
+    } else if (isDownSwipe) {
+      onDownSwipe?.()
     }
   }
   return { onTouchStart, onTouchMove, onTouchEnd }
 }
 
-export default useHorizontalSwipe
+export default useVerticalSwipe

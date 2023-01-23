@@ -28,7 +28,7 @@ function SchedulePage() {
 }
 
 function ToggledCalendar() {
-  const [showCalendar, setShowCalendar] = useState(false)
+  const [showCalendar, setShowCalendar] = useState(true)
   return (
     <>
       <S.ToggleButton onClick={() => setShowCalendar(!showCalendar)}>
