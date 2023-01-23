@@ -8,7 +8,6 @@ import { useCalendarAtom } from '@/domain/calendar'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
 import withAuth from '@/application/withAuth'
-import WeeklyCalendar from '@/components/WeeklyCalendar'
 
 function SchedulePage() {
   // TODO. refactor: calendarAtom 위치
@@ -22,7 +21,6 @@ function SchedulePage() {
     <BasicLayout>
       <S.Box>
         <ToggledCalendar />
-        {/* <WeeklyCalendar /> */}
         <ScheduleGrid />
       </S.Box>
     </BasicLayout>

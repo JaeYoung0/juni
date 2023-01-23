@@ -16,7 +16,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore/lite'
 
-const COLLENCTION_NAME = 'schedules' // db에서도 plans로 rename
+const COLLENCTION_NAME = 'plans'
 
 export type GetPlanItemsPayload = { currentUnix: number } & Pick<User, 'userId'>
 export const getPlanItems = async (payload: GetPlanItemsPayload) => {
