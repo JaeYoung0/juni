@@ -1,4 +1,5 @@
 import { useCategoryList } from '@/domain/category'
+import { useChart } from '@/domain/chart'
 import { usePlanList } from '@/domain/plan'
 import { usePracticeList } from '@/domain/practice'
 import { useUserAtom } from '@/domain/user'
@@ -20,10 +21,13 @@ function MyCategories({}: Props) {
   const [userAtom] = useUserAtom()
 
   const [name, setName] = useState('')
+  // const {data: ChartList} = useChart({categoryId})
 
   const { data: planList } = usePlanList()
   const { data: practiceList } = usePracticeList()
 
+  // console.log('@@planList and practiceList', planList, practiceList)
+  // TODO. Fix this ... 연월에 종속되지 않은 전체 planList, practiceList를 봐야함
   const cannotDelete = (id: string) => {
     return !!(
       planList?.find((item) => item.categoryId === id) ||
@@ -103,7 +107,7 @@ function MyCategories({}: Props) {
           >
             <span>{item.name}</span>
             <button
-              disabled={cannotDelete(item.categoryId)}
+              disabled
               onClick={() => {
                 const res = confirm('삭제하시겠어요?')
                 if (res) {
