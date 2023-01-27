@@ -7,6 +7,7 @@ import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 
 import useDateCell, { DateCell } from './useDateCell'
 import { usePlanHistory } from '@/domain/plan'
+import useDialog from '@/hooks/useDialog'
 
 export type CalendarViewProps = {
   onChange: (unix: number) => void
@@ -56,6 +57,8 @@ function CalendarView({ onChange }: CalendarViewProps) {
       setCurrentCalendar((prev) => prev.subtract(1, 'M'))
   }, [selectedDate])
 
+  const { openDialog } = useDialog()
+
   return (
     <S.Container>
       {/* Controller */}
@@ -65,6 +68,7 @@ function CalendarView({ onChange }: CalendarViewProps) {
       <button onClick={() => goToday()}>오늘</button>
       <button onClick={() => goPrevWeek()}>이전주</button>
       <button onClick={() => goNextWeek()}>다음주</button>
+      <button onClick={() => {}}>스톱워치</button>
 
       {/* Header */}
       <S.CalendarBox onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>

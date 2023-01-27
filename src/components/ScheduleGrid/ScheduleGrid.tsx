@@ -13,7 +13,7 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
 import * as S from './style'
 import { getItemHeight, minParser, unixToUTC, utcParser } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
-import useDialogList from '@/hooks/useDialogList'
+import useDialog from '@/hooks/useDialog'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 import { useCategoryList } from '@/domain/category'
 
@@ -70,7 +70,7 @@ function PlanCol() {
 
   const [planItemAtom, setPlanItemAtom] = usePlanItemAtom()
   const [currentUnix] = useCalendarAtom()
-  const { openDialog } = useDialogList()
+  const { openDialog } = useDialog()
 
   const handleClickPlanBase = (hour: number) => {
     setPlanItemAtom({
@@ -132,7 +132,7 @@ type PlanItemProps = {
 }
 function PlanItem({ ...props }: PlanItemProps) {
   const { top, height, item } = props
-  const { openDialog } = useDialogList()
+  const { openDialog } = useDialog()
   const [_, setPracticeItemAtom] = usePracticeItemAtom()
 
   const handleRightSwipePlan = (item: PlanItem) => {
@@ -170,7 +170,7 @@ function PracticeCol() {
   const [praticeItemAtom, setPracticeItemAtom] = usePracticeItemAtom()
 
   const [currentUnix] = useCalendarAtom()
-  const { openDialog } = useDialogList()
+  const { openDialog } = useDialog()
 
   const handleClickPracticeBase = (hour: number) => {
     setPracticeItemAtom({

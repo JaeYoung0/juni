@@ -1,7 +1,7 @@
 import * as CS from '@/components/Dialogs/Plan/common.style'
 import PracticeHeader from '../CreatePracticeDialog/PracticeHeader'
 import PracticeBody from '../CreatePracticeDialog/PracticeBody'
-import { BasicProps } from '@/hooks/useDialogList'
+import { BasicProps } from '@/hooks/useDialog'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
 import { useUserAtom } from '@/domain/user'

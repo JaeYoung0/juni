@@ -26,6 +26,7 @@ const Text = styled.p`
   font-size: 2rem;
   color: #fff;
   margin-bottom: 2rem;
+  text-align: center;
 `
 
 const Img = styled.img`
