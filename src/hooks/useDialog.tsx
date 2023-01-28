@@ -32,7 +32,7 @@ function useDialogListAtom() {
   return useRecoilState(DialogListAtom)
 }
 
-export default function useDialogList() {
+export default function useDialog() {
   const [dialogList, setDialogList] = useDialogListAtom()
 
   // 구조만 타입정의한대로 맞아떨어진다면, 뒤쪽 T에 "ActionDialog"라고 들어가면 앞쪽 T에도 똑같이 할당된다.

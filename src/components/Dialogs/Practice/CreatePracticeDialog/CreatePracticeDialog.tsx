@@ -4,13 +4,14 @@ import PracticeBody from './PracticeBody'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useCreatePracticeItem } from '@/service/practice'
 import { useUserAtom } from '@/domain/user'
-import { BasicProps } from '@/hooks/useDialogList'
+import { BasicProps } from '@/hooks/useDialog'
 import { useCalendarAtom } from '@/domain/calendar'
 
-type CreatePracticeDialogProps = BasicProps
+type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 
 // TODO. CreatePlanDialog와 거의 동일
-export default function CreatePracticeDialog({ close }: CreatePracticeDialogProps) {
+
+export default function CreatePracticeDialog({ close, onClose }: CreatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
@@ -24,11 +25,13 @@ export default function CreatePracticeDialog({ close }: CreatePracticeDialogProp
       userId: userAtom.userId,
     })
     close()
+    onClose?.()
   }
 
   const handleClose = () => {
     setPracticeItem(DEFAULT_PRACTICE_ATOM)
     close()
+    onClose?.()
   }
 
   const ItemProps = { item: practiceItem, setItem: setPracticeItem }

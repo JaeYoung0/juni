@@ -17,7 +17,7 @@ export type PracticeItem = {
   id: string
   title: string
   content: string
-  startTime: string | number
+  startTime: string | number // dayjs().utc.format()
   endTime: string | number
   categoryId: string
 }

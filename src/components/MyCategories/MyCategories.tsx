@@ -3,7 +3,7 @@ import { useChart } from '@/domain/chart'
 import { usePlanList } from '@/domain/plan'
 import { usePracticeList } from '@/domain/practice'
 import { useUserAtom } from '@/domain/user'
-import useDialogList from '@/hooks/useDialogList'
+import useDialog from '@/hooks/useDialog'
 import { useCreateCategoryItem, useDeleteCategoryItem } from '@/service/category'
 import { css } from '@emotion/react'
 import React, { useState } from 'react'
@@ -15,7 +15,7 @@ function MyCategories({}: Props) {
   const createCategoryItem = useCreateCategoryItem()
   const deleteCategoryItem = useDeleteCategoryItem()
 
-  const { openDialog } = useDialogList()
+  const { openDialog } = useDialog()
 
   const [color, setColor] = useState('#aaa')
   const [userAtom] = useUserAtom()

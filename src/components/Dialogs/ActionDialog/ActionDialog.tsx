@@ -1,4 +1,4 @@
-import { BasicProps } from '@/hooks/useDialogList'
+import { BasicProps } from '@/hooks/useDialog'
 import { useEffect, useRef } from 'react'
 
 export type ActionDialogProps = BasicProps & {

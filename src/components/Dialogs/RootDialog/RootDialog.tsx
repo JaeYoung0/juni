@@ -1,9 +1,9 @@
-import useDialogList from '@/hooks/useDialogList'
+import useDialog from '@/hooks/useDialog'
 import * as Dialogs from '@/components/Dialogs'
 import { css } from '@emotion/react'
 
 function RootDialog() {
-  const { dialogList, setDialogList } = useDialogList()
+  const { dialogList, setDialogList } = useDialog()
 
   return (
     <>

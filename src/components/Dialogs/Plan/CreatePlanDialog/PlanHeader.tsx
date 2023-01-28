@@ -1,6 +1,5 @@
 import { PlanItem } from '@/domain/plan'
 import { PracticeItem } from '@/domain/practice'
-import useDialogList from '@/hooks/useDialogList'
 import { SetterOrUpdater } from 'recoil'
 import * as CS from '../common.style'
 
