@@ -29,6 +29,7 @@ function RootDialog() {
               display: flex;
               justify-content: center;
               align-items: center;
+              z-index: 999;
             `}
           >
             <Dialog close={close} {...(dialogProps.props as any)} />

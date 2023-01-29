@@ -25,27 +25,43 @@ const planCellStyle = css`
 
 const bottomPadding = '20rem'
 
-export const GridWrapper = styled.div<{ firstHour: number }>`
+export const GridWrapper = styled.div`
   overflow: hidden;
   background: #000;
-  padding: 0;
-  height: ${({ firstHour }) =>
-    `calc((24 - ${firstHour}) * ${CELL_HEIGHT} + ${bottomPadding})`}; // 9시부터 시작인 시간표라면, 24-9 - 13에다가 각 셀의 높이인 10rem을 곱한다
+  padding: 6rem 0rem;
 `
-export const Grid = styled.div<{ firstHour: number }>`
+export const Grid = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 7fr 1fr 7fr;
   padding: 0;
-  margin-bottom: 20rem;
+  margin-bottom: 10rem;
   background: #000;
 
   div:not(:nth-of-type(2)) > div {
     border-top: 1px solid ${Colors.Gray};
   }
+`
 
-  transform: ${({ firstHour }) =>
-    firstHour ? `translateY(calc((-${firstHour} / 24) * 100% + 5rem));` : `translateY(3rem)`};
+export const CurrentTimeLine = styled.p`
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #7755ff;
+  z-index: 10;
+
+  &::before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: #7755ff;
+  }
 `
 
 export const Times = styled.div`

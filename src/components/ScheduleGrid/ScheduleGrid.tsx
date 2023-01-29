@@ -1,46 +1,36 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import {
-  getStartTimeOfPlanList,
-  PlanItem,
-  usePlanHistory,
-  usePlanItemAtom,
-  usePlanList,
-} from '@/domain/plan'
+import { PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess'
+import { useEffect, useRef } from 'react'
+
 import * as S from './style'
 import { getItemHeight, minParser, unixToUTC, utcParser } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDialog from '@/hooks/useDialog'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 import { useCategoryList } from '@/domain/category'
+import { css } from '@emotion/react'
 
 const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
 export default function ScheduleGrid() {
-  const [currentUnix] = useCalendarAtom()
-  const { data: planList } = usePlanList()
-  const startTimeOfFirstPlanItem = useMemo(() => getStartTimeOfPlanList(planList ?? []), [planList])
-  const [firstStartHour, setFirstStartHour] = useState(0)
+  const currentMinutes = dayjs().get('h') * 60 + dayjs().get('m')
+  const timeLineRef = useRef<HTMLParagraphElement | null>(null)
 
   useEffect(() => {
-    setFirstStartHour(startTimeOfFirstPlanItem)
-  }, [planList])
-
-  const handleClickGridToggle = () =>
-    setFirstStartHour(firstStartHour === 0 ? startTimeOfFirstPlanItem : 0)
+    timeLineRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [timeLineRef.current])
 
   return (
     <>
-      <S.CurrentUnix>선택한 날짜: {dayjs.unix(currentUnix).format('YYYY-MM-DD')}</S.CurrentUnix>
-
-      <S.GridToggleBtn onClick={handleClickGridToggle}>
-        {firstStartHour ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
-      </S.GridToggleBtn>
-      <S.GridWrapper firstHour={firstStartHour}>
-        <S.Grid firstHour={firstStartHour}>
+      <S.GridWrapper>
+        <S.Grid>
+          <S.CurrentTimeLine
+            ref={timeLineRef}
+            css={css`
+              top: calc((${currentMinutes} / (24 * 60)) * 100%);
+            `}
+          />
           <PlanCol />
           <TimeCol />
           <PracticeCol />
