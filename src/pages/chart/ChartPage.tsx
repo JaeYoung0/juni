@@ -63,6 +63,7 @@ function ChartPage() {
 
   const totalPlanDuration = chartList?.plan.reduce((acc, cur) => acc + cur.minutes, 0) ?? 0
   const { hh: planHH, mm: planMM } = mmTohhmm(totalPlanDuration)
+
   const totalPraticeDuration = chartList?.practice.reduce((acc, cur) => acc + cur.minutes, 0) ?? 0
   const { hh: practiceHH, mm: practiceMM } = mmTohhmm(totalPraticeDuration)
 
