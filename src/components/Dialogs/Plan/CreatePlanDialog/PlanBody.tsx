@@ -48,16 +48,6 @@ export default function PlanBody({ item, setItem }: Props<PlanItem | PracticeIte
       </CS.Row>
 
       <CS.Row>
-        <CS.TitleInput
-          type="text"
-          required
-          placeholder="제목"
-          value={item.title}
-          onChange={(e) => setItem({ ...item, title: e.target.value })}
-        />
-      </CS.Row>
-
-      <CS.Row>
         <CS.ContentTextArea
           value={item.content}
           required

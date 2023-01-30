@@ -15,7 +15,6 @@ import { useUserAtom } from '../user'
  */
 export type PracticeItem = {
   id: string
-  title: string
   content: string
   startTime: string | number // dayjs().utc.format()
   endTime: string | number
