@@ -8,6 +8,8 @@ import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDateCell, { DateCell } from './useDateCell'
 import { usePlanHistory } from '@/domain/plan'
 import useDialog from '@/hooks/useDialog'
+import { css } from '@emotion/react'
+import CalendarDial from './CalendarDial'
 
 export type CalendarViewProps = {
   onChange: (unix: number) => void
@@ -59,6 +61,14 @@ function CalendarView({ onChange }: CalendarViewProps) {
 
   const { openDialog } = useDialog()
 
+  const DialProps = {
+    goToday,
+    goPrevWeek,
+    goNextWeek,
+    toggleMonthlyView,
+    isMonthlyView,
+  }
+
   return (
     <S.Container>
       {/* Controller */}
@@ -75,7 +85,6 @@ function CalendarView({ onChange }: CalendarViewProps) {
       >
         스톱워치
       </button>
-
       {/* Header */}
       <S.CalendarBox onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {isMonthlyView && (
@@ -123,6 +132,7 @@ function CalendarView({ onChange }: CalendarViewProps) {
           })}
         </S.DatesBox>
       </S.CalendarBox>
+      {/* <CalendarDial {...DialProps} /> */}
     </S.Container>
   )
 }

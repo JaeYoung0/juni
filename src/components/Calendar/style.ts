@@ -4,6 +4,7 @@ import { Colors } from '@/styles/colors'
 const CALENDAR_COLOR = Colors.Black
 
 export const Container = styled.div`
+  width: 100%;
   touch-action: none; // 패닝, 줌 동작을 막는다
 `
 

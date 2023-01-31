@@ -14,6 +14,7 @@ export const ToggleButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   padding: 1rem 2rem;
   background: #000;

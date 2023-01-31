@@ -3,9 +3,7 @@ import Head from 'next/head'
 import { Global } from '@emotion/react'
 import { resetStyle } from '@/styles/resetStyle'
 import { RecoilRoot } from 'recoil'
-import { firebaseAuth } from '@/service/auth'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useServiceWorker from '@/hooks/useServiceWorker'
 import useViewportHeight from '@/hooks/useViewportHeight'
@@ -51,7 +49,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <Component {...pageProps} />
-          {/* <Dialogs /> */}
           <RootDialog />
         </RecoilRoot>
       </QueryClientProvider>

@@ -21,7 +21,15 @@ function SchedulePage() {
   return (
     <BasicLayout>
       <S.Box>
-        <ToggledCalendar />
+        <div
+          css={css`
+            position: sticky;
+            top: 0;
+            z-index: 500;
+          `}
+        >
+          <ToggledCalendar />
+        </div>
         <ScheduleGrid />
       </S.Box>
     </BasicLayout>
