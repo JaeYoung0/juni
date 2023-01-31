@@ -88,8 +88,9 @@ export const getEndTime = ({ currentUnix, hour }: { currentUnix: number; hour: n
 
   const isMidnight = checkMidnight(endTime)
 
+  // 자정을 00:00:00에서 전날 23:59:59로 보정한다.
   if (isMidnight) {
-    return dayjs(endTime).subtract(1, 'minute').format()
+    return dayjs(endTime).subtract(1, 's').format()
   }
 
   return endTime

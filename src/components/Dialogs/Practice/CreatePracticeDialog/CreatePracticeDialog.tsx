@@ -11,27 +11,53 @@ import dayjs from 'dayjs'
 type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 
 // TODO. CreatePlanDialog와 거의 동일
-
 export default function CreatePracticeDialog({ close, onClose }: CreatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
-  console.log('@@practiceItem', practiceItem)
 
   const createPracticeItem = useCreatePracticeItem()
 
+  // 자정을 걸쳐서 제출하느라 잘라서 저장해야하는지 여부
   const shouldSplit =
     dayjs(practiceItem.startTime).get('d') !== dayjs(practiceItem.endTime).get('d')
-  console.log('@@shouldSplit', shouldSplit)
 
-  const handleSubmit = () => {
+  const createSplittedItems = () => {
+    // 자르는 기준: 첫번째로 저장할 날의 23시 59분 59초
+    const firstJunction = dayjs(practiceItem.startTime).endOf('d').utc().format()
+
+    // 두번째로 저장할 날의 00:00:00
+    const secondJunction = dayjs(firstJunction).add(1, 's').utc().format()
+
     createPracticeItem.mutate({
       currentUnix,
       ...practiceItem,
+      endTime: firstJunction,
       userId: userAtom.userId,
     })
-    close()
+
+    createPracticeItem.mutate({
+      currentUnix: dayjs.unix(currentUnix).add(1, 'd').unix(), // 다음날짜 캘린더에 저장하기 위함 (year, month, day 키를 바꿔주기)
+      ...practiceItem,
+      startTime: secondJunction,
+      endTime: practiceItem.endTime,
+      userId: userAtom.userId,
+    })
+  }
+
+  const handleSubmit = () => {
+    if (shouldSplit) {
+      createSplittedItems()
+    } else {
+      createPracticeItem.mutate({
+        currentUnix,
+        ...practiceItem,
+        userId: userAtom.userId,
+      })
+    }
+
     onClose?.()
+    close()
   }
 
   const handleClose = () => {
