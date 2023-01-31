@@ -79,8 +79,8 @@ function PlanCol() {
   const handleClickPlanItem = (item: PlanItem) => {
     setPlanItemAtom({
       ...item,
-      startTime: utcParser(item.startTime, currentUnix),
-      endTime: utcParser(item.endTime, currentUnix),
+      startTime: item.startTime,
+      endTime: item.endTime,
     })
     openDialog({
       variant: 'UpdatePlanDialog',
@@ -179,8 +179,8 @@ function PracticeCol() {
   const handleClickPracticeItem = (item: PracticeItem) => {
     setPracticeItemAtom({
       ...item,
-      startTime: utcParser(item.startTime, currentUnix),
-      endTime: utcParser(item.endTime, currentUnix),
+      startTime: item.startTime,
+      endTime: item.endTime,
     })
     openDialog({
       variant: 'UpdatePracticeDialog',

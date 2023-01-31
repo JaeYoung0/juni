@@ -12,8 +12,8 @@ dayjs.extend(utc)
 export type PlanItem = {
   id: string
   content: string
-  startTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
-  endTime: string | number // db에 utc로 저장 | 하루를 분으로 계산 (number)
+  startTime: string // db에 utc로 저장
+  endTime: string // db에 utc로 저장
   categoryId: string
 }
 

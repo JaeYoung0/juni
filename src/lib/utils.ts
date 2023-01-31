@@ -40,8 +40,11 @@ export const minParser = (time: string | number) => {
 }
 
 /**
+ * @deprecated
  * time이 utc인 경우와(2023-01-18T14:02:33Z), 분단위로 저장한 경우(120) 모두에 대응하여
  * utc 값을(120) 리턴한다.
+ *
+ * startTime, endTime은 무조건 utc를 ISO8601 형식으로 저장한다.
  */
 export const utcParser = (time: string | number, currentUnix: number) => {
   let _time

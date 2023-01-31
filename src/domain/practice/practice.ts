@@ -9,15 +9,15 @@ import { usePlanList } from '../plan'
 import { useUserAtom } from '../user'
 
 /**
- * @startTime - db에 utc로 저장 | 하루를 분으로 계산 (number)
- * @endTime - db에 utc로 저장 | 하루를 분으로 계산 (number)
+ * @startTime - db에 utc로 저장
+ * @endTime - db에 utc로 저장
  * @categoryId - categoryId가 비어있는("") practiceItem은 "계획에 없던 일" 아이템이다.
  */
 export type PracticeItem = {
   id: string
   content: string
-  startTime: string | number // dayjs().utc.format()
-  endTime: string | number
+  startTime: string
+  endTime: string
   categoryId: string
 }
 
