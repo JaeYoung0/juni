@@ -1,4 +1,5 @@
 import { Colors } from '@/styles/colors'
+import Z_INDEX from '@/styles/z-index'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
@@ -124,7 +125,7 @@ export const PlanItem = styled.button<{ top: number; height: number }>`
   height: ${({ height }) => `${height}%`};
 
   left: 0;
-  z-index: 100;
+  z-index: ${Z_INDEX.ScheduleItem};
 
   ${planCellStyle}
   background: gray;
