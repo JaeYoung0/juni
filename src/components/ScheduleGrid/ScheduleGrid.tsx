@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useEffect, useRef } from 'react'
 
 import * as S from './style'
-import { getItemHeight, minParser, unixToUTC, utcParser } from '@/lib/utils'
+import { getEndTime, getItemHeight, minParser, unixToUTC } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDialog from '@/hooks/useDialog'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
@@ -66,9 +66,7 @@ function PlanCol() {
     setPlanItemAtom({
       ...planItemAtom,
       startTime: unixToUTC(currentUnix).add(hour, 'h').format(),
-      endTime: unixToUTC(currentUnix)
-        .add(hour + 1, 'h')
-        .format(),
+      endTime: getEndTime({ currentUnix, hour }),
     })
     openDialog({
       variant: 'CreatePlanDialog',
@@ -166,9 +164,7 @@ function PracticeCol() {
     setPracticeItemAtom({
       ...praticeItemAtom,
       startTime: unixToUTC(currentUnix).add(hour, 'h').format(),
-      endTime: unixToUTC(currentUnix)
-        .add(hour + 1, 'h')
-        .format(),
+      endTime: getEndTime({ currentUnix, hour }),
     })
     openDialog({
       variant: 'CreatePracticeDialog',

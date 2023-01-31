@@ -6,6 +6,7 @@ import { useCreatePracticeItem } from '@/service/practice'
 import { useUserAtom } from '@/domain/user'
 import { BasicProps } from '@/hooks/useDialog'
 import { useCalendarAtom } from '@/domain/calendar'
+import dayjs from 'dayjs'
 
 type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 
@@ -15,8 +16,13 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
   const [userAtom] = useUserAtom()
+  console.log('@@practiceItem', practiceItem)
 
   const createPracticeItem = useCreatePracticeItem()
+
+  const shouldSplit =
+    dayjs(practiceItem.startTime).get('d') !== dayjs(practiceItem.endTime).get('d')
+  console.log('@@shouldSplit', shouldSplit)
 
   const handleSubmit = () => {
     createPracticeItem.mutate({

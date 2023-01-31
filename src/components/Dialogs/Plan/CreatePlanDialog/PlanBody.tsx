@@ -8,6 +8,7 @@ import { css } from '@emotion/react'
 import { PlanItem } from '@/domain/plan'
 import { PracticeItem } from '@/domain/practice'
 import { SetterOrUpdater } from 'recoil'
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker'
 
 type Props<T extends PlanItem | PracticeItem> = {
   item: T
@@ -25,7 +26,7 @@ export default function PlanBody({ item, setItem }: Props<PlanItem | PracticeIte
               justify-content: space-between;
             `}
           >
-            <TimePicker
+            <MobileDateTimePicker
               label="시작 시간"
               value={dayjs(item.startTime)}
               onChange={(newValue) =>
@@ -37,7 +38,7 @@ export default function PlanBody({ item, setItem }: Props<PlanItem | PracticeIte
               renderInput={(params) => <TextField {...params} />}
             />
 
-            <TimePicker
+            <MobileDateTimePicker
               label="종료 시간"
               value={dayjs(item.endTime)}
               onChange={(newValue) => setItem({ ...item, endTime: dayjs(newValue).utc().format() })}

@@ -77,3 +77,20 @@ export const convertHexToRGBA = (hexCode: string, opacity = 1) => {
 
   return `rgba(${r},${g},${b},${opacity})`
 }
+
+const checkMidnight = (endTime: string) =>
+  dayjs(endTime).hour() === 0 && dayjs(endTime).minute() === 0
+
+export const getEndTime = ({ currentUnix, hour }: { currentUnix: number; hour: number }) => {
+  const endTime = unixToUTC(currentUnix)
+    .add(hour + 1, 'h')
+    .format()
+
+  const isMidnight = checkMidnight(endTime)
+
+  if (isMidnight) {
+    return dayjs(endTime).subtract(1, 'minute').format()
+  }
+
+  return endTime
+}
