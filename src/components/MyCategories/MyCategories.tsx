@@ -4,7 +4,7 @@ import { useUserAtom } from '@/domain/user'
 import useDialog from '@/hooks/useDialog'
 import { useCreateCategoryItem, useDeleteCategoryItem } from '@/service/category'
 import { css } from '@emotion/react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import * as S from './style'
 
 interface Props {}
@@ -16,6 +16,7 @@ function MyCategories({}: Props) {
   const { data: categoryList } = useCategoryList()
 
   const { openDialog } = useDialog()
+
   const createCategoryItem = useCreateCategoryItem()
 
   const handleClickColorPicker = () => {
@@ -25,12 +26,23 @@ function MyCategories({}: Props) {
     })
   }
 
-  const handleClickButton = () =>
+  const handleClickButton = () => {
+    if (!name) return alert('카테고리 이름을 적어주세요.')
     createCategoryItem.mutate({ name, color, userId: userAtom.userId })
+  }
+
+  const callbackRef = useCallback((el: HTMLInputElement | null) => {
+    el?.focus()
+  }, [])
 
   return (
     <S.Wrapper>
-      <input placeholder="카테고리 이름" value={name} onChange={(e) => setName(e.target.value)} />
+      <input
+        ref={callbackRef}
+        placeholder="카테고리 이름"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
 
       <button
         css={css`

@@ -20,17 +20,18 @@ export const Wrapper = styled.div`
   row-gap: 2rem;
 `
 
-export const CategroyList = styled.div``
+export const CategroyList = styled.div`
+  padding: 0 4rem;
+`
 
 export const CategoryItem = styled.div`
   padding: 2rem;
   display: flex;
   justify-content: space-between;
 
-  h2 {
-    font-size: 1.8rem;
+  span {
+    font-size: 1.6rem;
     color: #fff;
-    margin: 10rem auto 2rem;
   }
 
   button {
