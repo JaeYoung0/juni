@@ -28,3 +28,10 @@ export const ToggleButton = styled.button`
     font-size: 2rem;
   }
 `
+
+export const CalendarWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: #111111;
+`

@@ -2,7 +2,6 @@ import { PlanItem } from '@/domain/plan'
 import { PracticeItem } from '@/domain/practice'
 import { SetterOrUpdater } from 'recoil'
 import * as CS from '../common.style'
-
 import { css } from '@emotion/react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
