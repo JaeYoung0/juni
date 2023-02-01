@@ -1,14 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import * as S from './style'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
-
 import useDateCell, { DateCell } from './useDateCell'
-import { usePlanHistory } from '@/domain/plan'
-import useDialog from '@/hooks/useDialog'
-import { css } from '@emotion/react'
 import CalendarDial from './CalendarDial'
 
 export type CalendarViewProps = {
@@ -59,8 +55,6 @@ function CalendarView({ onChange }: CalendarViewProps) {
       setCurrentCalendar((prev) => prev.subtract(1, 'M'))
   }, [selectedDate])
 
-  const { openDialog } = useDialog()
-
   const DialProps = {
     goToday,
     goPrevWeek,
@@ -71,20 +65,6 @@ function CalendarView({ onChange }: CalendarViewProps) {
 
   return (
     <S.Container>
-      {/* Controller */}
-      <button onClick={toggleMonthlyView}>
-        {isMonthlyView ? '주단위로 보기' : '월단위로 보기'}
-      </button>
-      <button onClick={() => goToday()}>오늘</button>
-      <button onClick={() => goPrevWeek()}>이전주</button>
-      <button onClick={() => goNextWeek()}>다음주</button>
-      <button
-        onClick={() => {
-          openDialog({ variant: 'StopwatchDialog', props: {} })
-        }}
-      >
-        스톱워치
-      </button>
       {/* Header */}
       <S.CalendarBox onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {isMonthlyView && (
@@ -132,7 +112,7 @@ function CalendarView({ onChange }: CalendarViewProps) {
           })}
         </S.DatesBox>
       </S.CalendarBox>
-      {/* <CalendarDial {...DialProps} /> */}
+      <CalendarDial {...DialProps} />
     </S.Container>
   )
 }

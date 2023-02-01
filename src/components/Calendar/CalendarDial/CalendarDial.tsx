@@ -10,6 +10,7 @@ import PrintIcon from '@mui/icons-material/Print'
 import ShareIcon from '@mui/icons-material/Share'
 import { css } from '@emotion/react'
 import { Colors } from '@/styles/colors'
+import useDialog from '@/hooks/useDialog'
 
 export type CalendarDialProps = {
   goToday: () => void
@@ -24,34 +25,26 @@ function CalendarDial(props: CalendarDialProps) {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { openDialog } = useDialog()
+
   const actions = [
-    { icon: <button>버튼</button>, name: '오늘', onClick: () => goToday() },
-    { icon: <button>버튼</button>, name: '지난주', onClick: () => goPrevWeek() },
-    { icon: <button>버튼</button>, name: '다음주', onClick: () => goNextWeek() },
     {
-      icon: <button>버튼</button>,
+      icon: <span>{isMonthlyView ? '주단위로 보기' : '월단위로 보기'}</span>,
       name: isMonthlyView ? '주단위로 보기' : '월단위로 보기',
       onClick: () => toggleMonthlyView(),
     },
+    { icon: <span>지난주</span>, name: '지난주', onClick: () => goPrevWeek() },
+    { icon: <span>오늘</span>, name: '오늘', onClick: () => goToday() },
+    { icon: <span>다음주</span>, name: '다음주', onClick: () => goNextWeek() },
+    {
+      icon: <span>스톱워치</span>,
+      name: '스톱워치',
+      onClick: () => openDialog({ variant: 'StopwatchDialog', props: {} }),
+    },
   ]
-
-  //   <button onClick={toggleMonthlyView}>
-  //   {isMonthlyView ? '주단위로 보기' : '월단위로 보기'}
-  // </button>
-  // <button onClick={() => goToday()}>오늘</button>
-  // <button onClick={() => goPrevWeek()}>이전주</button>
-  // <button onClick={() => goNextWeek()}>다음주</button>
-  // <button
-  //   onClick={() => {
-  //     openDialog({ variant: 'StopwatchDialog', props: {} })
-  //   }}
-  // >
-  //   스톱워치
-  // </button>
 
   return (
     <Box>
-      <Backdrop open={open} />
       <SpeedDial
         ariaLabel="SpeedDial tooltip example"
         sx={{ position: 'fixed', right: 20, bottom: 100 }}
@@ -60,13 +53,12 @@ function CalendarDial(props: CalendarDialProps) {
         onOpen={handleOpen}
         open={open}
       >
-        {actions.map((action) => (
+        {actions.map((action, idx) => (
           <SpeedDialAction
-            key={action.name}
+            key={idx}
             icon={action.icon}
             tooltipTitle={action.name}
-            tooltipOpen
-            onClick={handleClose}
+            onClick={action.onClick}
           />
         ))}
       </SpeedDial>
