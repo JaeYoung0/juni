@@ -15,6 +15,7 @@ const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
 export default function ScheduleGrid() {
   const currentMinutes = dayjs().get('h') * 60 + dayjs().get('m')
+  console.log('@@currentMinutes', currentMinutes)
 
   // TODO useCallback으로 감싸면 동작 x
   const callbackRef = (el: HTMLParagraphElement | null) => {
