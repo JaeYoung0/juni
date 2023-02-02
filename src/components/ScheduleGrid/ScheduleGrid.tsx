@@ -1,7 +1,7 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import * as S from './style'
 import { getEndTime, getItemHeight, minParser, unixToUTC } from '@/lib/utils'
@@ -15,18 +15,18 @@ const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
 export default function ScheduleGrid() {
   const currentMinutes = dayjs().get('h') * 60 + dayjs().get('m')
-  const timeLineRef = useRef<HTMLParagraphElement | null>(null)
 
-  useEffect(() => {
-    timeLineRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  }, [timeLineRef.current])
+  // TODO useCallback으로 감싸면 동작 x
+  const callbackRef = (el: HTMLParagraphElement | null) => {
+    el?.scrollIntoView({ block: 'center' })
+  }
 
   return (
     <>
       <S.GridWrapper>
         <S.Grid>
           <S.CurrentTimeLine
-            ref={timeLineRef}
+            ref={callbackRef}
             css={css`
               top: calc((${currentMinutes} / (24 * 60)) * 100%);
             `}
