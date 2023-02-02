@@ -17,7 +17,10 @@ const THIS_MONTH = dayjs().startOf('M')
 
 function CalendarView({ onChange }: CalendarViewProps) {
   const [currentCalendar, setCurrentCalendar] = useState<Dayjs>(THIS_MONTH)
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(THIS_DATE)
+  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs().startOf('date'))
+  console.log('@@THIS_DATE', THIS_DATE.format())
+  console.log('@@selectedDate', selectedDate)
+
   const [isMonthlyView, setIsMonthlyView] = useState(false)
 
   const { monthlyDates, weeklyDates } = useDateCell({ currentCalendar, selectedDate })
