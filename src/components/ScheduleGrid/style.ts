@@ -123,22 +123,21 @@ export const PlanItem = styled.button<{ top: number; height: number }>`
   position: absolute;
   top: ${({ top }) => `${top}%`};
   height: ${({ height }) => `${height}%`};
-
   left: 0;
   z-index: ${Z_INDEX.ScheduleItem};
 
   ${planCellStyle}
   background: gray;
-
-  font-size: 1rem;
-  line-height: 1.5;
-
-  font-size: 1.4rem;
   padding: 1rem;
 
-  overflow: hidden;
-  white-space: pre;
-  text-overflow: ellipsis;
+  span {
+    font-size: 1.4rem;
+    line-height: 1.5;
+    text-align: left;
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+  }
 `
 
 export const PracticeList = styled.div`

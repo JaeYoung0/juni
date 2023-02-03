@@ -21,7 +21,7 @@ export const Wrapper = styled.div`
 `
 
 export const CategroyList = styled.div`
-  padding: 0 4rem;
+  padding: 0 4rem 10rem;
 `
 
 export const CategoryItem = styled.div`
