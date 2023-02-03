@@ -6,7 +6,7 @@ import { atom, useRecoilState } from 'recoil'
 import { v1 } from 'uuid'
 import { useCalendarAtom } from '../calendar'
 import { usePlanList } from '../plan'
-import { useUserAtom } from '../user'
+import { useUserStore } from '@/service/storeAdapter'
 
 /**
  * @startTime - db에 utc로 저장
@@ -42,19 +42,21 @@ export function usePracticeItemAtom() {
 export const QUERY_KEY_HEAD = '@practiceList'
 
 export function usePracticeList() {
-  const { data: plans, isLoading } = usePlanList()
+  const { isLoading } = usePlanList()
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
+
+  const { user } = useUserStore()
+  const { userId } = user
 
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   return useQuery({
     queryKey: [QUERY_KEY_HEAD, year, month, date],
 
-    queryFn: async () => getPracticeItems({ currentUnix, userId: userAtom.userId }),
+    queryFn: async () => getPracticeItems({ currentUnix, userId }),
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
-    enabled: !!userAtom.userId && !isLoading,
+    enabled: !!userId && !isLoading,
     refetchOnWindowFocus: false,
   })
 }

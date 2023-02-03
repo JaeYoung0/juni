@@ -1,15 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { CategoryItem } from '../category'
 import { unixToYYYYMMDD } from '@/lib/utils'
-import { getMonthlyPlanHistory } from '@/service/plan'
-
-import { atom, useRecoilState } from 'recoil'
 import { useCalendarAtom } from '../calendar'
-import { useUserAtom } from '../user'
-import { v1 } from 'uuid'
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
 import { getDayChartItems } from '@/service/chart'
+import { useUserStore } from '@/service/storeAdapter'
 
 export type DayChartItem = Pick<CategoryItem, 'categoryId'> & {
   id: string
@@ -20,8 +14,9 @@ export type DayChartItem = Pick<CategoryItem, 'categoryId'> & {
 const QUERY_KEY_HEAD = '@chart'
 export function useChart({ categoryId }: { categoryId: string }) {
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
-  const { userId } = userAtom
+
+  const { user } = useUserStore()
+  const { userId } = user
 
   const { year, month } = unixToYYYYMMDD(currentUnix)
 

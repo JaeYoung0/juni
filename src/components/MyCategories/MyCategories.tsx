@@ -1,6 +1,6 @@
 import { CategoryItem, useCategoryList } from '@/domain/category'
 import { useChart } from '@/domain/chart'
-import { useUserAtom } from '@/domain/user'
+import { useUserStore } from '@/service/storeAdapter'
 import useDialog from '@/hooks/useDialog'
 import { useCreateCategoryItem, useDeleteCategoryItem } from '@/service/category'
 import { css } from '@emotion/react'
@@ -12,7 +12,8 @@ interface Props {}
 function MyCategories({}: Props) {
   const [color, setColor] = useState('#aaa')
   const [name, setName] = useState('')
-  const [userAtom] = useUserAtom()
+  const { user } = useUserStore()
+  const { userId } = user
   const { data: categoryList } = useCategoryList()
 
   const { openDialog } = useDialog()
@@ -28,7 +29,7 @@ function MyCategories({}: Props) {
 
   const handleClickButton = () => {
     if (!name) return alert('카테고리 이름을 적어주세요.')
-    createCategoryItem.mutate({ name, color, userId: userAtom.userId })
+    createCategoryItem.mutate({ name, color, userId })
   }
 
   const callbackRef = useCallback((el: HTMLInputElement | null) => {
@@ -66,7 +67,8 @@ function MyCategories({}: Props) {
 }
 
 function CategoryItem({ name, color, categoryId }: CategoryItem) {
-  const [userAtom] = useUserAtom()
+  const { user } = useUserStore()
+  const { userId } = user
   const { data: chartList } = useChart({ categoryId })
 
   const deleteApplicable =
@@ -79,7 +81,7 @@ function CategoryItem({ name, color, categoryId }: CategoryItem) {
     if (res) {
       deleteCategoryItem.mutate({
         categoryId: categoryId,
-        userId: userAtom.userId,
+        userId,
       })
     }
   }

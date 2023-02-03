@@ -1,5 +1,5 @@
-import { useUserAtom } from '@/domain/user'
-import { firebaseAuth } from '@/service/auth'
+import { firebaseAuth } from '@/service/authAdapter'
+import { useUserStore } from '@/service/storeAdapter'
 import { JSX } from '@emotion/react/jsx-runtime'
 import { WithConditionalCSSProp } from '@emotion/react/types/jsx-namespace'
 import { NextPage } from 'next'
@@ -15,7 +15,7 @@ export default function withAuth<P extends Props<P>>(WrappedComponent: NextPage<
   return (props: P) => {
     const router = useRouter()
 
-    const [_, setUserAtom] = useUserAtom()
+    const { updateUser } = useUserStore()
 
     useEffect(() => {
       firebaseAuth.onAuthStateChanged((user) => {
@@ -24,7 +24,7 @@ export default function withAuth<P extends Props<P>>(WrappedComponent: NextPage<
         } else {
           const { uid, displayName } = user
 
-          setUserAtom({
+          updateUser({
             userId: uid,
             name: displayName ?? '이름 없음',
           })

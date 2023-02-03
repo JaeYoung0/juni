@@ -3,7 +3,7 @@ import { getMonthlyPlanHistory, getPlanItems } from '@/service/plan'
 import { useQuery } from '@tanstack/react-query'
 import { atom, useRecoilState } from 'recoil'
 import { useCalendarAtom } from '../calendar'
-import { useUserAtom } from '../user'
+import { useUserStore } from '@/service/storeAdapter'
 import { v1 } from 'uuid'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -37,14 +37,14 @@ export function usePlanItemAtom() {
 export const QUERY_KEY_HEAD = '@planList'
 export function usePlanList() {
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
-  const { userId } = userAtom
+  const { user } = useUserStore()
+  const { userId } = user
 
   const { year, month, date } = unixToYYYYMMDD(currentUnix)
 
   return useQuery({
     queryKey: [QUERY_KEY_HEAD, year, month, date],
-    queryFn: () => getPlanItems({ currentUnix, userId: userId }) ?? [],
+    queryFn: () => getPlanItems({ currentUnix, userId }) ?? [],
     refetchOnMount: false,
     staleTime: 60 * 1000, // 1분, default 0
     enabled: !!userId && !!currentUnix,
@@ -71,8 +71,8 @@ export const getStartTimeOfPlanList = (planList: PlanItem[]) => {
 // ex. 1월 3, 5, 19일에 계획을 세운 히스토리가 있다면 3, 5, 19를 리턴
 export function usePlanHistory() {
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
-  const { userId } = userAtom
+  const { user } = useUserStore()
+  const { userId } = user
 
   const { year, month } = unixToYYYYMMDD(currentUnix)
 

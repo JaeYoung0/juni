@@ -1,5 +1,5 @@
 import BasicLayout from '@/components/layouts/BasicLayout'
-import { useAuth } from '@/service/auth'
+import { useAuth } from '@/service/authAdapter'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 

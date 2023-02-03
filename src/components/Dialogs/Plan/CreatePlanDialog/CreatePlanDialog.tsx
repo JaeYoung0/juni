@@ -1,19 +1,21 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
-import { useUserAtom } from '@/domain/user'
 import { BasicProps } from '@/hooks/useDialog'
 import { useCreatePlanItem } from '@/service/plan'
 import * as CS from '../common.style'
 import Header from './PlanHeader'
 import Body from './PlanBody'
 import dayjs from 'dayjs'
+import { useUserStore } from '@/service/storeAdapter'
 
 type CreatePlanDialogProps = BasicProps
 
 function CreatePlanDialog({ close }: CreatePlanDialogProps) {
   const [planItem, setPlanItem] = usePlanItemAtom()
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
+
+  const { user } = useUserStore()
+  const { userId } = user
 
   const createPlanItem = useCreatePlanItem()
 
@@ -30,7 +32,7 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
       currentUnix,
       ...planItem,
       endTime: firstJunction,
-      userId: userAtom.userId,
+      userId,
     })
 
     createPlanItem.mutate({
@@ -38,7 +40,7 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
       ...planItem,
       startTime: secondJunction,
       endTime: planItem.endTime,
-      userId: userAtom.userId,
+      userId,
     })
   }
 
@@ -49,7 +51,7 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
       createPlanItem.mutate({
         currentUnix,
         ...planItem,
-        userId: userAtom.userId,
+        userId,
       })
     }
 

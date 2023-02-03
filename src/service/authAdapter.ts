@@ -2,7 +2,7 @@ import { createUser } from './user'
 import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth'
 
 import { FirebaseError } from '@firebase/util'
-import { useUserAtom } from '@/domain/user/user'
+import { useUserStore } from '@/service/storeAdapter'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { firebaseApp } from '@/lib/firebase'
@@ -12,21 +12,21 @@ export const firebaseAuth = getAuth(firebaseApp)
 const provider = new GoogleAuthProvider()
 
 export function useAuth() {
-  const [userAtom, setUserAtom] = useUserAtom()
   const [isLoading, setIsLoading] = useState(false)
+
+  const { updateUser } = useUserStore()
 
   const router = useRouter()
   const googleLogin = async () => {
     try {
       setIsLoading(true)
 
-      // await setPersistence(firebaseAuth, browserSessionPersistence)
       const { user } = await signInWithPopup(firebaseAuth, provider)
       const res = await findOrCreateUser(user)
 
       const { uid, displayName } = user
       // 여기서 res를 써먹어야하지 않을까
-      setUserAtom({ userId: uid, name: displayName ?? '이름 없음' })
+      updateUser({ userId: uid, name: displayName ?? '이름 없음' })
       void router.replace('/')
     } catch (error) {
       if (error instanceof FirebaseError) {

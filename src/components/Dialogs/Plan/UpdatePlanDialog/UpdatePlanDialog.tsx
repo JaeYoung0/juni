@@ -5,21 +5,22 @@ import { BasicProps } from '@/hooks/useDialog'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
 import { useDeletePlanItem, useUpdatePlanItem } from '@/service/plan'
 import { useCalendarAtom } from '@/domain/calendar'
-import { useUserAtom } from '@/domain/user'
+import { useUserStore } from '@/service/storeAdapter'
 
 type UpdatePlanDialogProps = BasicProps
 
 function UpdatePlanDialog({ close }: UpdatePlanDialogProps) {
   const [planItem, setPlanItem] = usePlanItemAtom()
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
+  const { user } = useUserStore()
+  const { userId } = user
 
   const updatePlanItem = useUpdatePlanItem()
   const handleSubmit = () => {
     updatePlanItem.mutate({
       currentUnix,
       ...planItem,
-      userId: userAtom.userId,
+      userId,
     })
     close()
   }
@@ -27,7 +28,7 @@ function UpdatePlanDialog({ close }: UpdatePlanDialogProps) {
   const deletePlanItem = useDeletePlanItem()
   const handleDelete = () => {
     void deletePlanItem.mutate({
-      userId: userAtom.userId,
+      userId,
       currentUnix,
       id: planItem.id,
     })

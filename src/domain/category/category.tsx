@@ -2,7 +2,7 @@ import { getCategoryItems } from '@/service/category'
 import { useQuery } from '@tanstack/react-query'
 import { atom, useRecoilState } from 'recoil'
 import { v1 } from 'uuid'
-import { useUserAtom } from '../user'
+import { useUserStore } from '@/service/storeAdapter'
 
 export type CategoryItem = {
   categoryId: string
@@ -25,13 +25,14 @@ export function useCategoryAtom() {
 
 export const QUERY_KEY_HEAD = '@categoryList'
 export function useCategoryList() {
-  const [userAtom] = useUserAtom()
+  const { user } = useUserStore()
+  const { userId } = user
 
   return useQuery({
     queryKey: [QUERY_KEY_HEAD],
-    queryFn: () => getCategoryItems({ userId: userAtom.userId }),
+    queryFn: () => getCategoryItems({ userId }),
     refetchOnMount: false,
-    enabled: !!userAtom.userId,
+    enabled: !!userId,
     refetchOnWindowFocus: false,
   })
 }

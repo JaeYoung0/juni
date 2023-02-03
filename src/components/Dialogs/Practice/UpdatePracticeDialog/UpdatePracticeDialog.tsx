@@ -4,15 +4,17 @@ import PracticeBody from '../CreatePracticeDialog/PracticeBody'
 import { BasicProps } from '@/hooks/useDialog'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
-import { useUserAtom } from '@/domain/user'
 import { useCalendarAtom } from '@/domain/calendar'
+import { useUserStore } from '@/service/storeAdapter'
 
 type UpdatePracticeDialogProps = BasicProps
 
 function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
+
+  const { user } = useUserStore()
+  const { userId } = user
 
   const updatePracticeItem = useUpdatePracticeItem()
 
@@ -23,7 +25,7 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
     updatePracticeItem.mutate({
       currentUnix,
       ...practiceItem,
-      userId: userAtom.userId,
+      userId,
     })
     close()
   }
@@ -31,7 +33,7 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
   const deletePracticeItem = useDeletePracticeItem()
   const handleDelete = () => {
     void deletePracticeItem.mutate({
-      userId: userAtom.userId,
+      userId,
       currentUnix,
       id: practiceItem.id,
     })

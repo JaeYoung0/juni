@@ -3,10 +3,10 @@ import PracticeHeader from './PracticeHeader'
 import PracticeBody from './PracticeBody'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useCreatePracticeItem } from '@/service/practice'
-import { useUserAtom } from '@/domain/user'
 import { BasicProps } from '@/hooks/useDialog'
 import { useCalendarAtom } from '@/domain/calendar'
 import dayjs from 'dayjs'
+import { useUserStore } from '@/service/storeAdapter'
 
 type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 
@@ -14,7 +14,9 @@ type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 export default function CreatePracticeDialog({ close, onClose }: CreatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
   const [currentUnix] = useCalendarAtom()
-  const [userAtom] = useUserAtom()
+
+  const { user } = useUserStore()
+  const { userId } = user
 
   const createPracticeItem = useCreatePracticeItem()
 
@@ -33,7 +35,7 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
       currentUnix,
       ...practiceItem,
       endTime: firstJunction,
-      userId: userAtom.userId,
+      userId,
     })
 
     createPracticeItem.mutate({
@@ -41,7 +43,7 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
       ...practiceItem,
       startTime: secondJunction,
       endTime: practiceItem.endTime,
-      userId: userAtom.userId,
+      userId,
     })
   }
 
@@ -52,7 +54,7 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
       createPracticeItem.mutate({
         currentUnix,
         ...practiceItem,
-        userId: userAtom.userId,
+        userId,
       })
     }
 

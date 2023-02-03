@@ -1,22 +1,23 @@
 import withAuth from '@/application/withAuth'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import MyCategories from '@/components/MyCategories'
-import { useUserAtom } from '@/domain/user'
-import { useAuth } from '@/service/auth'
-import { useEffect } from 'react'
+import { useAuth } from '@/service/authAdapter'
+
 import * as S from './style'
+import { useUserStore } from '@/service/storeAdapter'
 
 function MyPage() {
-  const [userAtom] = useUserAtom()
+  const { user } = useUserStore()
+  const { userId, name } = user
   const { logout } = useAuth()
   const handleClickButton = () => void logout()
 
   return (
     <BasicLayout>
       <S.UserName>
-        {userAtom.userId ? (
+        {userId ? (
           <>
-            <span>{userAtom.name}님, 안녕하세요!</span>
+            <span>{name}님, 안녕하세요!</span>
             <button onClick={handleClickButton}>로그아웃</button>
           </>
         ) : null}
