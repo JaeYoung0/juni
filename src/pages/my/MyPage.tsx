@@ -1,10 +1,9 @@
-import withAuth from '@/application/withAuth'
+import withAuth from '@/hoc/withAuth'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import MyCategories from '@/components/MyCategories'
 import { useAuth } from '@/service/authAdapter'
-
+import { useUserStore } from '@/service/userAdapter'
 import * as S from './style'
-import { useUserStore } from '@/service/storeAdapter'
 
 function MyPage() {
   const { user } = useUserStore()

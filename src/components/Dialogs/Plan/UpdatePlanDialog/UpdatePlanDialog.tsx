@@ -5,7 +5,7 @@ import { BasicProps } from '@/hooks/useDialog'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
 import { useDeletePlanItem, useUpdatePlanItem } from '@/service/plan'
 import { useCalendarAtom } from '@/domain/calendar'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 
 type UpdatePlanDialogProps = BasicProps
 

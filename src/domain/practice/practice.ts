@@ -6,7 +6,7 @@ import { atom, useRecoilState } from 'recoil'
 import { v1 } from 'uuid'
 import { useCalendarAtom } from '../calendar'
 import { usePlanList } from '../plan'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 
 /**
  * @startTime - db에 utc로 저장

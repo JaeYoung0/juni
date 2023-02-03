@@ -2,13 +2,12 @@ import { PlanItem } from '@/domain/plan'
 import { PracticeItem } from '@/domain/practice'
 import { SetterOrUpdater } from 'recoil'
 import * as CS from '@/components/Dialogs/Plan/common.style'
-
 import { css } from '@emotion/react'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { useEffect, useState } from 'react'
-import { useCategoryList } from '@/domain/category'
+import { useCategoryStore } from '@/service/categoryAdapter'
 import InputLabel from '@mui/material/InputLabel'
 
 // BodyProps와 동일
@@ -19,7 +18,7 @@ type Props<T extends PlanItem | PracticeItem> = {
 }
 export default function PracticeHeader({ item, setItem, type }: Props<PlanItem | PracticeItem>) {
   const [categoryId, setCategoryId] = useState(item.categoryId)
-  const { data: categoryList } = useCategoryList()
+  const { categoryList } = useCategoryStore()
   const categoryOptions = categoryList?.map((item) => ({ id: item.categoryId, color: item.color }))
 
   const current = categoryOptions?.find((item) => item.id === categoryId)

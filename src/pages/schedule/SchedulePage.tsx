@@ -7,7 +7,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useCalendarAtom } from '@/domain/calendar'
 import BasicLayout from '@/components/layouts/BasicLayout'
 import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
-import withAuth from '@/application/withAuth'
+import withAuth from '@/hoc/withAuth'
 import { css } from '@emotion/react'
 
 function SchedulePage() {

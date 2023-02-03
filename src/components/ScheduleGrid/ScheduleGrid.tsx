@@ -8,7 +8,7 @@ import { getEndTime, getItemHeight, minParser, unixToUTC } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
 import useDialog from '@/hooks/useDialog'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
-import { useCategoryList } from '@/domain/category'
+import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
 
 const LENGTH = 24
@@ -134,7 +134,7 @@ function PlanItem({ ...props }: PlanItemProps) {
     onRightSwipe: () => handleRightSwipePlan(item),
   })
 
-  const { data: categoryList } = useCategoryList()
+  const { categoryList } = useCategoryStore()
   const category = categoryList?.find((c) => c.categoryId === item.categoryId)
 
   return (
@@ -221,7 +221,7 @@ type PracticeItemProps = {
 function PracticeItem({ ...props }: PracticeItemProps) {
   const { top, height, item } = props
 
-  const { data: categoryList } = useCategoryList()
+  const { categoryList } = useCategoryStore()
   const category = categoryList?.find((c) => c.categoryId === item.categoryId)
 
   return (

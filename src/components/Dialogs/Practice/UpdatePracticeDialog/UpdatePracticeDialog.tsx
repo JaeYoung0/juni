@@ -5,7 +5,7 @@ import { BasicProps } from '@/hooks/useDialog'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
 import { useCalendarAtom } from '@/domain/calendar'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 
 type UpdatePracticeDialogProps = BasicProps
 

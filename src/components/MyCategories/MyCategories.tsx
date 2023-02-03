@@ -1,8 +1,8 @@
-import { CategoryItem, useCategoryList } from '@/domain/category'
+import { CategoryItem } from '@/domain/category'
 import { useChart } from '@/domain/chart'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 import useDialog from '@/hooks/useDialog'
-import { useCreateCategoryItem, useDeleteCategoryItem } from '@/service/category'
+import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
 import { useCallback, useState } from 'react'
 import * as S from './style'
@@ -14,11 +14,9 @@ function MyCategories({}: Props) {
   const [name, setName] = useState('')
   const { user } = useUserStore()
   const { userId } = user
-  const { data: categoryList } = useCategoryList()
+  const { categoryList, createCategory } = useCategoryStore()
 
   const { openDialog } = useDialog()
-
-  const createCategoryItem = useCreateCategoryItem()
 
   const handleClickColorPicker = () => {
     openDialog({
@@ -29,7 +27,7 @@ function MyCategories({}: Props) {
 
   const handleClickButton = () => {
     if (!name) return alert('카테고리 이름을 적어주세요.')
-    createCategoryItem.mutate({ name, color, userId })
+    createCategory({ name, color, userId })
   }
 
   const callbackRef = useCallback((el: HTMLInputElement | null) => {
@@ -70,16 +68,16 @@ function CategoryItem({ name, color, categoryId }: CategoryItem) {
   const { user } = useUserStore()
   const { userId } = user
   const { data: chartList } = useChart({ categoryId })
+  const { deleteCategory } = useCategoryStore()
 
   const deleteApplicable =
     !chartList?.plan.find((item) => item.categoryId === categoryId) &&
     !chartList?.practice.find((item) => item.categoryId === categoryId)
 
-  const deleteCategoryItem = useDeleteCategoryItem()
   const handleDelete = () => {
     const res = confirm('삭제하시겠어요?')
     if (res) {
-      deleteCategoryItem.mutate({
+      deleteCategory({
         categoryId: categoryId,
         userId,
       })

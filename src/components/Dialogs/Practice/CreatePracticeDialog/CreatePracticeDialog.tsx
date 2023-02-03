@@ -6,7 +6,7 @@ import { useCreatePracticeItem } from '@/service/practice'
 import { BasicProps } from '@/hooks/useDialog'
 import { useCalendarAtom } from '@/domain/calendar'
 import dayjs from 'dayjs'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 
 type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
 

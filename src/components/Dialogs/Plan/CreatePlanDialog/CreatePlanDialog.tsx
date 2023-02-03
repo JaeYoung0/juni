@@ -6,7 +6,7 @@ import * as CS from '../common.style'
 import Header from './PlanHeader'
 import Body from './PlanBody'
 import dayjs from 'dayjs'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 
 type CreatePlanDialogProps = BasicProps
 

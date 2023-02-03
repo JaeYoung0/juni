@@ -1,28 +1,26 @@
-import { createUser } from './user'
+import { createUser } from './api/user'
 import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth'
-
 import { FirebaseError } from '@firebase/util'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { firebaseApp } from '@/lib/firebase'
-import { getUser } from '@/service/user'
+import { getUser } from '@/service/api/user'
+import { AuthService } from '@/application/ports'
 
 export const firebaseAuth = getAuth(firebaseApp)
-const provider = new GoogleAuthProvider()
 
-export function useAuth() {
-  const [isLoading, setIsLoading] = useState(false)
-
+export function useAuth(): AuthService {
   const { updateUser } = useUserStore()
-
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const googleLogin = async () => {
+
+  const login = async () => {
     try {
       setIsLoading(true)
-
+      const provider = new GoogleAuthProvider()
       const { user } = await signInWithPopup(firebaseAuth, provider)
-      const res = await findOrCreateUser(user)
+      await findOrCreateUser(user)
 
       const { uid, displayName } = user
       // 여기서 res를 써먹어야하지 않을까
@@ -55,5 +53,5 @@ export function useAuth() {
     await firebaseAuth.signOut()
   }
 
-  return { googleLogin, isLoading, logout }
+  return { login, isLoading, logout }
 }

@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
 function Login() {
-  const { googleLogin, isLoading } = useAuth()
+  const { login, isLoading } = useAuth()
   return (
     <BasicLayout
       center
@@ -15,7 +15,7 @@ function Login() {
       `}
     >
       <Text>{isLoading ? 'loading...' : '로그인 해주세요'}</Text>
-      <Img onClick={() => void googleLogin()} src="/btn_google_signin_light_normal_web@2x.png" />
+      <Img onClick={() => void login()} src="/btn_google_signin_light_normal_web@2x.png" />
     </BasicLayout>
   )
 }

@@ -1,5 +1,5 @@
 import { firebaseAuth } from '@/service/authAdapter'
-import { useUserStore } from '@/service/storeAdapter'
+import { useUserStore } from '@/service/userAdapter'
 import { JSX } from '@emotion/react/jsx-runtime'
 import { WithConditionalCSSProp } from '@emotion/react/types/jsx-namespace'
 import { NextPage } from 'next'

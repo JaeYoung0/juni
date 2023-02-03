@@ -1,6 +1,5 @@
-import withAuth from '@/application/withAuth'
+import withAuth from '@/hoc/withAuth'
 import BasicLayout from '@/components/layouts/BasicLayout'
-import { useCategoryList } from '@/domain/category'
 import { useState } from 'react'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -20,6 +19,7 @@ import { Bar } from 'react-chartjs-2'
 import dayjs from 'dayjs'
 import { convertHexToRGBA } from '@/lib/utils'
 import { css } from '@emotion/react'
+import { useCategoryStore } from '@/service/categoryAdapter'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -33,7 +33,8 @@ export const options = {
 }
 
 function ChartPage() {
-  const { data: categoryList } = useCategoryList()
+  const { categoryList } = useCategoryStore()
+
   const [categoryId, setCategoryId] = useState('')
   const current = categoryList?.find((item) => item.categoryId === categoryId)
 
