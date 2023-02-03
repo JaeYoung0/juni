@@ -1,5 +1,4 @@
-import { BasicProps } from '@/hooks/useDialog'
-import { useEffect, useRef } from 'react'
+import { BasicProps } from '@/application/ports'
 
 export type ActionDialogProps = BasicProps & {
   title: string

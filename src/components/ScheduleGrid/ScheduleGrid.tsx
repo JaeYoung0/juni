@@ -1,12 +1,10 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
-import { useCallback, useEffect, useRef } from 'react'
-
 import * as S from './style'
 import { getEndTime, getItemHeight, minParser, unixToUTC } from '@/lib/utils'
 import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
-import useDialog from '@/hooks/useDialog'
+import useDialog from '@/service/dialogAdapter'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'

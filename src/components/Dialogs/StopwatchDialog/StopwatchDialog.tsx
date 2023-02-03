@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react'
 import TimerView from './TimerView'
 import styled from '@emotion/styled'
-import useDialog, { BasicProps } from '@/hooks/useDialog'
+import { BasicProps } from '@/application/ports'
 import { Colors } from '@/styles/colors'
 import { usePracticeItemAtom } from '@/domain/practice'
 import dayjs from 'dayjs'
+import useDialog from '@/service/dialogAdapter'
 
 const intervalTimer = (update: (time: number) => void, interval = 1000) => {
   let counter = 1

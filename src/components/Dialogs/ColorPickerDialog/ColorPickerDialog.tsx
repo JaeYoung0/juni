@@ -1,4 +1,4 @@
-import { BasicProps } from '@/hooks/useDialog'
+import { BasicProps } from '@/application/ports'
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
 import { HexColorPicker } from 'react-colorful'

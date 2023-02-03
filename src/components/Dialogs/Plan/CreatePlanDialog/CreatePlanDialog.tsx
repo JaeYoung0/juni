@@ -1,6 +1,6 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
-import { BasicProps } from '@/hooks/useDialog'
+import { BasicProps } from '@/application/ports'
 import { useCreatePlanItem } from '@/service/plan'
 import * as CS from '../common.style'
 import Header from './PlanHeader'

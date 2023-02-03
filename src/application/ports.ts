@@ -1,5 +1,6 @@
 import { CategoryItem } from '@/domain/category'
 import { User } from '@/domain/user'
+import * as Dialogs from '@/components/Dialogs'
 
 // 포트는 외부 서비스에 대한 인터페이스다.
 // 인터페이스만 정의하고 세부사항은 service에서 구현한다. minimally coupled를 위함
@@ -23,4 +24,22 @@ export type CategoryStoreService = {
   updateCategory: (category: CategoryItem) => void // 클라이언트 상태를 ? 서버상태를 ?
   deleteCategory: (payload: DeleteCategoryItemPayload) => void
   categoryList: CategoryItem[] | undefined
+}
+
+export type BasicProps = {
+  close: () => void
+}
+export type DialogVariant = keyof typeof Dialogs
+type Dialog = typeof Dialogs
+type DialogProps<T extends DialogVariant> = React.ComponentProps<Dialog[T]>
+type BasicPropKeys = keyof BasicProps
+export type DialogItem<V extends DialogVariant> = {
+  variant: V
+  props: Omit<DialogProps<V>, BasicPropKeys>
+}
+export type DialogService = {
+  // 구조만 타입정의한대로 맞아떨어진다면, 뒤쪽 T에 "ActionDialog"라고 들어가면 앞쪽 T에도 똑같이 할당된다.
+  openDialog: <T extends DialogVariant>(item: DialogItem<T>) => void
+  dialogList: DialogItem<DialogVariant>[]
+  updateDialogList: (list: DialogItem<DialogVariant>[]) => void
 }

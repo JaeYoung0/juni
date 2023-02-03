@@ -1,7 +1,7 @@
 import { CategoryItem } from '@/domain/category'
 import { useChart } from '@/domain/chart'
 import { useUserStore } from '@/service/userAdapter'
-import useDialog from '@/hooks/useDialog'
+import useDialog from '@/service/dialogAdapter'
 import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
 import { useCallback, useState } from 'react'

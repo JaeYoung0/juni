@@ -1,9 +1,9 @@
-import useDialog from '@/hooks/useDialog'
+import useDialog from '@/service/dialogAdapter'
 import * as Dialogs from '@/components/Dialogs'
 import { css } from '@emotion/react'
 
 function RootDialog() {
-  const { dialogList, setDialogList } = useDialog()
+  const { dialogList, updateDialogList } = useDialog()
 
   return (
     <>
@@ -13,7 +13,7 @@ function RootDialog() {
         const close = () => {
           // TODO. refactor
           const _dialogList = dialogList
-          setDialogList([..._dialogList].slice(0, _dialogList.length - 1))
+          updateDialogList([..._dialogList].slice(0, _dialogList.length - 1))
         }
 
         // TODO. fix this
