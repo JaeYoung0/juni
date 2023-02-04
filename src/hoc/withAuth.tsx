@@ -24,6 +24,7 @@ export default function withAuth<P extends Props<P>>(WrappedComponent: NextPage<
         } else {
           const { uid, displayName } = user
 
+          // TODO. updateUser가 page 이동시마다 실행됨
           updateUser({
             userId: uid,
             name: displayName ?? '이름 없음',

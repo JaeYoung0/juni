@@ -7,7 +7,7 @@ import * as Dialogs from '@/components/Dialogs'
 // ISP원칙 적용 (Interface segregation principle)
 export type UserStoreService = {
   user: User
-  updateUser: (user: User) => void
+  updateUser: (user: User) => Promise<User>
 }
 
 export type AuthService = {

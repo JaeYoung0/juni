@@ -1,5 +1,11 @@
 import { createUser } from './api/user'
-import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  User,
+  signInWithRedirect,
+  getRedirectResult,
+} from 'firebase/auth'
 import { FirebaseError } from '@firebase/util'
 import { useUserStore } from '@/service/userAdapter'
 import { useRouter } from 'next/router'
@@ -19,13 +25,16 @@ export function useAuth(): AuthService {
     try {
       setIsLoading(true)
       const provider = new GoogleAuthProvider()
-      const { user } = await signInWithPopup(firebaseAuth, provider)
-      await findOrCreateUser(user)
+      await signInWithRedirect(firebaseAuth, provider)
 
-      const { uid, displayName } = user
-      // 여기서 res를 써먹어야하지 않을까
-      updateUser({ userId: uid, name: displayName ?? '이름 없음' })
-      void router.replace('/')
+      // TODO. redirect 처리
+      const result = await getRedirectResult(firebaseAuth)
+
+      if (result) {
+        const user = result.user
+
+        await findOrCreateUser(user)
+      }
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error)

@@ -2,9 +2,14 @@ import { useUserAtom } from './store'
 import { UserStoreService } from '@/application/ports'
 
 export function useUserStore(): UserStoreService {
-  const [user, updateUser] = useUserAtom()
+  const [user, setUser] = useUserAtom()
+
   return {
     user,
-    updateUser,
+    updateUser: (user) =>
+      new Promise((resolve) => {
+        setUser(user)
+        resolve(user)
+      }),
   }
 }
