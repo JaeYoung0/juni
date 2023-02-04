@@ -5,6 +5,12 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import useDialog from '@/service/dialogAdapter'
 
+declare global {
+  interface Window {
+    ReactNativeWebView: any
+  }
+}
+
 export type CalendarDialProps = {
   goToday: () => void
   goPrevWeek: () => void
@@ -20,6 +26,11 @@ function CalendarDial(props: CalendarDialProps) {
 
   const { openDialog } = useDialog()
 
+  const openTimer = () => {
+    // openDialog({ variant: 'StopwatchDialog', props: {} })
+    window.ReactNativeWebView.postMessage('openTimer')
+  }
+
   const actions = [
     {
       icon: <span>{isMonthlyView ? '주단위로 보기' : '월단위로 보기'}</span>,
@@ -32,7 +43,7 @@ function CalendarDial(props: CalendarDialProps) {
     {
       icon: <span>스톱워치</span>,
       name: '스톱워치',
-      onClick: () => openDialog({ variant: 'StopwatchDialog', props: {} }),
+      onClick: openTimer,
     },
   ]
 
