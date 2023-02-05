@@ -9,6 +9,23 @@ import BasicLayout from '@/components/layouts/BasicLayout'
 import { TODAY_UNIX } from '@/components/Calendar/CalendarView'
 import withAuth from '@/hoc/withAuth'
 import { css } from '@emotion/react'
+import useDialog from '@/service/dialogAdapter'
+import { usePracticeItemAtom } from '@/domain/practice'
+
+type BridgeMessage = {
+  from: 'JuniNative'
+  method: string
+  payload: any
+}
+
+type PostTimerResultMessage = {
+  from: 'JuniNative'
+  method: 'postTimerResult'
+  payload: {
+    startTime: string
+    endTime: string
+  }
+}
 
 function SchedulePage() {
   // TODO. refactor: calendarAtom 위치
@@ -16,6 +33,23 @@ function SchedulePage() {
 
   useEffect(() => {
     setCurrentUnix(TODAY_UNIX)
+  }, [])
+
+  const [practiceItem, setPracticeItem] = usePracticeItemAtom()
+
+  const { openDialog } = useDialog()
+
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent<string>) => {
+      const data = JSON.parse(e.data) as PostTimerResultMessage
+      if (data.from !== 'JuniNative') return
+      const { startTime, endTime } = data.payload
+      setPracticeItem({ ...practiceItem, startTime, endTime })
+      openDialog({ variant: 'CreatePracticeDialog', props: {} })
+    }
+
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
   }, [])
 
   return (
