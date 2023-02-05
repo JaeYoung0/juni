@@ -4,12 +4,7 @@ import SpeedDial from '@mui/material/SpeedDial'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import useDialog from '@/service/dialogAdapter'
-
-declare global {
-  interface Window {
-    ReactNativeWebView: any
-  }
-}
+import { NativeBridge } from '@/lib/bridge'
 
 export type CalendarDialProps = {
   goToday: () => void
@@ -26,10 +21,8 @@ function CalendarDial(props: CalendarDialProps) {
 
   const { openDialog } = useDialog()
 
-  const openTimer = () => {
-    // openDialog({ variant: 'StopwatchDialog', props: {} })
-    window.ReactNativeWebView.postMessage('openTimer')
-  }
+  const bridge = new NativeBridge()
+  const openTimer = () => bridge.openTimer()
 
   const actions = [
     {
