@@ -1,11 +1,11 @@
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { COLOR_PICKERS } from './constant'
 import * as S from './style'
 
-type Props = BasicProps & {
+type Props = DialogBasicProps & {
   onChangeColor?: (color: string) => void
 }
 

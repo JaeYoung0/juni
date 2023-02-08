@@ -1,6 +1,6 @@
 import { useCalendarAtom } from '@/domain/calendar'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { useCreatePlanItem } from '@/service/plan'
 import * as CS from '../common.style'
 import Header from './PlanHeader'
@@ -8,7 +8,7 @@ import Body from './PlanBody'
 import dayjs from 'dayjs'
 import { useUserStore } from '@/service/userAdapter'
 
-type CreatePlanDialogProps = BasicProps
+type CreatePlanDialogProps = DialogBasicProps
 
 function CreatePlanDialog({ close }: CreatePlanDialogProps) {
   const [planItem, setPlanItem] = usePlanItemAtom()

@@ -1,6 +1,6 @@
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 
-export type ActionDialogProps = BasicProps & {
+export type ActionDialogProps = DialogBasicProps & {
   title: string
   content: string
   cancelText: string

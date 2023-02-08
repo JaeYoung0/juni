@@ -27,13 +27,13 @@ export type CategoryStoreService = {
   categoryList: CategoryItem[] | undefined
 }
 
-export type BasicProps = {
+export type DialogBasicProps = {
   close: () => void
 }
 export type DialogVariant = keyof typeof Dialogs
 type Dialog = typeof Dialogs
 type DialogProps<T extends DialogVariant> = React.ComponentProps<Dialog[T]>
-type BasicPropKeys = keyof BasicProps
+type BasicPropKeys = keyof DialogBasicProps
 export type DialogItem<V extends DialogVariant> = {
   variant: V
   props: Omit<DialogProps<V>, BasicPropKeys>
@@ -52,7 +52,10 @@ export type UpdateAphorismItemPayload = Pick<User, 'userId'> &
   Partial<AphorismItem>
 export type DeleteAphorismItemPayload = Pick<User, 'userId'> & Pick<AphorismItem, 'aphorismId'>
 export type GetCurrentAphorismItemPayload = Pick<User, 'userId'>
-export type SaveCurrentAphorismItemPayload = Pick<User, 'userId'> & Omit<AphorismItem, 'aphorismId'>
+export type SaveCurrentAphorismItemPayload = Pick<User, 'userId'> & {
+  prevId: string
+  targetId: string
+}
 
 export type AphorismService = {
   aphorism: AphorismItem
@@ -61,4 +64,5 @@ export type AphorismService = {
   updateAphorismItem: (payload: UpdateAphorismItemPayload) => void
   deleteAphorismItem: (payload: DeleteAphorismItemPayload) => void
   aphorismList: AphorismItem[] | undefined
+  saveCurrentAphorismItem: (payload: SaveCurrentAphorismItemPayload) => void
 }

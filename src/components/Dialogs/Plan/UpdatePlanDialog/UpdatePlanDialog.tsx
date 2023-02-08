@@ -1,13 +1,13 @@
 import * as CS from '../common.style'
 import PlanBody from '../CreatePlanDialog/PlanBody'
 import PlanHeader from '../CreatePlanDialog/PlanHeader'
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
 import { useDeletePlanItem, useUpdatePlanItem } from '@/service/plan'
 import { useCalendarAtom } from '@/domain/calendar'
 import { useUserStore } from '@/service/userAdapter'
 
-type UpdatePlanDialogProps = BasicProps
+type UpdatePlanDialogProps = DialogBasicProps
 
 function UpdatePlanDialog({ close }: UpdatePlanDialogProps) {
   const [planItem, setPlanItem] = usePlanItemAtom()

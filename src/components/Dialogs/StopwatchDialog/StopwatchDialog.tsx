@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import TimerView from './TimerView'
 import styled from '@emotion/styled'
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { Colors } from '@/styles/colors'
 import { usePracticeItemAtom } from '@/domain/practice'
 import dayjs from 'dayjs'
@@ -28,7 +28,7 @@ const intervalTimer = (update: (time: number) => void, interval = 1000) => {
   return () => clearTimeout(timeoutId)
 }
 
-type Props = BasicProps
+type Props = DialogBasicProps
 
 function StopwatchDialog({ close }: Props) {
   const [elapsedTime, setElapsedTime] = useState(0)

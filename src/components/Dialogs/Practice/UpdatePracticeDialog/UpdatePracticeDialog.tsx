@@ -1,13 +1,13 @@
 import * as CS from '@/components/Dialogs/Plan/common.style'
 import PracticeHeader from '../CreatePracticeDialog/PracticeHeader'
 import PracticeBody from '../CreatePracticeDialog/PracticeBody'
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
 import { useCalendarAtom } from '@/domain/calendar'
 import { useUserStore } from '@/service/userAdapter'
 
-type UpdatePracticeDialogProps = BasicProps
+type UpdatePracticeDialogProps = DialogBasicProps
 
 function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()

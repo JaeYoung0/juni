@@ -3,12 +3,12 @@ import PracticeHeader from './PracticeHeader'
 import PracticeBody from './PracticeBody'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useCreatePracticeItem } from '@/service/practice'
-import { BasicProps } from '@/application/ports'
+import { DialogBasicProps } from '@/application/ports'
 import { useCalendarAtom } from '@/domain/calendar'
 import dayjs from 'dayjs'
 import { useUserStore } from '@/service/userAdapter'
 
-type CreatePracticeDialogProps = BasicProps & { onClose?: () => void }
+type CreatePracticeDialogProps = DialogBasicProps & { onClose?: () => void }
 
 // TODO. CreatePlanDialog와 거의 동일
 export default function CreatePracticeDialog({ close, onClose }: CreatePracticeDialogProps) {

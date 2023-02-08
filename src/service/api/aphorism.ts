@@ -4,10 +4,23 @@ import {
   DeleteAphorismItemPayload,
   GetAphorismListPayload,
   UpdateAphorismItemPayload,
+  GetCurrentAphorismItemPayload,
+  SaveCurrentAphorismItemPayload,
 } from '@/application/ports'
 import { firestore } from '@/lib/firebase'
 
-import { addDoc, collection, query, getDocs, doc, deleteDoc, setDoc } from 'firebase/firestore/lite'
+import {
+  addDoc,
+  collection,
+  query,
+  getDocs,
+  doc,
+  deleteDoc,
+  setDoc,
+  getDoc,
+  where,
+  updateDoc,
+} from 'firebase/firestore/lite'
 
 const COLLECTION_NAME = 'aphorism'
 const SUB_NAME = 'myAphorism'
@@ -40,7 +53,7 @@ export const createAphorismItem = async (payload: CreateAphorismItemPayload) => 
 export const updateAphorismItem = async (payload: UpdateAphorismItemPayload) => {
   const { userId, aphorismId, ...rest } = payload
   await setDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, aphorismId), {
-    rest,
+    ...rest,
   })
 }
 
@@ -49,21 +62,24 @@ export const deleteAphorismItem = async (payload: DeleteAphorismItemPayload) => 
   await deleteDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, aphorismId))
 }
 
-// export const getCurrentAphorism = async (payload: GetCurrentAphorismItemPayload) => {
-//   const { userId } = payload
-//   const docRef = doc(firestore, COLLECTION_NAME, userId, 'current')
+export const getCurrentAphorism = async (payload: GetCurrentAphorismItemPayload) => {
+  const { userId } = payload
+  const docRef = doc(firestore, COLLECTION_NAME, userId, 'current')
 
-//   const docSnap = await getDoc(docRef)
-//   console.log('@@docSnap', docSnap.data())
-//   if (docSnap.exists()) {
-//     return docSnap.data()
-//   }
-// }
+  const docSnap = await getDoc(docRef)
+  if (docSnap.exists()) {
+    return docSnap.data()
+  }
+}
 
-// export const saveCurrentAphorismItem = async (payload: SaveCurrentAphorismItemPayload) => {
-//   const { userId, text } = payload
+export const saveCurrentAphorismItem = async (payload: SaveCurrentAphorismItemPayload) => {
+  const { userId, prevId, targetId } = payload
 
-//   await setDoc(doc(firestore, COLLECTION_NAME, userId, 'current'), {
-//     text,
-//   })
-// }
+  await updateDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, prevId), {
+    current: false,
+  })
+
+  await updateDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, targetId), {
+    current: true,
+  })
+}

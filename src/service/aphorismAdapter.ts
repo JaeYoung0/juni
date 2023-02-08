@@ -1,4 +1,4 @@
-import { getAphorismList } from './api/aphorism'
+import { getAphorismList, saveCurrentAphorismItem } from './api/aphorism'
 import { AphorismService } from '@/application/ports'
 import { useAphorismAtom } from './store'
 import { useUserStore } from './userAdapter'
@@ -13,6 +13,7 @@ export function useAphorismStore(): AphorismService {
   const create = useCreateAphorismItem()
   const update = useUpdateAphorismItem()
   const remove = useDeleteAphorismItem()
+  const save = useSaveCurrentAphorismItem()
 
   return {
     aphorism,
@@ -21,6 +22,7 @@ export function useAphorismStore(): AphorismService {
     createAphorismItem: create.mutate,
     updateAphorismItem: update.mutate,
     deleteAphorismItem: remove.mutate,
+    saveCurrentAphorismItem: save.mutate,
   }
 }
 
@@ -54,6 +56,17 @@ export function useUpdateAphorismItem() {
 
   return useMutation({
     mutationFn: updateAphorismItem,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD] })
+    },
+  })
+}
+
+export function useSaveCurrentAphorismItem() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: saveCurrentAphorismItem,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: [QUERY_KEY_HEAD] })
     },
