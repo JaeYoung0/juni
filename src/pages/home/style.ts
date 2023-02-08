@@ -14,14 +14,18 @@ export const MyAphorism = styled.div`
 `
 
 export const AphorismText = styled.p`
+  width: 100%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
 
-  font-size: 2.4rem;
+  font-size: 2rem;
   color: #fff;
 
   line-height: 2;
   text-align: center;
+
+  white-space: pre-wrap;
+  padding: 0 1rem;
 `
