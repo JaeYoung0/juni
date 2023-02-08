@@ -23,7 +23,7 @@ function AphorismListDialog({ close }: Props) {
         {aphorismList?.map(({ aphorismId, text, current }) => (
           <>
             <li key={aphorismId}>
-              <input
+              <textarea
                 value={text}
                 css={css`
                   background: ${current ? '#fff' : 'gray'};

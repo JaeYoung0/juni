@@ -6,13 +6,13 @@ export const BackButton = styled.button`
 
 export const ListBox = styled.ol`
   li {
-    display: flex;
-    justify-content: space-around;
     color: #fff;
-    font-size: 2rem;
 
-    input {
-      flex: 1;
+    margin-bottom: 3rem;
+
+    textarea {
+      font-size: 1.6rem;
+      width: 100%;
       margin-right: 2rem;
     }
   }
@@ -34,7 +34,9 @@ export const Form = styled.form`
 `
 
 export const Buttons = styled.div`
+  display: flex;
+  justify-content: flex-end;
   button + button {
-    margin-left: 2rem;
+    margin-left: 1rem;
   }
 `
