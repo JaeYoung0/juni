@@ -41,8 +41,10 @@ function SchedulePage() {
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent<string>) => {
+      // TODO. RN에서 보내는 메시지 ... window.isJuniNative로 판별하기
+      if (typeof e.data !== 'string') return
+
       const data = JSON.parse(e.data) as PostTimerResultMessage
-      if (data.from !== 'JuniNative') return
       const { startTime, endTime } = data.payload
       setPracticeItem({ ...practiceItem, startTime, endTime })
       openDialog({ variant: 'CreatePracticeDialog', props: {} })
