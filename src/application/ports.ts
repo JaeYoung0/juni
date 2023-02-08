@@ -1,6 +1,7 @@
 import { CategoryItem } from '@/domain/category'
 import { User } from '@/domain/user'
 import * as Dialogs from '@/components/Dialogs'
+import { AphorismItem } from '@/domain/aphorism'
 
 // 포트는 외부 서비스에 대한 인터페이스다.
 // 인터페이스만 정의하고 세부사항은 service에서 구현한다. minimally coupled를 위함
@@ -42,4 +43,22 @@ export type DialogService = {
   openDialog: <T extends DialogVariant>(item: DialogItem<T>) => void
   dialogList: DialogItem<DialogVariant>[]
   updateDialogList: (list: DialogItem<DialogVariant>[]) => void
+}
+
+export type GetAphorismListPayload = Pick<User, 'userId'>
+export type CreateAphorismItemPayload = Pick<User, 'userId'> & Omit<AphorismItem, 'aphorismId'>
+export type UpdateAphorismItemPayload = Pick<User, 'userId'> &
+  Pick<AphorismItem, 'aphorismId'> &
+  Partial<AphorismItem>
+export type DeleteAphorismItemPayload = Pick<User, 'userId'> & Pick<AphorismItem, 'aphorismId'>
+export type GetCurrentAphorismItemPayload = Pick<User, 'userId'>
+export type SaveCurrentAphorismItemPayload = Pick<User, 'userId'> & Omit<AphorismItem, 'aphorismId'>
+
+export type AphorismService = {
+  aphorism: AphorismItem
+  setAphorism: (payload: AphorismItem) => void
+  createAphorismItem: (payload: CreateAphorismItemPayload) => void
+  updateAphorismItem: (payload: UpdateAphorismItemPayload) => void
+  deleteAphorismItem: (payload: DeleteAphorismItemPayload) => void
+  aphorismList: AphorismItem[] | undefined
 }
