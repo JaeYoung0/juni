@@ -27,7 +27,7 @@ export function useAphorismStore(): AphorismService {
 }
 
 // 서버상태
-const QUERY_KEY_HEAD = '@aphorismList'
+export const QUERY_KEY_HEAD = '@aphorismList'
 function useAphorismList() {
   const { user } = useUserStore()
   const { userId } = user

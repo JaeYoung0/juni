@@ -13,6 +13,7 @@ function HomePage() {
     <BasicLayout>
       <S.MyAphorism onClick={() => openDialog({ variant: 'AphorismListDialog', props: {} })}>
         <img src="https://images.unsplash.com/photo-1639678349533-5758a710ca0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+        {/* <S.AphorismText>{isLoading ? 'loading ...' : currentAphorism?.text}</S.AphorismText> */}
         <S.AphorismText>{currentAphorism?.text}</S.AphorismText>
       </S.MyAphorism>
     </BasicLayout>

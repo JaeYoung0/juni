@@ -4,7 +4,7 @@ import { Global } from '@emotion/react'
 import { resetStyle } from '@/styles/resetStyle'
 import { RecoilRoot } from 'recoil'
 import { useState } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query'
 import useServiceWorker from '@/hooks/useServiceWorker'
 import useViewportHeight from '@/hooks/useViewportHeight'
 import RootDialog from '@/components/Dialogs/RootDialog'
@@ -47,10 +47,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Global styles={resetStyle} />
       <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <Component {...pageProps} />
-          <RootDialog />
-        </RecoilRoot>
+        <Hydrate state={pageProps.dehydratedState}>
+          <RecoilRoot>
+            <Component {...pageProps} />
+            <RootDialog />
+          </RecoilRoot>
+        </Hydrate>
       </QueryClientProvider>
     </>
   )

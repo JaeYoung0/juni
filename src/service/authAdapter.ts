@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { firebaseApp } from '@/lib/firebase'
 import { getUser } from '@/service/api/user'
 import { AuthService } from '@/application/ports'
-import { setCookie } from 'nookies'
+import { setCookie, destroyCookie } from 'nookies'
 
 export const firebaseAuth = getAuth(firebaseApp)
 
@@ -52,8 +52,9 @@ export function useAuth(): AuthService {
 
       const userCredential = await getRedirectResult(firebaseAuth)
       if (userCredential) {
-        const user = userCredential.user
-        await findOrCreateUser(user)
+        const user = await findOrCreateUser(userCredential.user)
+
+        setCookie(null, 'juni_uid', user.userId)
 
         router.replace('/')
       }
@@ -65,6 +66,7 @@ export function useAuth(): AuthService {
   }
 
   const logout = async () => {
+    destroyCookie(null, 'juni_uid')
     await firebaseAuth.signOut()
   }
 
