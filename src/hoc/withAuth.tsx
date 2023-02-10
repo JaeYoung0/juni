@@ -25,7 +25,7 @@ export default function withAuth<P extends Props<P>>(WrappedComponent: NextPage<
         } else {
           const { uid, displayName } = user
 
-          // TODO. updateUser가 page 이동시마다 실행됨
+          // 페이지를 새로고침하더라도 firebase auth 세팅이 되어 있으면 현재 유저를 저장
           updateUser({
             userId: uid,
             name: displayName ?? '이름 없음',

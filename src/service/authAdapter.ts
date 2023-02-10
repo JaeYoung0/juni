@@ -7,7 +7,6 @@ import {
   getRedirectResult,
 } from 'firebase/auth'
 import { FirebaseError } from '@firebase/util'
-import { useUserStore } from '@/service/userAdapter'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { firebaseApp } from '@/lib/firebase'
@@ -17,7 +16,6 @@ import { AuthService } from '@/application/ports'
 export const firebaseAuth = getAuth(firebaseApp)
 
 export function useAuth(): AuthService {
-  const { updateUser } = useUserStore()
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -25,16 +23,9 @@ export function useAuth(): AuthService {
     try {
       setIsLoading(true)
       const provider = new GoogleAuthProvider()
+
       await signInWithRedirect(firebaseAuth, provider)
-
-      // TODO. redirect 처리
-      const result = await getRedirectResult(firebaseAuth)
-
-      if (result) {
-        const user = result.user
-
-        await findOrCreateUser(user)
-      }
+      // 리디렉션 결과는 handleRedirect에서 처리
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error)
@@ -58,9 +49,29 @@ export function useAuth(): AuthService {
     }
   }
 
+  const handleRedirect = async () => {
+    try {
+      setIsLoading(true)
+
+      // signInWithRedirect의 결과를 받아오는 함수
+      const userCredential = await getRedirectResult(firebaseAuth)
+      if (userCredential) {
+        const user = userCredential.user
+        await findOrCreateUser(user)
+        router.replace('/')
+      }
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.error(error)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const logout = async () => {
     await firebaseAuth.signOut()
   }
 
-  return { login, isLoading, logout }
+  return { login, isLoading, logout, handleRedirect }
 }

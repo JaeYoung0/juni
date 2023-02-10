@@ -15,6 +15,7 @@ export type AuthService = {
   isLoading: boolean
   login: () => Promise<void>
   logout: () => Promise<void>
+  handleRedirect: () => Promise<void>
 }
 
 export type CreateCategoryItemPayload = Pick<User, 'userId'> & Omit<CategoryItem, 'categoryId'>

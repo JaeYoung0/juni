@@ -9,13 +9,14 @@ type Props = {
   center?: boolean
   style?: CSSProperties
   css?: Interpolation<Theme>
+  bottomNavigation?: boolean
 }
 
-function BasicLayout({ children, ...props }: Props) {
+function BasicLayout({ children, bottomNavigation = true, ...props }: Props) {
   return (
     <Container {...props}>
       <Main>{children}</Main>
-      <BottomNavigation />
+      {bottomNavigation && <BottomNavigation />}
     </Container>
   )
 }
