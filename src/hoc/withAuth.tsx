@@ -6,6 +6,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
+// TODO. cookie auth ssr, 인증 이후 리디렉션 화면 수정
 type Props<T> = JSX.IntrinsicAttributes & WithConditionalCSSProp<T>
 /**
  *
