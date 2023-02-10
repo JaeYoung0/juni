@@ -12,7 +12,6 @@ export type UserStoreService = {
 }
 
 export type AuthService = {
-  isLoading: boolean
   login: () => Promise<void>
   logout: () => Promise<void>
   handleRedirect: () => Promise<void>

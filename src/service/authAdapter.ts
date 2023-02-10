@@ -8,30 +8,27 @@ import {
 } from 'firebase/auth'
 import { FirebaseError } from '@firebase/util'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { firebaseApp } from '@/lib/firebase'
 import { getUser } from '@/service/api/user'
 import { AuthService } from '@/application/ports'
+import { setCookie } from 'nookies'
 
 export const firebaseAuth = getAuth(firebaseApp)
 
 export function useAuth(): AuthService {
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const login = async () => {
     try {
-      setIsLoading(true)
       const provider = new GoogleAuthProvider()
 
+      setCookie(null, 'login_try', '1')
       await signInWithRedirect(firebaseAuth, provider)
-      // 리디렉션 결과는 handleRedirect에서 처리
+      // 리디렉션 결과는 handleRedirect 에서 처리
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error)
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -51,21 +48,19 @@ export function useAuth(): AuthService {
 
   const handleRedirect = async () => {
     try {
-      setIsLoading(true)
-
       // signInWithRedirect의 결과를 받아오는 함수
+
       const userCredential = await getRedirectResult(firebaseAuth)
       if (userCredential) {
         const user = userCredential.user
         await findOrCreateUser(user)
+
         router.replace('/')
       }
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error)
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -73,5 +68,5 @@ export function useAuth(): AuthService {
     await firebaseAuth.signOut()
   }
 
-  return { login, isLoading, logout, handleRedirect }
+  return { login, logout, handleRedirect }
 }

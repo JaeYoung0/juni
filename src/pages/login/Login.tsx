@@ -2,15 +2,9 @@ import BasicLayout from '@/components/layouts/BasicLayout'
 import { useAuth } from '@/service/authAdapter'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useEffect } from 'react'
+
 function Login() {
-  const { login, isLoading, handleRedirect } = useAuth()
-
-  useEffect(() => {
-    handleRedirect()
-  }, [])
-
-  if (isLoading) return <p>loading ...</p>
+  const { login } = useAuth()
 
   return (
     <BasicLayout
@@ -22,7 +16,7 @@ function Login() {
         background-position: center;
       `}
     >
-      <Text>{isLoading ? 'loading...' : '로그인 해주세요'}</Text>
+      <Text>로그인 해주세요</Text>
       <Img onClick={() => void login()} src="/btn_google_signin_light_normal_web@2x.png" />
     </BasicLayout>
   )
