@@ -53,7 +53,7 @@ export type UpdateAphorismItemPayload = Pick<User, 'userId'> &
 export type DeleteAphorismItemPayload = Pick<User, 'userId'> & Pick<AphorismItem, 'aphorismId'>
 export type GetCurrentAphorismItemPayload = Pick<User, 'userId'>
 export type SaveCurrentAphorismItemPayload = Pick<User, 'userId'> & {
-  prevId: string
+  prevId: string | null
   targetId: string
 }
 

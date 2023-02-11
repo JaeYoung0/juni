@@ -75,9 +75,11 @@ export const getCurrentAphorism = async (payload: GetCurrentAphorismItemPayload)
 export const saveCurrentAphorismItem = async (payload: SaveCurrentAphorismItemPayload) => {
   const { userId, prevId, targetId } = payload
 
-  await updateDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, prevId), {
-    current: false,
-  })
+  if (prevId) {
+    await updateDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, prevId), {
+      current: false,
+    })
+  }
 
   await updateDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, targetId), {
     current: true,

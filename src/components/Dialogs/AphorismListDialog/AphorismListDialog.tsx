@@ -21,7 +21,7 @@ function AphorismListDialog({ close }: Props) {
   const handleClickText = (aphorismId: string) => {
     saveCurrentAphorismItem({
       userId,
-      prevId: currentId ?? '',
+      prevId: currentId ?? null,
       targetId: aphorismId,
     })
   }
