@@ -11,3 +11,11 @@ export const Dialog = styled.dialog`
   border: none;
   background: #000;
 `
+
+export const Header = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 3rem;
+`

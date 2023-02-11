@@ -1,4 +1,5 @@
-import * as CS from '@/components/Dialogs/Plan/common.style'
+import * as DS from '@/components/Dialogs/Plan/common.style'
+import * as CS from '@/components/Dialogs/common.style'
 import PracticeHeader from './PracticeHeader'
 import PracticeBody from './PracticeBody'
 import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
@@ -7,6 +8,9 @@ import { DialogBasicProps } from '@/application/ports'
 import { useCalendarAtom } from '@/domain/calendar'
 import dayjs from 'dayjs'
 import { useUserStore } from '@/service/userAdapter'
+import { css } from '@emotion/react'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { horizontalCentered } from '@/styles/cssProps'
 
 type CreatePracticeDialogProps = DialogBasicProps & { onClose?: () => void }
 
@@ -72,16 +76,41 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
 
   return (
     <>
-      <CS.Dialog open>
-        <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
-        <CS.Wrapper>
+      <DS.Dialog
+        open
+        css={css`
+          background: #000;
+        `}
+      >
+        <CS.Header>
+          <button
+            css={css`
+              background: transparent;
+              color: #fff;
+            `}
+            onClick={handleClose}
+          >
+            <ArrowBackIosNewIcon fontSize="large" />
+          </button>
+          <p
+            css={css`
+              ${horizontalCentered}
+              font-size:1.6rem;
+              color: #fff;
+            `}
+          >
+            {practiceItem.id ? '[계획 수정]' : '[계획 추가]'}
+          </p>
+        </CS.Header>
+
+        <DS.Wrapper>
           <PracticeHeader type="create" {...ItemProps} />
           <PracticeBody type="create" {...ItemProps} />
-          <CS.ButtonsWrapper>
-            <CS.Button onClick={handleSubmit}>추가</CS.Button>
-          </CS.ButtonsWrapper>
-        </CS.Wrapper>
-      </CS.Dialog>
+          <DS.ButtonsWrapper>
+            <DS.Button onClick={handleSubmit}>추가</DS.Button>
+          </DS.ButtonsWrapper>
+        </DS.Wrapper>
+      </DS.Dialog>
     </>
   )
 }

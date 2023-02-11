@@ -1,4 +1,5 @@
-import * as CS from '@/components/Dialogs/Plan/common.style'
+import * as DS from '@/components/Dialogs/Plan/common.style'
+import * as CS from '@/components/Dialogs/common.style'
 import PracticeHeader from '../CreatePracticeDialog/PracticeHeader'
 import PracticeBody from '../CreatePracticeDialog/PracticeBody'
 import { DialogBasicProps } from '@/application/ports'
@@ -6,7 +7,9 @@ import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
 import { useUpdatePracticeItem, useDeletePracticeItem } from '@/service/practice'
 import { useCalendarAtom } from '@/domain/calendar'
 import { useUserStore } from '@/service/userAdapter'
-
+import { css } from '@emotion/react'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { horizontalCentered } from '@/styles/cssProps'
 type UpdatePracticeDialogProps = DialogBasicProps
 
 function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
@@ -49,17 +52,41 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
   const ItemProps = { item: practiceItem, setItem: setPracticeItem }
 
   return (
-    <CS.Dialog open>
-      <CS.CloseButton onClick={handleClose}>X</CS.CloseButton>
-      <CS.Wrapper>
+    <DS.Dialog
+      open
+      css={css`
+        background: #000;
+      `}
+    >
+      <CS.Header>
+        <button
+          css={css`
+            background: transparent;
+            color: #fff;
+          `}
+          onClick={handleClose}
+        >
+          <ArrowBackIosNewIcon fontSize="large" />
+        </button>
+        <p
+          css={css`
+            ${horizontalCentered}
+            font-size:1.6rem;
+            color: #fff;
+          `}
+        >
+          {practiceItem.id ? '[계획 수정]' : '[계획 추가]'}
+        </p>
+      </CS.Header>
+      <DS.Wrapper>
         <PracticeHeader type="update" {...ItemProps} />
         <PracticeBody type="update" {...ItemProps} />
-        <CS.ButtonsWrapper>
-          <CS.Button onClick={handleDelete}>삭제</CS.Button>
-          <CS.Button onClick={handleSubmit}>수정</CS.Button>
-        </CS.ButtonsWrapper>
-      </CS.Wrapper>
-    </CS.Dialog>
+        <DS.ButtonsWrapper>
+          <DS.Button onClick={handleDelete}>삭제</DS.Button>
+          <DS.Button onClick={handleSubmit}>수정</DS.Button>
+        </DS.ButtonsWrapper>
+      </DS.Wrapper>
+    </DS.Dialog>
   )
 }
 

@@ -23,6 +23,7 @@ export default function PlanBody({ item, setItem }: Props<PlanItem | PracticeIte
               display: flex;
               width: 100%;
               justify-content: space-between;
+              background: gray;
             `}
           >
             <MobileDateTimePicker
@@ -49,10 +50,12 @@ export default function PlanBody({ item, setItem }: Props<PlanItem | PracticeIte
 
       <CS.Row>
         <CS.ContentTextArea
+          css={css`
+            background: gray;
+          `}
           value={item.content}
           required
           onChange={(e) => setItem({ ...item, content: e.target.value })}
-          placeholder="메모"
         />
       </CS.Row>
     </>

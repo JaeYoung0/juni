@@ -24,6 +24,7 @@ export default function PracticeBody({ item, setItem, type }: Props<PlanItem | P
               display: flex;
               width: 100%;
               justify-content: space-between;
+              background: gray;
             `}
           >
             <MobileDateTimePicker
@@ -53,7 +54,9 @@ export default function PracticeBody({ item, setItem, type }: Props<PlanItem | P
           value={item.content}
           required
           onChange={(e) => setItem({ ...item, content: e.target.value })}
-          placeholder="메모"
+          css={css`
+            background: gray;
+          `}
         />
       </CS.Row>
     </>

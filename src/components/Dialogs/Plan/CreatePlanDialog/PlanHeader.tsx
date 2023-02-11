@@ -31,10 +31,10 @@ export default function PlanHeader({ item, setItem }: Props<PlanItem | PracticeI
 
   return (
     <CS.Header>
-      <p>{item.id ? '[스케줄 수정]' : '[스케줄 추가]'}</p>
       <CS.Row
         css={css`
           display: flex;
+          background: gray;
         `}
       >
         <FormControl sx={{ minWidth: 100, background: current?.color }}>

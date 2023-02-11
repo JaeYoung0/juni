@@ -9,13 +9,6 @@ const hideScroll = css`
   }
 `
 
-export const Header = styled.div`
-  margin-bottom: 3rem;
-
-  display: flex;
-  justify-content: space-between;
-`
-
 export const BackButton = styled.button`
   color: #fff;
   background: transparent;

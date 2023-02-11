@@ -20,7 +20,7 @@ export const Dialog = styled.dialog`
   padding: 2rem;
 
   transform: translateY(100%);
-  animation: ${slideUp} ease-out 0.5s forwards;
+  animation: ${slideUp} ease-out 0.3s forwards;
 `
 
 export const Form = styled.form`

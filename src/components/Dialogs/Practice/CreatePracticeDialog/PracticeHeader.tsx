@@ -32,11 +32,10 @@ export default function PracticeHeader({ item, setItem, type }: Props<PlanItem |
 
   return (
     <CS.Header>
-      <p>{type === 'update' ? `[스케줄 수정]` : `[스케줄 추가]`} </p>
-
       <CS.Row
         css={css`
           display: flex;
+          background: gray;
         `}
       >
         <FormControl sx={{ minWidth: 100, background: current?.color }}>

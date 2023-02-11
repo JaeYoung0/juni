@@ -30,7 +30,7 @@ function AphorismListDialog({ close }: Props) {
 
   return (
     <CS.Dialog open>
-      <S.Header>
+      <CS.Header>
         <S.BackButton onClick={close}>
           <ArrowBackIosNewIcon fontSize="large" />
         </S.BackButton>
@@ -41,7 +41,7 @@ function AphorismListDialog({ close }: Props) {
         >
           <AddCommentIcon fontSize="large" />
         </S.PlusButton>
-      </S.Header>
+      </CS.Header>
       <S.ListBox>
         {aphorismList?.map(({ aphorismId, text, current }) => (
           <>
