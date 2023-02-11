@@ -8,7 +8,7 @@ export default function _Login() {
 
 export function getServerSideProps(ctx: GetServerSidePropsContext) {
   const cookies = nookies.get(ctx)
-  console.log('@@cookies', cookies)
+
   if (cookies.login_try) {
     destroyCookie(ctx, 'login_try')
     return {
