@@ -7,3 +7,4 @@ export { default as CreatePracticeDialog } from './Practice/CreatePracticeDialog
 export { default as UpdatePracticeDialog } from './Practice/UpdatePracticeDialog'
 export { default as StopwatchDialog } from './StopwatchDialog'
 export { default as AphorismListDialog } from './AphorismListDialog'
+export { default as CreateAphorismDialog } from './CreateAphorismDialog'

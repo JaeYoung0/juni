@@ -1,76 +1,67 @@
 import { DialogBasicProps } from '@/application/ports'
 import { useAphorismStore } from '@/service/aphorismAdapter'
+import useDialog from '@/service/dialogAdapter'
 import { useUserStore } from '@/service/userAdapter'
 import { css } from '@emotion/react'
-import { useState } from 'react'
 import * as CS from '../common.style'
-
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import AddCommentIcon from '@mui/icons-material/AddComment'
 import * as S from './style'
+import { Colors } from '@/styles/colors'
 type Props = DialogBasicProps
 function AphorismListDialog({ close }: Props) {
-  const { aphorismList, deleteAphorismItem, createAphorismItem, saveCurrentAphorismItem } =
-    useAphorismStore()
+  const { aphorismList, deleteAphorismItem, saveCurrentAphorismItem } = useAphorismStore()
   const currentId = aphorismList?.find((item) => item.current)?.aphorismId
 
   const { user } = useUserStore()
   const { userId } = user
-  const [value, setvalue] = useState('')
+
+  const { openDialog } = useDialog()
+
+  const handleClickText = (aphorismId: string) => {
+    saveCurrentAphorismItem({
+      userId,
+      prevId: currentId ?? '',
+      targetId: aphorismId,
+    })
+  }
+
+  const handleDelete = (aphorismId: string) => deleteAphorismItem({ userId, aphorismId })
 
   return (
     <CS.Dialog open>
-      <S.BackButton onClick={close}>뒤로가기</S.BackButton>
+      <S.Header>
+        <S.BackButton onClick={close}>
+          <ArrowBackIosNewIcon fontSize="large" />
+        </S.BackButton>
+        <S.PlusButton
+          onClick={() => {
+            openDialog({ variant: 'CreateAphorismDialog', props: {} })
+          }}
+        >
+          <AddCommentIcon fontSize="large" />
+        </S.PlusButton>
+      </S.Header>
       <S.ListBox>
         {aphorismList?.map(({ aphorismId, text, current }) => (
           <>
             <li key={aphorismId}>
-              <textarea
-                value={text}
+              <S.AphorismText
+                onClick={() => handleClickText(aphorismId)}
                 css={css`
-                  background: ${current ? '#fff' : 'gray'};
+                  background: ${current ? Colors.Purple : Colors.Black};
+                  border: ${!current && `1px solid ${Colors.Purple}`};
                 `}
-              />
+              >
+                {text}
+              </S.AphorismText>
               <S.Buttons>
-                <button
-                  onClick={() => {
-                    saveCurrentAphorismItem({
-                      userId,
-                      prevId: currentId ?? '',
-                      targetId: aphorismId,
-                    })
-                  }}
-                >
-                  선택
-                </button>
-                <button>수정</button>
-                <button
-                  onClick={() => {
-                    deleteAphorismItem({ userId, aphorismId })
-                  }}
-                >
-                  삭제
-                </button>
+                <button onClick={() => handleDelete(aphorismId)}>삭제</button>
               </S.Buttons>
             </li>
           </>
         ))}
       </S.ListBox>
-
-      <S.Form
-        onSubmit={(e) => {
-          e.preventDefault()
-          if (!value) return
-          createAphorismItem({ userId: user.userId, text: value, current: false })
-          setvalue('')
-        }}
-      >
-        <textarea
-          value={value}
-          onChange={(e) => {
-            setvalue(e.target.value)
-          }}
-        />
-        <button type="submit">생성하기</button>
-      </S.Form>
     </CS.Dialog>
   )
 }

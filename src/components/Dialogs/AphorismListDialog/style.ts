@@ -1,13 +1,40 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
-export const BackButton = styled.button`
+const hideScroll = css`
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+`
+
+export const Header = styled.div`
   margin-bottom: 3rem;
+
+  display: flex;
+  justify-content: space-between;
+`
+
+export const BackButton = styled.button`
+  color: #fff;
+  background: transparent;
+`
+
+export const PlusButton = styled.button`
+  color: #fff;
+  background: transparent;
 `
 
 export const ListBox = styled.ol`
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0rem 0rem 10rem;
+
+  ${hideScroll}
+
   li {
     color: #fff;
-
     margin-bottom: 3rem;
 
     textarea {
@@ -18,19 +45,11 @@ export const ListBox = styled.ol`
   }
 `
 
-export const Form = styled.form`
-  textarea {
-    width: 100%;
-    min-height: 20rem;
-    background: #222;
-    color: #fff;
-    font-size: 2rem;
-  }
-
-  button {
-    display: flex;
-    margin-left: auto;
-  }
+export const AphorismText = styled.p`
+  border-radius: 10px;
+  padding: 2rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
 `
 
 export const Buttons = styled.div`

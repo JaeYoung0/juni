@@ -6,6 +6,7 @@ import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
 import { useCallback, useState } from 'react'
 import * as S from './style'
+import useFocus from '@/hooks/useFocus'
 
 interface Props {}
 
@@ -30,14 +31,12 @@ function MyCategories({}: Props) {
     createCategory({ name, color, userId })
   }
 
-  const callbackRef = useCallback((el: HTMLInputElement | null) => {
-    el?.focus()
-  }, [])
+  // const callbackRef = useFocus()
 
   return (
     <S.Wrapper>
       <input
-        ref={callbackRef}
+        // ref={callbackRef}
         placeholder="카테고리 이름"
         value={name}
         onChange={(e) => setName(e.target.value)}
