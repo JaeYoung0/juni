@@ -3,7 +3,7 @@ import { PlanItem, usePlanItemAtom, usePlanList } from '@/domain/plan'
 import dayjs from 'dayjs'
 import * as S from './style'
 import { getEndTime, getItemHeight, minParser, unixToUTC } from '@/lib/utils'
-import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
+import useSwipe from '@/hooks/useSwipe'
 import useDialog from '@/service/dialogAdapter'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 import { useCategoryStore } from '@/service/categoryAdapter'
@@ -128,7 +128,7 @@ function PlanItem({ ...props }: PlanItemProps) {
     openDialog({ variant: 'CreatePracticeDialog', props: {} })
   }
 
-  const { onTouchStart, onTouchMove, onTouchEnd } = useHorizontalSwipe({
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
     onRightSwipe: () => handleRightSwipePlan(item),
   })
 

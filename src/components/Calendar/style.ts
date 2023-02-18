@@ -49,6 +49,7 @@ export const DaysBox = styled.div`
 export const Day = styled.div`
   width: 100%;
   text-align: center;
+  font-size: 1.2rem;
 `
 
 export const DatesBox = styled.div``

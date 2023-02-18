@@ -75,7 +75,7 @@ function UpdatePracticeDialog({ close }: UpdatePracticeDialogProps) {
             color: #fff;
           `}
         >
-          {practiceItem.id ? '[계획 수정]' : '[계획 추가]'}
+          {practiceItem.id ? '[실행 수정]' : '[실행 추가]'}
         </p>
       </CS.Header>
       <DS.Wrapper>

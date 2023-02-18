@@ -6,7 +6,6 @@ export const Box = styled.div`
   height: 100%;
   max-width: 60rem;
   margin: 0 auto;
-  /* padding-bottom: 15rem; */
   margin-bottom: 15rem;
 `
 
@@ -34,5 +33,4 @@ export const CalendarWrapper = styled.div`
   position: sticky;
   top: 0;
   z-index: 500;
-  background: #111111;
 `
