@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export function useAphorismStore(): AphorismService {
   const [aphorism, setAphorism] = useAphorismAtom()
-  const { data: aphorismList } = useAphorismList()
+  const { data: aphorismList, isLoading } = useAphorismList()
   const create = useCreateAphorismItem()
   const update = useUpdateAphorismItem()
   const remove = useDeleteAphorismItem()
@@ -23,6 +23,7 @@ export function useAphorismStore(): AphorismService {
     updateAphorismItem: update.mutate,
     deleteAphorismItem: remove.mutate,
     saveCurrentAphorismItem: save.mutate,
+    isLoading,
   }
 }
 

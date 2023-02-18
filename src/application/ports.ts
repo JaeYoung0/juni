@@ -65,4 +65,5 @@ export type AphorismService = {
   deleteAphorismItem: (payload: DeleteAphorismItemPayload) => void
   aphorismList: AphorismItem[] | undefined
   saveCurrentAphorismItem: (payload: SaveCurrentAphorismItemPayload) => void
+  isLoading: boolean
 }
