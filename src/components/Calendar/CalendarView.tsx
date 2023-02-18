@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import * as S from './style'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import useHorizontalSwipe from '@/hooks/useHorizontalSwipe'
+import useSwipe from '@/hooks/useSwipe'
 import useDateCell, { DateCell } from './useDateCell'
 import CalendarDial from './CalendarDial'
 
@@ -18,8 +18,6 @@ const THIS_MONTH = dayjs().startOf('M')
 function CalendarView({ onChange }: CalendarViewProps) {
   const [currentCalendar, setCurrentCalendar] = useState<Dayjs>(THIS_MONTH)
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs().startOf('date'))
-  console.log('@@THIS_DATE', THIS_DATE.format())
-  console.log('@@selectedDate', selectedDate)
 
   const [isMonthlyView, setIsMonthlyView] = useState(false)
 
@@ -38,9 +36,11 @@ function CalendarView({ onChange }: CalendarViewProps) {
   const goPrevWeek = () => setSelectedDate(selectedDate.subtract(1, 'week'))
   const toggleMonthlyView = () => setIsMonthlyView(!isMonthlyView)
 
-  const { onTouchStart, onTouchMove, onTouchEnd } = useHorizontalSwipe({
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
     onLeftSwipe: !isMonthlyView ? goNextWeek : goNextCalendar,
     onRightSwipe: !isMonthlyView ? goPrevWeek : goPrevCalendar,
+    onUpperSwipe: toggleMonthlyView,
+    onDownSwipe: toggleMonthlyView,
   })
 
   useEffect(() => {
