@@ -2,6 +2,7 @@ import useDialog from '@/service/dialogAdapter'
 import { PracticeItem, usePracticeItemAtom } from '@/domain/practice'
 declare global {
   interface Window {
+    isJuniNative: boolean
     ReactNativeWebView: {
       postMessage: (message: string) => void
     }
@@ -45,13 +46,15 @@ export default function useWebviewBridge() {
     window.ReactNativeWebView.postMessage('openTimer')
   }
 
-  const handleMessage = (e: MessageEvent<WebviewMessage>) => {
-    if (e.data.source !== 'juniNative') return
+  const handleMessage = (e: MessageEvent<Message>) => {
+    if (!window.isJuniNative) return
 
-    alert(JSON.stringify(e.data))
+    const data = e.data
+    if (!isWebviewMessage(data)) return
 
-    if (e.data.type === '@open/CreatePracticeDialog') {
-      const { startTime, endTime } = e.data.payload
+    const { type, payload } = data
+    if (type === '@open/CreatePracticeDialog') {
+      const { startTime, endTime } = payload
 
       openCreatePracticeDialog({ startTime, endTime })
     }
