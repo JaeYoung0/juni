@@ -1,42 +1,47 @@
 import { DialogBasicProps } from '@/application/ports'
 import { css } from '@emotion/react'
-import { useState, useEffect } from 'react'
+import { forwardRef } from 'react'
+import { useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { COLOR_PICKERS } from './constant'
 import * as S from './style'
 
 type Props = DialogBasicProps & {
-  onChangeColor?: (color: string) => void
+  onChange: React.ChangeEventHandler
+  onBlur: React.FocusEventHandler
+  name: string
+  label: string
 }
 
-function ColorPickerDialog({ onChangeColor, close }: Props) {
-  const [color, setColor] = useState('#aaa')
+const ColorPickerDialog = forwardRef<HTMLInputElement, Props>(
+  ({ close, onChange, onBlur, name, label }, ref) => {
+    const [color, setColor] = useState('#aaa')
 
-  useEffect(() => {
-    onChangeColor?.(color)
-  }, [color])
-
-  return (
-    <dialog open>
-      <HexColorPicker
-        style={{ width: '100%', marginBottom: '2rem' }}
-        color={color}
-        onChange={setColor}
-      />
-      <Palette onClick={setColor} />
-      <button
-        css={css`
-          width: 100%;
-          padding: 0.5rem;
-          margin-top: 1rem;
-        `}
-        onClick={close}
-      >
-        확인
-      </button>
-    </dialog>
-  )
-}
+    return (
+      <dialog open>
+        <HexColorPicker
+          css={css`
+            width: 100%;
+            margin-bottom: 2rem;
+          `}
+          color={color}
+          onChange={setColor}
+        />
+        <Palette onClick={setColor} />
+        <button
+          css={css`
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 1rem;
+          `}
+          onClick={close}
+        >
+          확인
+        </button>
+      </dialog>
+    )
+  }
+)
 
 export default ColorPickerDialog
 

@@ -1,65 +1,30 @@
 import { CategoryItem } from '@/domain/category'
 import { useChart } from '@/domain/chart'
 import { useUserStore } from '@/service/userAdapter'
-import useDialog from '@/service/dialogAdapter'
 import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
-import { useCallback, useState } from 'react'
 import * as S from './style'
-import useFocus from '@/hooks/useFocus'
+import CategoryForm from './CategoryForm'
+import useDialog from '@/service/dialogAdapter'
 
-interface Props {}
-
-function MyCategories({}: Props) {
-  const [color, setColor] = useState('#aaa')
-  const [name, setName] = useState('')
-  const { user } = useUserStore()
-  const { userId } = user
-  const { categoryList, createCategory } = useCategoryStore()
-
-  const { openDialog } = useDialog()
-
-  const handleClickColorPicker = () => {
-    openDialog({
-      variant: 'ColorPickerDialog',
-      props: { onChangeColor: (color) => setColor(color) },
-    })
-  }
-
-  const handleClickButton = () => {
-    if (!name) return alert('카테고리 이름을 적어주세요.')
-    createCategory({ name, color, userId })
-  }
-
-  // const callbackRef = useFocus()
-
+function MyCategories() {
   return (
     <S.Wrapper>
-      <input
-        // ref={callbackRef}
-        placeholder="카테고리 이름"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-
-      <button
-        css={css`
-          background: ${color};
-        `}
-        onClick={handleClickColorPicker}
-      >
-        컬러 선택
-      </button>
-
-      <button onClick={handleClickButton}>카테고리 생성하기</button>
-
-      <S.CategroyList>
-        <h2 css={css``}>내 카테고리 리스트</h2>
-        {categoryList?.map((item) => (
-          <CategoryItem key={item.categoryId} {...item} />
-        ))}
-      </S.CategroyList>
+      <CategoryForm />
+      <CategroyList />
     </S.Wrapper>
+  )
+}
+
+function CategroyList() {
+  const { categoryList } = useCategoryStore()
+
+  return (
+    <S.CategroyList>
+      {categoryList?.map((item) => (
+        <CategoryItem key={item.categoryId} {...item} />
+      ))}
+    </S.CategroyList>
   )
 }
 
@@ -73,15 +38,7 @@ function CategoryItem({ name, color, categoryId }: CategoryItem) {
     !chartList?.plan.find((item) => item.categoryId === categoryId) &&
     !chartList?.practice.find((item) => item.categoryId === categoryId)
 
-  const handleDelete = () => {
-    const res = confirm('삭제하시겠어요?')
-    if (res) {
-      deleteCategory({
-        categoryId: categoryId,
-        userId,
-      })
-    }
-  }
+  const { openDialog } = useDialog()
 
   return (
     <S.CategoryItem
@@ -91,7 +48,35 @@ function CategoryItem({ name, color, categoryId }: CategoryItem) {
       `}
     >
       <span>{name}</span>
-      <button disabled={!deleteApplicable} onClick={handleDelete}>
+      <button
+        disabled={!deleteApplicable}
+        onClick={async () => {
+          const confirm = () =>
+            new Promise((resolve) => {
+              openDialog({
+                variant: 'ActionDialog',
+                props: {
+                  title: '삭제하시겠습니까?',
+                  content: '',
+                  cancelText: '취소',
+                  actionText: '확인',
+                  onAction: () => {
+                    resolve(true)
+                  },
+                },
+              })
+            })
+
+          const isConfirmed = await confirm()
+
+          if (isConfirmed) {
+            deleteCategory({
+              categoryId: categoryId,
+              userId,
+            })
+          }
+        }}
+      >
         삭제
       </button>
     </S.CategoryItem>
