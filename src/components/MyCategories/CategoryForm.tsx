@@ -1,19 +1,18 @@
 import { css } from '@emotion/react'
 import { useCategoryStore } from '@/service/categoryAdapter'
 import { useUserStore } from '@/service/userAdapter'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Colors } from '@/styles/colors'
 
+type FormValue = { name: string; color: string }
 function CategoryForm() {
   const { user } = useUserStore()
   const { userId } = user
-
   const { createCategory } = useCategoryStore()
 
-  const methods = useForm<{ name: string; color: string }>()
+  const methods = useForm<FormValue>()
   const { errors } = methods.formState
-
-  const onSubmit = (e: FieldValues) => {
+  const onSubmit = (e: FormValue) => {
     const { name, color } = e
     createCategory({ name, color, userId })
     methods.reset()
