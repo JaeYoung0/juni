@@ -13,14 +13,14 @@ const slideUp = keyframes`
 `
 
 export const Dialog = styled.dialog`
-  bottom: 0;
+  top: 0;
 
   width: 100%;
   background: #000;
   padding: 2rem;
 
-  transform: translateY(100%);
-  animation: ${slideUp} ease-out 0.3s forwards;
+  /* transform: translateY(100%); */
+  /* animation: ${slideUp} ease-in 0.3s forwards; */
 `
 
 export const Form = styled.form`

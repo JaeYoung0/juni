@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { DialogBasicProps } from '@/application/ports'
 import * as S from './style'
 import useFocus from '@/hooks/useFocus'
+import { css } from '@emotion/react'
+import * as CS from '../common.style'
+import { horizontalCentered } from '@/styles/cssProps'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 
 type Props = DialogBasicProps
 function CreateAphorismDialog({ close }: Props) {
@@ -15,9 +19,28 @@ function CreateAphorismDialog({ close }: Props) {
 
   return (
     <>
-      <S.Overlay onClick={close} />
-      <S.Dialog open>
-        <S.Title>추가할 문장을 적어주세요 : )</S.Title>
+      <CS.Dialog open>
+        <CS.Header>
+          <button
+            css={css`
+              background: transparent;
+              color: #fff;
+            `}
+            onClick={close}
+          >
+            <ArrowBackIosNewIcon fontSize="large" />
+          </button>
+          <p
+            css={css`
+              ${horizontalCentered}
+              font-size:1.6rem;
+              color: #fff;
+            `}
+          >
+            문장 추가
+          </p>
+        </CS.Header>
+
         <S.Form
           onSubmit={(e) => {
             e.preventDefault()
@@ -36,7 +59,7 @@ function CreateAphorismDialog({ close }: Props) {
           />
           <S.Button type="submit">확인</S.Button>
         </S.Form>
-      </S.Dialog>
+      </CS.Dialog>
     </>
   )
 }
