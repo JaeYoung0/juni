@@ -56,7 +56,33 @@ function AphorismListDialog({ close }: Props) {
                 {text}
               </S.AphorismText>
               <S.Buttons>
-                <button onClick={() => handleDelete(aphorismId)}>삭제</button>
+                <button
+                  onClick={async () => {
+                    const confirm = () =>
+                      new Promise((resolve) => {
+                        openDialog({
+                          variant: 'ActionDialog',
+                          props: {
+                            title: '삭제하시겠습니까?',
+                            content: '',
+                            cancelText: '취소',
+                            actionText: '확인',
+                            onAction: () => {
+                              resolve(true)
+                            },
+                          },
+                        })
+                      })
+
+                    const isConfirmed = await confirm()
+
+                    if (isConfirmed) {
+                      handleDelete(aphorismId)
+                    }
+                  }}
+                >
+                  삭제
+                </button>
               </S.Buttons>
             </li>
           </>
