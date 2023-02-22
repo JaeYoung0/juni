@@ -27,5 +27,6 @@ export const AphorismText = styled.p`
   text-align: center;
 
   white-space: pre-wrap;
+  word-break: keep-all;
   padding: 0 1rem;
 `
