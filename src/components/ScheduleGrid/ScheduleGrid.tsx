@@ -8,17 +8,16 @@ import useDialog from '@/service/dialogAdapter'
 import { PracticeItem, usePracticeItemAtom, usePracticeList } from '@/domain/practice'
 import { useCategoryStore } from '@/service/categoryAdapter'
 import { css } from '@emotion/react'
+import useCurrentMin from './useCurrentMin'
 
 const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
 export default function ScheduleGrid() {
-  const currentMinutes = dayjs().get('h') * 60 + dayjs().get('m')
-  console.log('@@currentMinutes', currentMinutes)
-
   // TODO useCallback으로 감싸면 동작 x
   const callbackRef = (el: HTMLParagraphElement | null) => {
     el?.scrollIntoView({ block: 'center' })
   }
+  const currentMin = useCurrentMin()
 
   return (
     <>
@@ -27,7 +26,7 @@ export default function ScheduleGrid() {
           <S.CurrentTimeLine
             ref={callbackRef}
             css={css`
-              top: calc((${currentMinutes} / (24 * 60)) * 100%);
+              top: calc((${currentMin} / (24 * 60)) * 100%);
             `}
           />
           <PlanCol />
