@@ -12,9 +12,8 @@ import useCurrentMin from './useCurrentMin'
 
 const LENGTH = 24
 // ScheduleGrid = Time + Plan + Practice
-export default function ScheduleGrid() {
-  // TODO useCallback으로 감싸면 동작 x
-  const callbackRef = (el: HTMLParagraphElement | null) => {
+function ScheduleGrid() {
+  const scrollRef = (el: HTMLParagraphElement | null) => {
     el?.scrollIntoView({ block: 'center' })
   }
   const currentMin = useCurrentMin()
@@ -24,7 +23,7 @@ export default function ScheduleGrid() {
       <S.GridWrapper>
         <S.Grid>
           <S.CurrentTimeLine
-            ref={callbackRef}
+            ref={scrollRef}
             css={css`
               top: calc((${currentMin} / (24 * 60)) * 100%);
             `}
@@ -37,6 +36,8 @@ export default function ScheduleGrid() {
     </>
   )
 }
+
+export default ScheduleGrid
 
 function TimeCol() {
   const bases = Array.from({ length: LENGTH }, (v, i) => i)
