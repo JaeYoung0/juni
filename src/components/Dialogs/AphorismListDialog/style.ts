@@ -45,6 +45,19 @@ export const AphorismText = styled.p`
   line-height: 1.5;
 `
 
+export const NoticeText = styled.p`
+  width: 100%;
+  height: calc(var(--vh) * 50);
+  display: flex;
+  align-items: center;
+
+  font-size: 1.8rem;
+  line-height: 1.5;
+  color: #fff;
+  text-align: center;
+  word-break: keep-all;
+`
+
 export const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;

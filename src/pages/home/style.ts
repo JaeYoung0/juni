@@ -30,3 +30,5 @@ export const AphorismText = styled.p`
   word-break: keep-all;
   padding: 0 1rem;
 `
+
+export const NoticeText = styled(AphorismText)``

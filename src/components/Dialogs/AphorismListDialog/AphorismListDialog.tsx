@@ -52,21 +52,24 @@ function AphorismListDialog({ close }: Props) {
     }
   }
 
+  const handleClickPlus = () => {
+    openDialog({ variant: 'CreateAphorismDialog', props: {} })
+  }
+
   return (
     <CS.Dialog open>
       <CS.Header>
         <S.BackButton onClick={close}>
           <ArrowBackIosNewIcon fontSize="large" />
         </S.BackButton>
-        <S.PlusButton
-          onClick={() => {
-            openDialog({ variant: 'CreateAphorismDialog', props: {} })
-          }}
-        >
+        <S.PlusButton onClick={handleClickPlus}>
           <AddCommentIcon fontSize="large" />
         </S.PlusButton>
       </CS.Header>
       <S.ListBox>
+        {aphorismList?.length === 0 && (
+          <S.NoticeText>오른쪽 위 아이콘을 클릭하여 문장을 추가해주세요.</S.NoticeText>
+        )}
         {aphorismList?.map(({ aphorismId, text, current }) => (
           <>
             <li key={aphorismId}>
