@@ -8,6 +8,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import AddCommentIcon from '@mui/icons-material/AddComment'
 import * as S from './style'
 import { Colors } from '@/styles/colors'
+
 type Props = DialogBasicProps
 function AphorismListDialog({ close }: Props) {
   const { aphorismList, deleteAphorismItem, saveCurrentAphorismItem } = useAphorismStore()
@@ -26,7 +27,30 @@ function AphorismListDialog({ close }: Props) {
     })
   }
 
-  const handleDelete = (aphorismId: string) => deleteAphorismItem({ userId, aphorismId })
+  const deleteItem = (aphorismId: string) => deleteAphorismItem({ userId, aphorismId })
+  const handleClickDelete = async (aphorismId: string) => {
+    const confirm = () =>
+      new Promise((resolve) => {
+        openDialog({
+          variant: 'ActionDialog',
+          props: {
+            title: '삭제하시겠습니까?',
+            content: '',
+            cancelText: '취소',
+            actionText: '확인',
+            onAction: () => {
+              resolve(true)
+            },
+          },
+        })
+      })
+
+    const isConfirmed = await confirm()
+
+    if (isConfirmed) {
+      deleteItem(aphorismId)
+    }
+  }
 
   return (
     <CS.Dialog open>
@@ -56,33 +80,7 @@ function AphorismListDialog({ close }: Props) {
                 {text}
               </S.AphorismText>
               <S.Buttons>
-                <button
-                  onClick={async () => {
-                    const confirm = () =>
-                      new Promise((resolve) => {
-                        openDialog({
-                          variant: 'ActionDialog',
-                          props: {
-                            title: '삭제하시겠습니까?',
-                            content: '',
-                            cancelText: '취소',
-                            actionText: '확인',
-                            onAction: () => {
-                              resolve(true)
-                            },
-                          },
-                        })
-                      })
-
-                    const isConfirmed = await confirm()
-
-                    if (isConfirmed) {
-                      handleDelete(aphorismId)
-                    }
-                  }}
-                >
-                  삭제
-                </button>
+                <button onClick={() => handleClickDelete(aphorismId)}>삭제</button>
               </S.Buttons>
             </li>
           </>

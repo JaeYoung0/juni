@@ -20,6 +20,8 @@ import {
   getDoc,
   where,
   updateDoc,
+  serverTimestamp,
+  orderBy,
 } from 'firebase/firestore/lite'
 
 const COLLECTION_NAME = 'aphorism'
@@ -30,7 +32,7 @@ export const getAphorismList = async (payload: GetAphorismListPayload) => {
 
   const ref = collection(firestore, COLLECTION_NAME, userId, SUB_NAME)
 
-  const q = query(ref)
+  const q = query(ref, orderBy('timestamp'))
   const querySnapShot = await getDocs(q)
 
   const results: AphorismItem[] = []
@@ -47,13 +49,18 @@ export const getAphorismList = async (payload: GetAphorismListPayload) => {
 
 export const createAphorismItem = async (payload: CreateAphorismItemPayload) => {
   const { userId, ...rest } = payload
-  await addDoc(collection(firestore, COLLECTION_NAME, userId, SUB_NAME), rest)
+
+  await addDoc(collection(firestore, COLLECTION_NAME, userId, SUB_NAME), {
+    ...rest,
+    timestamp: serverTimestamp(),
+  })
 }
 
 export const updateAphorismItem = async (payload: UpdateAphorismItemPayload) => {
   const { userId, aphorismId, ...rest } = payload
   await setDoc(doc(firestore, COLLECTION_NAME, userId, SUB_NAME, aphorismId), {
     ...rest,
+    timestamp: serverTimestamp(),
   })
 }
 
