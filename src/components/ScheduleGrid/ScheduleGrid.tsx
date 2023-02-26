@@ -137,7 +137,9 @@ function PlanItem({ ...props }: PlanItemProps) {
 
   return (
     <S.PlanItem
-      style={{ background: category?.color ?? '#aaa' }}
+      css={css`
+        background: ${category?.color ?? '#aaa'};
+      `}
       top={top}
       height={height}
       onClick={() => props.onClickPlanItem(item)}
@@ -224,7 +226,9 @@ function PracticeItem({ ...props }: PracticeItemProps) {
 
   return (
     <S.PracticeItem
-      style={{ background: category?.color ?? '#aaa' }}
+      css={css`
+        background: ${category?.color ?? '#aaa'};
+      `}
       top={top}
       height={height}
       onClick={() => props.onClickPracticeItem(item)}

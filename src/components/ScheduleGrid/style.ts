@@ -24,8 +24,6 @@ const planCellStyle = css`
   align-items: center;
 `
 
-const bottomPadding = '20rem'
-
 export const GridWrapper = styled.div`
   overflow: hidden;
   background: #000;
@@ -129,6 +127,8 @@ export const PlanItem = styled.button<{ top: number; height: number }>`
   ${planCellStyle}
   background: gray;
   padding: 1rem;
+
+  border-bottom: 1px solid #fff;
 
   span {
     font-size: 1.4rem;
