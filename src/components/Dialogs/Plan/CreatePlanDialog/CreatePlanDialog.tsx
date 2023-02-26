@@ -1,5 +1,5 @@
 import { useCalendarAtom } from '@/domain/calendar'
-import { DEFAULT_PLAN_ATOM, usePlanItemAtom } from '@/domain/plan'
+import { usePlanItemAtom, useResetPlanItem } from '@/domain/plan'
 import { DialogBasicProps } from '@/application/ports'
 import { useCreatePlanItem } from '@/service/plan'
 import * as DS from '../common.style'
@@ -16,6 +16,7 @@ type CreatePlanDialogProps = DialogBasicProps
 
 function CreatePlanDialog({ close }: CreatePlanDialogProps) {
   const [planItem, setPlanItem] = usePlanItemAtom()
+  const reset = useResetPlanItem()
   const [currentUnix] = useCalendarAtom()
   const { user } = useUserStore()
   const { userId } = user
@@ -56,14 +57,12 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
       })
     }
 
-    // reset 기능이 recoil에 없는가 ...
-    setPlanItem(DEFAULT_PLAN_ATOM)
-
+    reset()
     close()
   }
 
   const handleClose = () => {
-    setPlanItem(DEFAULT_PLAN_ATOM)
+    reset()
     close()
   }
 

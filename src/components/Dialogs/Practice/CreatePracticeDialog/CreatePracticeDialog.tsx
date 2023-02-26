@@ -2,7 +2,7 @@ import * as DS from '@/components/Dialogs/Plan/common.style'
 import * as CS from '@/components/Dialogs/common.style'
 import PracticeHeader from './PracticeHeader'
 import PracticeBody from './PracticeBody'
-import { DEFAULT_PRACTICE_ATOM, usePracticeItemAtom } from '@/domain/practice'
+import { usePracticeItemAtom, useResetPracticeItem } from '@/domain/practice'
 import { useCreatePracticeItem } from '@/service/practice'
 import { DialogBasicProps } from '@/application/ports'
 import { useCalendarAtom } from '@/domain/calendar'
@@ -17,6 +17,7 @@ type CreatePracticeDialogProps = DialogBasicProps & { onClose?: () => void }
 // TODO. CreatePlanDialog와 거의 동일
 export default function CreatePracticeDialog({ close, onClose }: CreatePracticeDialogProps) {
   const [practiceItem, setPracticeItem] = usePracticeItemAtom()
+  const reset = useResetPracticeItem()
   const [currentUnix] = useCalendarAtom()
 
   const { user } = useUserStore()
@@ -62,15 +63,15 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
       })
     }
 
-    setPracticeItem(DEFAULT_PRACTICE_ATOM)
+    reset()
     onClose?.()
     close()
   }
 
   const handleClose = () => {
-    setPracticeItem(DEFAULT_PRACTICE_ATOM)
-    close()
+    reset()
     onClose?.()
+    close()
   }
 
   const ItemProps = { item: practiceItem, setItem: setPracticeItem }

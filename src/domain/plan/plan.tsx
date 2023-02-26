@@ -1,7 +1,7 @@
 import { minParser, unixToYYYYMMDD } from '@/lib/utils'
 import { getMonthlyPlanHistory, getPlanItems } from '@/service/plan'
 import { useQuery } from '@tanstack/react-query'
-import { atom, useRecoilState } from 'recoil'
+import { atom, useRecoilState, useResetRecoilState } from 'recoil'
 import { useCalendarAtom } from '../calendar'
 import { useUserStore } from '@/service/userAdapter'
 import { v1 } from 'uuid'
@@ -25,13 +25,17 @@ export const DEFAULT_PLAN_ATOM: PlanItem = {
   categoryId: '',
 }
 
-const PlanItemAtom = atom<PlanItem>({
+export const PlanItemAtom = atom<PlanItem>({
   key: '@PlanItem' + v1(),
   default: DEFAULT_PLAN_ATOM,
 })
 
 export function usePlanItemAtom() {
   return useRecoilState(PlanItemAtom)
+}
+
+export function useResetPlanItem() {
+  return useResetRecoilState(PlanItemAtom)
 }
 
 export const QUERY_KEY_HEAD = '@planList'

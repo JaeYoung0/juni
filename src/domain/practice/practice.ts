@@ -2,7 +2,7 @@ import { unixToYYYYMMDD } from '@/lib/utils'
 import { getPracticeItems } from '@/service/practice'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { atom, useRecoilState } from 'recoil'
+import { atom, useRecoilState, useResetRecoilState } from 'recoil'
 import { v1 } from 'uuid'
 import { useCalendarAtom } from '../calendar'
 import { usePlanList } from '../plan'
@@ -37,6 +37,10 @@ const PracticeItemAtom = atom<PracticeItem>({
 
 export function usePracticeItemAtom() {
   return useRecoilState(PracticeItemAtom)
+}
+
+export function useResetPracticeItem() {
+  return useResetRecoilState(PracticeItemAtom)
 }
 
 export const QUERY_KEY_HEAD = '@practiceList'
