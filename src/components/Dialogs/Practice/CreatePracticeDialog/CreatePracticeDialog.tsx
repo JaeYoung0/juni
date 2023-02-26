@@ -62,6 +62,7 @@ export default function CreatePracticeDialog({ close, onClose }: CreatePracticeD
       })
     }
 
+    setPracticeItem(DEFAULT_PRACTICE_ATOM)
     onClose?.()
     close()
   }

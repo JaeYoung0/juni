@@ -56,6 +56,9 @@ function CreatePlanDialog({ close }: CreatePlanDialogProps) {
       })
     }
 
+    // reset 기능이 recoil에 없는가 ...
+    setPlanItem(DEFAULT_PLAN_ATOM)
+
     close()
   }
 
