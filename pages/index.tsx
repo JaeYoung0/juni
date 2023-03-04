@@ -19,6 +19,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   await Promise.all([
     queryClient.prefetchQuery([QUERY_KEY_HEAD], () => getAphorismList({ userId })),
   ])
+  console.log('@@dehydrate(queryClient)', dehydrate(queryClient))
 
   return {
     props: {

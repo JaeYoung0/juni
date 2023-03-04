@@ -5,7 +5,6 @@ import { resetStyle } from '@/styles/resetStyle'
 import { RecoilRoot } from 'recoil'
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query'
-import useServiceWorker from '@/hooks/useServiceWorker'
 import useViewportHeight from '@/hooks/useViewportHeight'
 import RootDialog from '@/components/Dialogs/RootDialog'
 import dayjs from 'dayjs'
@@ -33,7 +32,6 @@ dayjs.extend(isoWeek)
 
 function MyApp({ Component, pageProps }: AppProps) {
   useViewportHeight()
-  useServiceWorker()
   const [queryClient] = useState(() => new QueryClient())
 
   return (
