@@ -37,8 +37,10 @@ export const getAphorismList = async (payload: GetAphorismListPayload) => {
 
   const results: AphorismItem[] = []
   querySnapShot.forEach((item) => {
+    const { timestamp, ...rest } = item.data()
+
     const element = {
-      ...item.data(),
+      ...rest,
       aphorismId: item.id, // create할 때 빈 스트링으로 넣었던 id를 db 생성시 만들어진 id로 대체한다
     }
     results.push(element as AphorismItem)
