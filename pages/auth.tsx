@@ -8,11 +8,8 @@ function Auth() {
   const { handleRedirect } = useAuth()
 
   useEffect(() => {
-    firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        handleRedirect()
-      }
-    })
+    alert('handleRedirect')
+    handleRedirect()
   }, [])
 
   return (

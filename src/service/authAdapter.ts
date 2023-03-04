@@ -49,9 +49,14 @@ export function useAuth(): AuthService {
   const handleRedirect = async () => {
     try {
       // signInWithRedirect의 결과를 받아오는 함수
+
       const userCredential = await getRedirectResult(firebaseAuth)
+
+      alert('userCredential ok')
       if (userCredential) {
         const user = await findOrCreateUser(userCredential.user)
+
+        alert('findOrCreateUser ok')
         setCookie(null, 'juni_uid', user.userId)
         router.replace('/')
       } else throw new Error('userCredential is null')
