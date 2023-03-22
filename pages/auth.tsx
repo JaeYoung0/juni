@@ -8,7 +8,6 @@ function Auth() {
   const { handleRedirect } = useAuth()
 
   useEffect(() => {
-    alert('handleRedirect')
     handleRedirect()
   }, [])
 

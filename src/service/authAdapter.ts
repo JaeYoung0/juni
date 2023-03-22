@@ -52,11 +52,9 @@ export function useAuth(): AuthService {
 
       const userCredential = await getRedirectResult(firebaseAuth)
 
-      alert('userCredential ok')
       if (userCredential) {
         const user = await findOrCreateUser(userCredential.user)
 
-        alert('findOrCreateUser ok')
         setCookie(null, 'juni_uid', user.userId)
         router.replace('/')
       } else throw new Error('userCredential is null')
