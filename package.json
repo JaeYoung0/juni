@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev -p 2001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 2001",
     "type-check": "tsc",
     "lint": "yarn run type-check && next lint"
   },
