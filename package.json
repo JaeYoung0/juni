@@ -26,7 +26,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "recoil": "^0.7.6",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zustand": "^4.3.2"
   },
   "devDependencies": {
     "@types/node": "18.0.6",
