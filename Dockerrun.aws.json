@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "026343158313.dkr.ecr.ap-northeast-2.amazonaws.com/juni:latest"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "2001"
+    }
+  ],
+  "Logging": "/var/log/nginx"
+}
