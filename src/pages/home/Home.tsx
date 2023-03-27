@@ -14,7 +14,10 @@ function HomePage() {
   return (
     <BasicLayout>
       <S.MyAphorism onClick={() => openDialog({ variant: 'AphorismListDialog', props: {} })}>
-        <img src="https://images.unsplash.com/photo-1639678349533-5758a710ca0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+        <img
+          src="https://images.unsplash.com/photo-1639678349533-5758a710ca0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+          alt="background-img-home"
+        />
 
         {aphorismList?.length === 0 && (
           <S.NoticeText>여기를 클릭해서 문장을 추가해주세요.</S.NoticeText>
